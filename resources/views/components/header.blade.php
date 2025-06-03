@@ -72,7 +72,7 @@
 
             </div>
             <div class="order-1 sm:order-4 mx-auto container sm:w-full">
-                <x-navbar></x-navbar>
+               @include('components.navbar')
             </div>
         </div>
 

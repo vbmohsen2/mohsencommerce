@@ -34,7 +34,7 @@
                     :key="product.id"
                     class="border rounded-lg shadow-sm overflow-hidden transition hover:shadow-md"
                 >
-                    <a :href="`./products/${product.id}`" class="block">
+                    <a :href="`/admin/products/${product.id}`" class="block">
 
 
                         <img

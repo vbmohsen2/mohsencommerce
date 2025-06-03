@@ -1,32 +1,47 @@
 <style>
-    .mega-menu { display: none;}
-    .mega-menu.show { display: flex; }
-    .submenu { display: none; }
-    .submenu.show { display: block; }
+    .mega-menu {
+        display: none;
+    }
+
+    .mega-menu.show {
+        display: flex;
+    }
+
+    .submenu {
+        display: none;
+    }
+
+    .submenu.show {
+        display: block;
+    }
 </style>
 
 @php
-    $parents = $categories->whereNull('parent_id')->merge($categories->where('parent_id', 0));
-    $children = $categories->whereNotIn('id', $parents->pluck('id'));
+    use App\Models\Category;
+    $categories = Category::where('is_active',"1")->get();
+       $parents = $categories->whereNull('parent_id')->merge($categories->where('parent_id', 0));
+       $children = $categories->whereNotIn('id', $parents->pluck('id'));
 @endphp
 <nav class="  px-4 relative">
     <div class=" mx-auto  flex items-center justify-between">
 
 
-        <div class="relative text-lg"  id="menu-wrapper">
+        <div class="relative text-lg" id="menu-wrapper">
             <button class="max-md:hidden mx-2  hover:text-green-600 py-2" id="menu-button">
                 <i class="fa fa-bars pl-2 "></i><span class="px-2 font-thin"> دسته بندی </span>
-                </button>
+            </button>
             <button class="max-md:hidden mx-2 py-2 hover:text-green-600" id="menu-button">
                 <i class="far fa-file-code pl-4"><span class="px-2 font-thin"> اسمبل هوشمند</span> </i>
             </button>
             <button class="max-md:hidden mx-2 py-2 hover:text-green-600" id="menu-button">
                 <i class="fa-solid  fa-file-lines pl-4"><span class="px-2 font-thin"><a href="/blog">بلاگ</a></span></i>
             </button>
-            <button class="md:hidden" id="openmobilemenu" ><i class="fa fa-bars pl-2 "></i></button>
+            <button class="md:hidden" id="openmobilemenu"><i class="fa fa-bars pl-2 "></i></button>
 
             <!-- First Mega Menu -->
-            <div class="absolute right-0 z-10  top-10 6 h-fit md:w-[200%] lg:w-[300%]  shadow-lg rounded-md bg-gray-300 text-black mega-menu p-4" id="mega-menu">
+            <div
+                class="absolute right-0 z-10  top-10 6 h-fit md:w-[200%] lg:w-[300%]  shadow-lg rounded-md bg-gray-300 text-black mega-menu p-4"
+                id="mega-menu">
                 <div class="flex">
                     <!-- Main Categories Column -->
                     <ul class="flex flex-col w-full text-nowrap ">
@@ -43,7 +58,7 @@
                     <!-- Subcategories Column -->
                     <div class="absolute flex justify-between top-0 right-40   p-4">
 
-                        <div id="electronics"  class="submenu w-full">
+                        <div id="electronics" class="submenu w-full">
                             <div class="flex justify-between w-fit">
                                 <div class="flex w-1/3  flex-col">
                                     <div><a href="#" class="block px-4 py-2   hover:bg-gray-200">Phones</a></div>
@@ -51,40 +66,41 @@
                                     <div><a href="#" class="block px-4 py-2   hover:bg-gray-200">Cameras</a></div>
                                 </div>
                                 <div class="flex w-1/2  mx-auto justify-center items-center">
-                                    <img src="images/slides/Accessories pc v1 copy-1600x400.jpg"  alt="">
+                                    <img src="images/slides/Accessories pc v1 copy-1600x400.jpg" alt="">
                                 </div>
                             </div>
                         </div>
 
 
+                        <ul id="submenu" class="submenu">
 
-                            <ul id="submenu" class="submenu">
+                            <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-200"></a>
+                            </li>
 
-                                    <li>
-                                        <a href="#" class="block px-4 py-2 hover:bg-gray-200"></a>
-                                    </li>
-
-                            </ul>
+                        </ul>
                         @foreach($parents as $parent)
-                            <div id="submenu-{{$parent->id}}"  class="submenu w-full">
+                            <div id="submenu-{{$parent->id}}" class="submenu w-full">
                                 <div class="flex justify-between w-fit">
                                     <div class="flex w-1/3  flex-col">
                                         @foreach($children->where('parent_id', $parent->id) as $child)
-                                        <div><a href="#" class="block px-4 py-2   hover:bg-gray-200">{{$child->name}}</a></div>
+                                            <div><a href="#"
+                                                    class="block px-4 py-2   hover:bg-gray-200">{{$child->name}}</a>
+                                            </div>
                                         @endforeach
                                     </div>
                                     <div class="flex w-1/2  mx-auto justify-center items-center">
-                                        <img src="images/slides/Accessories pc v1 copy-1600x400.jpg"  alt="">
+                                        <img src="images/slides/Accessories pc v1 copy-1600x400.jpg" alt="">
                                     </div>
                                 </div>
                             </div>
                         @endforeach
 
-{{--                        <ul id="home-kitchen" class="submenu">--}}
-{{--                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-200">Furniture</a></li>--}}
-{{--                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-200">Appliances</a></li>--}}
-{{--                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-200">Decor</a></li>--}}
-{{--                        </ul>--}}
+                        {{--                        <ul id="home-kitchen" class="submenu">--}}
+                        {{--                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-200">Furniture</a></li>--}}
+                        {{--                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-200">Appliances</a></li>--}}
+                        {{--                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-200">Decor</a></li>--}}
+                        {{--                        </ul>--}}
 
 
                     </div>
@@ -92,13 +108,14 @@
             </div>
         </div>
 
-{{--        mobile menu--}}
+        {{--        mobile menu--}}
 
 
         <div id="overlay" class="fixed inset-0 z-40 bg-green-400 bg-opacity-50 hidden"></div>
 
         <!-- Off-Canvas Menu -->
-        <div id="offCanvas"  class=" translate-x-full  fixed top-0 w-1/2 right-0 z-40  h-full bg-white shadow-lg transform  transition-all duration-300 ">
+        <div id="offCanvas"
+             class=" translate-x-full  fixed top-0 w-1/2 right-0 z-40  h-full bg-white shadow-lg transform  transition-all duration-300 ">
             <div class="p-4 bg-blue-600 text-white flex justify-between">
                 <span>Menu</span>
                 <button id="closeMenu" class="text-white">&times;</button>
@@ -133,8 +150,6 @@
                 <li><a href="#" class="block p-2 hover:bg-gray-200">تماس با ما</a></li>
             </ul>
         </div>
-
-
 
 
     </div>
@@ -174,11 +189,6 @@
         const megaMenu = document.getElementById("mega-menu");
         const subMenus = document.querySelectorAll(".submenu");
         const submenuWrappers = document.querySelectorAll(".submenu-wrapper");
-
-
-
-
-
 
 
         menuButton.addEventListener("mouseenter", () => {

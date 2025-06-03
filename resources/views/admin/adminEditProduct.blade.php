@@ -4,12 +4,11 @@
     <h1>تغییر محصول</h1>
 
 
-
+    @vite('resources/js/app.js')
 
 
 
     <div id="app">
-
         <edit-product  :id='@json($id)'></edit-product>
     </div>
 

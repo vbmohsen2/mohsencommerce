@@ -18,7 +18,7 @@ class PostsController extends Controller
         ->orderby('created_at','desc')->paginate(15);
 
 
-        return view('layouts.blog.blogmain',compact('Posts','PostsInBanners'));
+        return view('layouts.blog.blogMain',compact('Posts','PostsInBanners'));
     }
     public function show(Request $request,$slug){
         $Posts=Posts::where('is_published',true)->with(['postmedia' => function ($query) {

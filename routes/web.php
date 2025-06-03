@@ -24,6 +24,10 @@ Route::get('/admin/products', [admin::class, 'ProductsIndex'])->name('admin.prod
 Route::get('/admin/addproduct', [admin::class, 'addProductPage'])->name('admin.addProduct');
 Route::get('/admin/products/{id}', [admin::class, 'editproduct'])->name('admin.editProduct');
 
+
+
+
+
 Route::get('/admin/categories', [admin::class, 'CategoriesIndex'])->name('admin.categories');
 Route::get('/admin/categoriestree', [admin::class, 'categoriesIndexTree'])->name('admin.categoriestree');
 
