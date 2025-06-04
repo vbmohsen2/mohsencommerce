@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('content')
 
-    <div class=" container mt-2 mx-auto ">
+    <div class=" container mx-auto mt-2 px-16 ">
        @php
 
         @endphp

@@ -10,7 +10,12 @@
     </div>
     <div class="swiper-pagination"></div>
 </div>
-
+<style>
+    .swiper-slide {
+        height: auto !important;
+        display: flex;
+    }
+</style>
 <script>
 
 

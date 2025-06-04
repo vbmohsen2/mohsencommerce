@@ -1,11 +1,11 @@
-<div class="relative h-full overflow-hidden w-full">
+<div class="relative h-full overflow-hidden w-full rounded-xl">
     <!-- Carousel Container -->
     <div id="carousel" class="flex transition-transform duration-500 ease-in-out">
         @foreach ($images as $index => $image)
             <div class="slide w-full flex-shrink-0 flex items-center justify-center">
                 <a href="#">
                     <img src="{{ asset($image) }}"
-                         class="w-full h-full max-h-screen object-contain"
+                         class="w-full h-[80vh] aspect-auto object-cover align-middle sm:h-full sm:max-h-screen sm:object-contain"
                          alt="Slide {{ $index }}">
                 </a>
             </div>

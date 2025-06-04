@@ -65,6 +65,8 @@ Route::get('/', [\App\Livewire\Mainpage::class, 'index'])->name('home');
 route::get('/product/{slug}',ProductsController::class.'@show');
 route::get('/addtocart/{productId}',ProductsController::class.'@addToCart');
 route::get('/category/{slug}',CategoryController::class.'@show');
+Route::get('/products/search', [ProductsController::class, 'search']);
+
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/increase/{id}', [CartController::class, 'increase'])->name('cart.increase');

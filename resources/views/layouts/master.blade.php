@@ -13,7 +13,7 @@
 
 
 </head>
-<body style="direction: rtl">
+<body style="direction: rtl;font-weight: 300">
 
 <x-header/>
 <main>

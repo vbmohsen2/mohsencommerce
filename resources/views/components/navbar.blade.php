@@ -27,16 +27,16 @@
 
 
         <div class="relative text-lg" id="menu-wrapper">
-            <button class="max-md:hidden mx-2  hover:text-green-600 py-2" id="menu-button">
+            <button class="max-sm:hidden mx-2  hover:text-green-600 py-2" id="menu-button">
                 <i class="fa fa-bars pl-2 "></i><span class="px-2 font-thin"> دسته بندی </span>
             </button>
-            <button class="max-md:hidden mx-2 py-2 hover:text-green-600" id="menu-button">
+            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" id="menu-button">
                 <i class="far fa-file-code pl-4"><span class="px-2 font-thin"> اسمبل هوشمند</span> </i>
             </button>
-            <button class="max-md:hidden mx-2 py-2 hover:text-green-600" id="menu-button">
+            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" id="menu-button">
                 <i class="fa-solid  fa-file-lines pl-4"><span class="px-2 font-thin"><a href="/blog">بلاگ</a></span></i>
             </button>
-            <button class="md:hidden" id="openmobilemenu"><i class="fa fa-bars pl-2 "></i></button>
+            <button class="sm:hidden" id="openmobilemenu"><i class="fa fa-bars pl-2 "></i></button>
 
             <!-- First Mega Menu -->
             <div
@@ -60,7 +60,7 @@
 
                         <div id="electronics" class="submenu w-full">
                             <div class="flex justify-between w-fit">
-                                <div class="flex w-1/3  flex-col">
+                                <div class="flex w-full  flex-col">
                                     <div><a href="#" class="block px-4 py-2   hover:bg-gray-200">Phones</a></div>
                                     <div><a href="#" class="block px-4 py-2   hover:bg-gray-200">Laptops</a></div>
                                     <div><a href="#" class="block px-4 py-2   hover:bg-gray-200">Cameras</a></div>
@@ -82,7 +82,7 @@
                         @foreach($parents as $parent)
                             <div id="submenu-{{$parent->id}}" class="submenu w-full">
                                 <div class="flex justify-between w-fit">
-                                    <div class="flex w-1/3  flex-col">
+                                    <div class="flex w-full  flex-col">
                                         @foreach($children->where('parent_id', $parent->id) as $child)
                                             <div><a href="#"
                                                     class="block px-4 py-2   hover:bg-gray-200">{{$child->name}}</a>

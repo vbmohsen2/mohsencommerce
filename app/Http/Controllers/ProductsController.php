@@ -48,6 +48,17 @@ class ProductsController extends Controller
         $product->save();
         return view('product', ['product' => $product]);
     }
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+
+        $products = Products::where('name', 'like', "%$query%")
+            ->orWhere('description', 'like', "%$query%")
+            ->take(10)
+            ->get(['id', 'name','slug', 'images', 'price']);
+
+        return response()->json($products);
+    }
 
 
 }

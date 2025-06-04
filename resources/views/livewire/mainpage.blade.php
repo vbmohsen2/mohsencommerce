@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    <div class="container mx-auto mt-4">
+    <div  class="container px-6 sm:px-0  mx-auto mt-4">
         @livewire('carousel')
         @include('components.row')
         <div class="mb-4 mt-8 text-xl">
