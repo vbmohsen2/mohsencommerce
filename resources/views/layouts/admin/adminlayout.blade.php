@@ -16,32 +16,31 @@
 <body style="direction: rtl">
 
 
-<main>
-    {{--    header--}}
-    <div class="flex justify-between items-center shadow-md h-20 px-4">
-        @auth()
-           <p>{{auth()->user()->name}}</p>
-        @endauth
-        <div>
-            <img src="{{asset('images/logo.svg')}}" alt="">
-        </div>
-        <div>
-           {{ \Carbon\Carbon::now()->format('Y-m-d H:i') }}
-        </div>
 
+    {{--    header--}}
+    <div class="flex-col fixed top-0 w-full  bg-white justify-between items-center shadow-md h-20 ">
+       <div class="w-full flex justify-between items-center mx-auto py-2 px-4">
+           @auth()
+               <p>{{auth()->user()->name}}</p>
+           @endauth
+           <div>
+               <img src="{{asset('images/logo.svg')}}" alt="">
+           </div>
+           <div>
+               {{ \Carbon\Carbon::now()->format('Y-m-d H:i') }}
+           </div>
+       </div>
+            @include('admin.sidebar')
     </div>
-<div class="flex">
+<main class="flex-col mt-16">
 {{--    navbar--}}
 
-   @include('admin.sidebar')
-
-    <div class="mx-auto w-3/4 p-4">
+    <div class="mx-auto p-4">
     @yield('content')
     </div>
 
-</div>
-
 </main>
+
 <footer>
     footer admin
 </footer>

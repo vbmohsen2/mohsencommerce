@@ -1,79 +1,111 @@
 <template>
-    <div class="max-w-4xl mx-auto  ">
-        <div class="bg-white rounded-2xl shadow p-4 border">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-2xl shadow p-4 sm:p-6 border">
             <div class="mb-4 text-center">
                 <button
-                    @click="addChild(0,0)"
+                    @click="addChild(0, 0)"
                     class="bg-green-600 text-white px-4 py-2 rounded-full shadow hover:bg-green-700 transition"
                 >
                     ➕ افزودن دسته‌بندی اصلی
                 </button>
             </div>
-            <Draggable ref="tree" :rtl="true" :default-open="false" :indent="24" v-model="treeData">
+
+            <Draggable
+                ref="tree"
+                :rtl="true"
+                :default-open="false"
+                :indent="24"
+                v-model="treeData"
+            >
                 <template #default="{ node, stat }">
-
                     <div
-                        class="flex justify-between items-center gap-3 p-2 mb-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-all"
+                        class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-3 p-3 mb-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-all"
                         :style="{ marginRight: `${stat.level * 20}px` }"
-                        :class="{ 'bg-gray-300': stat.level === 1, 'bg-yellow-100': stat.level > 1,'bg-yellow-200': stat.level > 2}"
+                        :class="{
+              'bg-gray-300': stat.level === 1,
+              'bg-yellow-100': stat.level > 1,
+              'bg-yellow-200': stat.level > 2
+            }"
                     >
-                        <div class="flex items-center gap-3">
-      <span
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full">
+                            <div class="flex items-center gap-2">
+                <span
+                    v-if="stat.children.length"
+                    @click="stat.open = !stat.open"
+                    class="text-gray-700 font-bold text-lg cursor-pointer select-none"
+                >
+                  {{ stat.open ? "−" : "+" }}
+                </span>
+                                <span v-else class="w-5"></span>
+                            </div>
 
-          v-if="stat.children.length"
-          @click="stat.open = !stat.open"
-          class="text-gray-700 font-bold text-lg cursor-pointer select-none"
-      >
-        {{ stat.open ? "−" : "+" }}
-      </span>
-                            <span v-else class="w-5"></span>
+                            <div class="flex-1">
+                                <label class="inline-flex items-center gap-2 text-gray-800 font-medium">
+                                    <input
+                                        type="checkbox"
+                                        v-model="node.is_active"
+                                        :true-value="1"
+                                        :false-value="0"
+                                        class="accent-green-600"
+                                    />
+                                    {{ node.text }}
+                                </label>
 
-                            <span class="text-gray-800 font-medium">
-        <input type="checkbox" v-model="node.is_active" :true-value="1" :false-value="0" />
+                                <div class="flex flex-wrap justify-center gap-2 mt-2 text-sm">
+                                    <button @click="editDescription(node)" class="px-2">
+                    <span v-if="node.description">
+                      <span
+                          :title="node.description"
+                          class="border bg-red-200 px-2 rounded-md border-black"
+                      >
+                        توضیحات: {{ truncate(node.description, 20) }}
+                      </span>
+                    </span>
+                                    </button>
 
-        {{ node.text }}
+                                    <button @click="editslug(node)" class="px-2">
+                    <span v-if="node.slug">
+                      <span
+                          :title="node.slug"
+                          class="border bg-green-200 px-2 rounded-md border-black"
+                      >
+                        اسلاگ: {{ truncate(node.slug, 20) }}
+                      </span>
+                    </span>
+                                    </button>
 
+                                    <span class="text-nowrap">تعداد کالا: {{ node.product_count }}</span>
+                                </div>
+                            </div>
 
-
-      </span>
-                            <div class="text-center w-full flex justify-center" title>
-                                <button @click="editDescription(node)" class="px-2">
-                                <span v-if="node.description"><span :title=node.description
-                                    class="border bg-red-200 px-2 rounded-md border-black  ">توضیحات: {{
-                                        truncate(node.description,20)
-                                    }}</span></span>
+                            <div class="flex gap-2 mt-2 sm:mt-0">
+                                <button
+                                    @click="addChild(node, stat)"
+                                    class="text-green-600 hover:text-green-800 text-sm"
+                                    title="افزودن زیرگروه"
+                                >
+                                    ➕
                                 </button>
-                                <button @click="editslug(node)" class="px-2">
-                                <span v-if="node.slug"><span :title=node.slug class="border bg-green-200 px-2 rounded-md border-black  ">
-                                    اسلاگ: {{ truncate(node.slug,20) }}</span></span>
+                                <button
+                                    @click="editNode(node)"
+                                    class="text-blue-600 hover:text-blue-800 text-sm"
+                                    title="ویرایش"
+                                >
+                                    ✏️
+                                </button>
+                                <button
+                                    @click="deleteNode(stat, node)"
+                                    class="text-red-600 hover:text-red-800 text-sm"
+                                    title="حذف"
+                                >
+                                    🗑️
                                 </button>
                             </div>
-                            <span class="text-nowrap">تعداد کالا:{{ node.product_count }}</span>
-                        </div>
-                        <div class="flex gap-2">
-                            <button
-                                @click="addChild(node,stat)"
-                                class="text-green-600 hover:text-green-800 text-sm"
-                                title="افزودن زیرگروه"
-                            >➕
-                            </button>
-                            <button
-                                @click="editNode(node)"
-                                class="text-blue-600 hover:text-blue-800 text-sm"
-                                title="ویرایش"
-                            >✏️
-                            </button>
-                            <button
-                                @click="deleteNode(stat, node)"
-                                class="text-red-600 hover:text-red-800 text-sm"
-                                title="حذف"
-                            >🗑️
-                            </button>
                         </div>
                     </div>
-
                 </template>
             </Draggable>
+
             <div class="text-center mt-6">
                 <button
                     class="bg-blue-600 text-white px-6 py-2 rounded-full shadow hover:bg-blue-700 transition"
@@ -83,6 +115,7 @@
                 </button>
             </div>
         </div>
+
         <!-- Modal component -->
         <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-lg relative">
@@ -96,10 +129,25 @@
                     @keyup.enter="confirmModal"
                 />
                 <div class="flex justify-end gap-2">
-                    <button @click="closeModal" class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400">لغو</button>
-                    <button @click="confirmModal" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">تأیید</button>
+                    <button
+                        @click="closeModal"
+                        class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400"
+                    >
+                        لغو
+                    </button>
+                    <button
+                        @click="confirmModal"
+                        class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                    >
+                        تأیید
+                    </button>
                 </div>
-                <button @click="closeModal" class="absolute top-2 left-2 text-gray-600 hover:text-gray-800">✖️</button>
+                <button
+                    @click="closeModal"
+                    class="absolute top-2 left-2 text-gray-600 hover:text-gray-800"
+                >
+                    ✖️
+                </button>
             </div>
         </div>
     </div>

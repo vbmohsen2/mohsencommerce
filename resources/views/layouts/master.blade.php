@@ -16,7 +16,7 @@
 <body style="direction: rtl;font-weight: 300">
 
 <x-header/>
-<main>
+<main class="mt-44">
     @yield('content')
 
 </main>

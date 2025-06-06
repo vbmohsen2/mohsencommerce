@@ -117,6 +117,7 @@ Route::post('/api/categories/attributes', [admin::class, 'attributesRet']);
 
 Route::get('/api/blog/categories', [blogAdmin::class, 'getBlogCategory']);
 Route::get('/api/allposts', [blogAdmin::class, 'getallposts']);
+Route::get('/api/allpostswithoutpaginate', [blogAdmin::class, 'getallpostswithoutpaginate']);
 Route::post('/api/blogcategories/delete', [blogAdmin::class, 'deleteBlogCategory']);
 Route::post('/api/blogcategories/save', [blogAdmin::class, 'categoryBlogSave']);
 

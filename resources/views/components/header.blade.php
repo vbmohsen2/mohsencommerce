@@ -1,5 +1,5 @@
-<header class=" w-full box-border mx-50  px-4 items-center  mt-5 pb-4 h-fit   shadow-xl ">
-    <div  class="flex flex-col">
+<header class=" w-full bg-white fixed top-0 left-0 z-50 box-border mx-auto  px-4 items-center  pt-5 pb-4 h-fit   shadow-xl  ">
+    <div class="flex flex-col">
         <div class="flex justify-between flex-wrap  items-center  ">
             {{--        logo--}}
             <div class="flex-grow-1 sm:order-1 order-2 w-20 md:justify-self-center">
@@ -7,13 +7,13 @@
             </div>
 
             {{--search--}}
-            <div  class="flex grow sm:order-2 order-4 max-sm:w-full justify-center  ">
+            <div class="flex grow sm:order-2 order-4 max-sm:w-full justify-center  ">
                 <div id="app" class="w-3/4 max-sm:w-full ml-5 mb-4 m-2  flex rounded-lg bg-gray-300">
                     <img src="{{asset('images/search icon.svg')}}" class="w-6 h-6 m-2 items-center" alt="">
-{{--                    <input--}}
-{{--                        class=" bg-gray-300 w-full  rounded-lg focus:outline-none   shadow-x"--}}
-{{--                        placeholder="جستجو..." type="text" name="" id="" >--}}
-                <productsearch></productsearch>
+                    {{--                    <input--}}
+                    {{--                        class=" bg-gray-300 w-full  rounded-lg focus:outline-none   shadow-x"--}}
+                    {{--                        placeholder="جستجو..." type="text" name="" id="" >--}}
+                    <productsearch></productsearch>
 
                 </div>
             </div>
@@ -73,7 +73,7 @@
 
             </div>
             <div class="order-1 sm:order-4 md:mx-auto container w-1/5 sm:w-full ">
-               @include('components.navbar')
+                <x-navbar></x-navbar>
             </div>
         </div>
 

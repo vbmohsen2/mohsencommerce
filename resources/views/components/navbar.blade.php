@@ -22,7 +22,7 @@
        $parents = $categories->whereNull('parent_id')->merge($categories->where('parent_id', 0));
        $children = $categories->whereNotIn('id', $parents->pluck('id'));
 @endphp
-<nav class="  px-4 relative">
+<nav class="px-4 relative">
     <div class=" mx-auto  flex items-center justify-between">
 
 

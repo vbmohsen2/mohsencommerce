@@ -25,7 +25,29 @@ class blogAdmin extends Controller
 
     public function getallposts()
     {
-        $posts = Posts::with(['user:id,name', 'postTags:id,name','category:id,name'])->paginate(10);
+        $posts = Posts::select(['id', 'title', 'slug', 'is_published', 'post_category_id', 'user_id', 'created_at'])
+            ->with([
+                'user:id,name',
+                'postTags:id,name',
+                'category:id,name'
+            ])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return response()->json($posts);
+    }
+    public function getallpostswithoutpaginate()
+    {
+        $posts = Posts::select(['id', 'title', 'slug', 'is_published', 'post_category_id', 'user_id', 'created_at'])
+            ->with([
+                'user:id,name',
+                'postTags:id,name',
+                'category:id,name'
+            ])
+            ->orderBy('created_at', 'desc')
+            ->limit(100)
+            ->get();
+
         return response()->json($posts);
     }
 
@@ -120,7 +142,7 @@ class blogAdmin extends Controller
         $searchTerm = $request->input('search', '');
         $perPage = 10;
 
-        $query = Posts::query()->orderBy('created_at');
+        $query = Posts::query()->select(['id', 'title', 'slug', 'is_published', 'post_category_id', 'user_id', 'created_at'])->orderBy('created_at');
         $query->with(['user:id,name', 'postTags:id,name','category:id,name']);
         // فیلتر دسته‌بندی‌ها
         if (!empty($categoryIds)) {

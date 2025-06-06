@@ -1,75 +1,93 @@
 <template>
-    <div class="max-w-4xl mx-auto  ">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-white rounded-2xl shadow p-4 border">
             <div class="mb-4 text-center">
                 <button
                     @click="addChild(0,0)"
-                    class="bg-green-600 text-white px-4 py-2 rounded-full shadow hover:bg-green-700 transition"
+                    class="bg-green-600 text-white px-4 py-2 rounded-full shadow hover:bg-green-700 transition inline-flex items-center justify-center mx-auto"
                 >
                     ➕ افزودن دسته‌بندی اصلی
                 </button>
             </div>
-            <base-tree ref="tree" :rtl="true" :default-open="false" :indent="24" v-model="treeData">
+            <base-tree
+                ref="tree"
+                :rtl="true"
+                :default-open="false"
+                :indent="24"
+                v-model="treeData"
+                class="overflow-x-auto"
+            >
                 <template #default="{ node, stat }">
-
                     <div
-                        class="flex justify-between items-center gap-3 p-2 mb-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-all"
+                        class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 p-2 mb-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-all"
                         :style="{ marginRight: `${stat.level * 20}px` }"
-                        :class="{ 'bg-gray-300': stat.level === 1, 'bg-yellow-100': stat.level > 1,'bg-yellow-200': stat.level > 2}"
+                        :class="{
+              'bg-gray-300': stat.level === 1,
+              'bg-yellow-100': stat.level > 1,
+              'bg-yellow-200': stat.level > 2
+            }"
                     >
-                        <div class="flex items-center gap-3">
-
-
-                            <span class="text-gray-800 font-medium">
-                             {{ node.text }}
-                                  </span>
-                            <div class="text-center w-full flex justify-center" title>
-
-                                <button @click="editslug(node)" class="px-2">
-                                <span v-if="node.slug"><span :title=node.slug
-                                                             class="border bg-green-200 px-2 rounded-md border-black  ">
-                                  <span class="md:inline-block sm:hidden">اسلاگ:</span>   {{ truncate(node.slug, 20) }}  </span></span>
+                        <div class="flex flex-wrap sm:flex-nowrap items-center gap-3 flex-grow min-w-0">
+              <span
+                  class="text-gray-800 font-medium truncate max-w-[200px] sm:max-w-[300px]"
+                  :title="node.text"
+              >
+                {{ node.text }}
+              </span>
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <button @click="editslug(node)" class="px-2" title="ویرایش اسلاگ">
+                  <span v-if="node.slug" class="border bg-green-200 px-2 rounded-md border-black whitespace-nowrap inline-block max-w-[150px] overflow-hidden text-ellipsis" :title="node.slug">
+                    <span class="hidden sm:inline">اسلاگ:</span> {{ truncate(node.slug, 20) }}
+                  </span>
                                 </button>
-                                <button @click="editIcon(node)" class="px-2">
-                                <span v-if="node.icon"><span :title=node.icon
-                                                             class="border bg-green-200 px-2 rounded-md border-black  ">
-                                    <i :class=node.icon></i></span></span>
+                                <button @click="editIcon(node)" class="px-2" title="ویرایش آیکون">
+                  <span v-if="node.icon" class="border bg-green-200 px-2 rounded-md border-black inline-flex items-center justify-center">
+                    <i :class="node.icon"></i>
+                  </span>
                                 </button>
                             </div>
-                            <span class="text-nowrap">تعداد پست:{{ node.product_count }}</span>
+                            <span class="whitespace-nowrap text-sm text-gray-700 flex-shrink-0">تعداد پست: {{ node.product_count }}</span>
                         </div>
-                        <div class="flex gap-2">
-
+                        <div class="flex gap-2 flex-shrink-0">
                             <button
                                 @click="editNode(node)"
                                 class="text-blue-600 hover:text-blue-800 text-sm"
                                 title="ویرایش"
-                            >✏️
+                            >
+                                ✏️
                             </button>
                             <button
                                 @click="deleteNode(stat, node)"
                                 class="text-red-600 hover:text-red-800 text-sm"
                                 title="حذف"
-                            >🗑️
+                            >
+                                🗑️
                             </button>
                         </div>
                     </div>
-
                 </template>
             </base-tree>
+
             <div class="text-center mt-6">
                 <button
-                    class="bg-blue-600 text-white px-6 py-2 rounded-full shadow hover:bg-blue-700 transition"
+                    class="bg-blue-600 text-white px-6 py-2 rounded-full shadow hover:bg-blue-700 transition w-full sm:w-auto"
                     @click="saveStructure"
                 >
                     💾 ذخیره
                 </button>
             </div>
         </div>
+
         <!-- Modal component -->
-        <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-lg relative">
-                <h2 class="text-xl font-semibold mb-4">{{ modalTitle }}</h2>
+        <div
+            v-if="showModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4"
+        >
+            <div
+                class="bg-white rounded-xl p-6 max-w-md w-full shadow-lg relative"
+                @click.stop
+            >
+                <h2 class="text-xl font-semibold mb-4 text-center">{{ modalTitle }}</h2>
                 <input
                     ref="modalInputRef"
                     v-model="modalInput"
@@ -78,13 +96,27 @@
                     :placeholder="modalPlaceholder"
                     @keyup.enter="confirmModal"
                 />
-                <div class="flex justify-end gap-2">
-                    <button @click="closeModal" class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400">لغو</button>
-                    <button @click="confirmModal" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
+                <div class="flex justify-end gap-2 flex-wrap">
+                    <button
+                        @click="closeModal"
+                        class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 flex-grow sm:flex-grow-0"
+                    >
+                        لغو
+                    </button>
+                    <button
+                        @click="confirmModal"
+                        class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 flex-grow sm:flex-grow-0"
+                    >
                         تأیید
                     </button>
                 </div>
-                <button @click="closeModal" class="absolute top-2 left-2 text-gray-600 hover:text-gray-800">✖️</button>
+                <button
+                    @click="closeModal"
+                    class="absolute top-2 left-2 text-gray-600 hover:text-gray-800 text-lg"
+                    aria-label="بستن"
+                >
+                    ✖️
+                </button>
             </div>
         </div>
     </div>
@@ -104,7 +136,7 @@ export default {
 
         async fetchCategories() {
             const categoriesRes = await axios.get("/api/blog/categories");
-            const productsRes = await axios.get("/api/allposts");
+            const productsRes = await axios.get("/api/allpostswithoutpaginate");
             console.log(productsRes.data)
             const productCountMap = this.countProductsByCategory(productsRes.data);
             this.treeData = this.transformRecursive(categoriesRes.data, productCountMap);
@@ -151,6 +183,7 @@ export default {
 
         countProductsByCategory(products) {
             const map = {};
+            console.log(products)
             products.forEach(p => {
                 if (!map[p.post_category_id]) {
                     map[p.post_category_id] = 0;
