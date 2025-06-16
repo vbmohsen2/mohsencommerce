@@ -18,6 +18,9 @@ import blogCategoryEdit from './components/admin/blog/blogCategoryEdit.vue';
 import attributesedit from './components/admin/attributes/attributesEdit.vue';
 import blogPosts from './components/admin/blog/blogPosts.vue';
 import search from './components/products/search.vue';
+import users from './components/admin/user/user.vue'
+import orders from './components/admin/orders/orders.vue'
+import categoryProducts  from './components/products/CategoryProducts.vue'
 import router from "./router";
 
 const app = createApp({});
@@ -29,6 +32,9 @@ app.component('blogCategoryEdit',blogCategoryEdit)
 app.component('blogPosts',blogPosts)
 app.component('editProduct',editProduct)
 app.component('productsearch',search)
+app.component('users', users)
+app.component('orders',orders)
+app.component('category-products', categoryProducts);
 // app.component('CategoryList', CategoryList);
 app.use(router)
 app.mount('#app');

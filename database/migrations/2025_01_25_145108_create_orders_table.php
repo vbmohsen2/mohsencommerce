@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('tracking_number')->nullable();
             $table->string('coupon_code')->nullable();
             $table->decimal('totalDiscount',15,2)->nullable();
-            $table->decimal('total');
+            $table->decimal('total',15,2)->nullable();
             $table->timestamps();
         });
     }

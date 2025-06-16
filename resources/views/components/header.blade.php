@@ -8,7 +8,7 @@
 
             {{--search--}}
             <div class="flex grow sm:order-2 order-4 max-sm:w-full justify-center  ">
-                <div id="app" class="w-3/4 max-sm:w-full ml-5 mb-4 m-2  flex rounded-lg bg-gray-300">
+                <div  class="w-3/4 max-sm:w-full ml-5 mb-4 m-2  flex rounded-lg bg-gray-300">
                     <img src="{{asset('images/search icon.svg')}}" class="w-6 h-6 m-2 items-center" alt="">
                     {{--                    <input--}}
                     {{--                        class=" bg-gray-300 w-full  rounded-lg focus:outline-none   shadow-x"--}}

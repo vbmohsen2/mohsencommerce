@@ -33,14 +33,14 @@
     <div class="flex flex-col justify-between flex-1 p-2 space-y-2">
         <div class="text-center text-xs text-gray-500">ارسال اکسپرس</div>
 
-        <div class="text-center text-sm font-semibold leading-tight line-clamp-2 h-[3.5em]">
+        <div class="text-center text-xs font-semibold leading-tight line-clamp-2 h-[3.5em]">
             {{ $product->name }}
         </div>
 
-        @if($product->discount_amount)
-            <div class="text-center text-green-600 text-lg font-bold">
+        @if($product->discount_price!=0)
+            <div class="text-center text-green-600 text-sm font-bold">
                 {{ $product->discount_price }}
-                <span class="text-sm text-red-500 font-normal">
+                <span class="text-xs  text-red-500 ">
                 ({{ round((($product->price - $product->discount_price) / $product->price) * 100) }}٪ تخفیف)
             </span>
             </div>

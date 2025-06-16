@@ -115,12 +115,9 @@
 
 
                     <!-- شبکه‌های اجتماعی -->
-                <div class=" flex justify-center flex-wrap w-full  text-wrap md:justify-evenly text-lg  mt-4 md:mt-0">
+                <div class=" flex  flex-wrap mx-auto max-md:w-full mt-10 text-wrap  text-lg  lg:mt-0">
                     <p class="md:hidden w-full px-4">با ما در ارتباط باشید</p>
-                    <div class=" flex items-center text-center justify-between mx-auto flex-wrap  text-wrap md:justify-evenly text-lg  mt-4 md:mt-0">
-                    <a href="" title="یوتیوب"><i class="fab fa-youtube text-3xl"></i></a>
-                    <a href="" title="یوتیوب"><i class="fab fa-youtube text-3xl"></i></a>
-                    <a href="" title="یوتیوب"><i class="fab fa-youtube text-3xl"></i></a>
+                    <div class=" flex items-center md:w-full text-center justify-between max-md:mx-auto   flex-wrap  text-wrap  text-lg  mt-4 md:mt-0">
                     <a href="" title="یوتیوب"><i class="fab fa-youtube text-3xl text-blue-400"></i></a>
                     <a href="" title="یوتیوب"><i class="fab fa-youtube text-3xl text-red-400"></i></a>
                     <a href="" title="یوتیوب"><i class="fab fa-youtube text-3xl text-green-600"></i></a>

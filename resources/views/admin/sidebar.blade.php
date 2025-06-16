@@ -43,7 +43,11 @@
         <div id="offCanvas"
              class=" translate-x-full  fixed top-0 w-1/2 sm:w-1/3 md:w-1/4    right-0 z-40  h-full bg-white shadow-lg transform  transition-all duration-300 overflow-scroll ">
             <div class="p-4 bg-blue-600 text-white flex justify-between">
-                <span>Menu</span>
+                <span>
+                    @auth()
+                        {{auth()->user()->name}}
+                    @endauth
+                </span>
                 <button id="closeMenu" class="text-white">&times;</button>
             </div>
             <aside>
@@ -57,13 +61,13 @@
                     <a href="{{route('admin.products')}}" class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition">
                         📦 محصولات
                     </a>
-                    <a href="" class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+                    <a href="{{route('admin.orders')}}" class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition">
                         📋 سفارشات
                     </a>
                     <a href="{{route('admin.categories')}}" class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition">
                         🗂 دسته بندی ها
                     </a>
-                    <a href="" class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+                    <a href="{{route('admin.users')}}" class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition">
                         👥 کاربران
                     </a>
                     <a href="{{route('admin.attributes.templates')}}" class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition">

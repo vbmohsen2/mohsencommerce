@@ -1,13 +1,12 @@
 @extends('layouts.master')
 @section('content')
 
-    <div class="w-full container mx-auto my-16 ">
+    <div id="app" class="w-full container mx-auto my-16 ">
 
-        @foreach ($products as $product)
-           
-        @endforeach
+        <category-products
+            :category-id="{{ $category->id }}"
+            category-slug="{{ $category->slug }}"
+        ></category-products>
 
-        <!-- لینک‌های صفحه‌بندی -->
-        {{ $products->links() }}
     </div>
 @endsection

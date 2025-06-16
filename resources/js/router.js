@@ -3,8 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import blogPosts from './components/admin/blog/blogPosts.vue'
 import EditPost from './components/admin/blog/editPost.vue'
 import NewPost from  './components/admin/blog/newPost.vue'
-
-
+import orders from './components/admin/orders/orders.vue'
+import orderDetails from './components/admin/orders/OrderDetails.vue'
 
 const routes = [
     {
@@ -22,6 +22,18 @@ const routes = [
         name: 'posts.new',
         component: NewPost
     },
+    {
+        path: '/admin/orders',
+        name: 'orders',
+        component: orders
+
+    },
+    {
+        path: '/admin/orders/:id',
+        name: 'orderDetails',
+        component: orderDetails
+
+    }
 
 
 

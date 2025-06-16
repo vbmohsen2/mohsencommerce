@@ -7,14 +7,48 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class OrderController extends Controller
 {
     public function index()
     {
-
         return view('pages.shipping');
     }
+    public function indexordersforvue(Request $request){
+        $perPage = $request->input('per_page', 10);
+        $query = Order::query();
+
+        if ($request->filled('id')) {
+            $query->where('id', $request->id);
+        }
+
+        if ($request->filled('user_name')) {
+            $query->where('user_name', 'like', '%' . $request->user_name . '%');
+        }
+
+        return $query
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+    }
+
+    public function updateStatus(Request $request, Order $order)
+    {
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(['معلق', 'در حال پردازش', 'ارسال شده', 'تحویل داده شده', 'کنسل'])],
+        ]);
+        $order = Order::findOrFail($request->id);
+
+        $order->status=$validated['status'];
+        Log::info($order);
+        $order->save();
+        return response()->json([
+            'message' => 'وضعیت با موفقیت بروزرسانی شد.',
+            'order' => $order,
+        ]);
+    }
+
 
     public function selectAddress(Request $request)
     {
@@ -45,6 +79,7 @@ class OrderController extends Controller
         $order->address= json_encode($selectedAddress, JSON_UNESCAPED_UNICODE);
         $order->shipping_method="";
         $order->total=$total;
+        $order->user_name=$user->name;
         $order->save();
 
         // افزودن آیتم‌ها به order_items
@@ -91,5 +126,44 @@ class OrderController extends Controller
             'address' => $newAddress,
             'index' => count($addresses) - 1
         ]);
+    }
+    public function show(){
+        return view('admin.orders.ordersvue');
+    }
+    public function showorder($id)
+    {
+        $order = Order::with(['orderItems.product'])->find($id);
+
+        if (!$order) {
+            return response()->json(['message' => 'سفارش یافت نشد'], 404);
+        }
+
+        return response()->json(['order' => $order]);
+    }
+    public function updateAddress(Request $request, $id)
+    {
+
+        Log::info($request);
+        $order = Order::find($id);
+
+        if (!$order) {
+            return response()->json(['message' => 'سفارش یافت نشد'], 404);
+        }
+
+        $validated = $request->validate([
+            'city' => ['required', 'string'],
+            'province' => ['required', 'string'],
+            'address' => ['required', 'string'],
+        ]);
+
+        $addressJson = json_encode([
+            'city' => $validated['city'],
+            'province' => $validated['province'],
+            'address' => $validated['address'],
+        ]);
+
+        $order->update(['address' => $addressJson]);
+
+        return response()->json(['message' => 'آدرس با موفقیت بروزرسانی شد']);
     }
 }
