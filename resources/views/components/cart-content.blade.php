@@ -2,6 +2,7 @@
     @php $total = 0; @endphp
     @foreach($cartItems as $item)
         @php
+
             $price = $item['price'] ?? 0;
             $quantity = $item['quantity'];
             $total += $price * $quantity;

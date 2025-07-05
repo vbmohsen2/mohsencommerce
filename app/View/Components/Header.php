@@ -40,7 +40,7 @@ class Header extends Component
                     'id' => $item->product_id,
                     'name' => optional($item->product)->name,
                     'quantity' => $item->quantity,
-                    'price' => $item->product->price,
+                    'price' => $item->product->discount_price > 0 ? $item->product->discount_price : $item->product->price,
                     'code' => $item->code,
                 ];
             }

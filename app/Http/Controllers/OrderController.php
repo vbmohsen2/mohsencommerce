@@ -88,7 +88,7 @@ class OrderController extends Controller
                 'order_id' => $order->id,
                 'product_id' => $item->product_id,
                 'quantity' => $item->quantity,
-                'price' => $item->product->price,
+                'price' => $item->product->discount_price > 0 ? $item->product->discount_price : $item->product->price,
                 'totalPrice' => $item->product->price * $item->quantity,
                 'code' => $item->code,
             ]);

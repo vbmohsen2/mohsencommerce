@@ -24,7 +24,7 @@ class CartController extends Controller
             // ✅ لاگین شده: ذخیره در دیتابیس
             $user = auth()->user();
 
-            $cartItem = \App\Models\Carts::where('user_id', $user->id)
+            $cartItem = Carts::where('user_id', $user->id)
                 ->where('product_id', $productId)
                 ->where('code', $code)
                 ->first();
@@ -32,7 +32,7 @@ class CartController extends Controller
             if ($cartItem) {
                 $cartItem->increment('quantity');
             } else {
-                \App\Models\Carts::create([
+               Carts::create([
                     'user_id'    => $user->id,
                     'product_id' => $productId,
                     'quantity'   => 1,
@@ -47,9 +47,13 @@ class CartController extends Controller
             if (isset($cart[$cartKey])) {
                 $cart[$cartKey]['quantity']++;
             } else {
+                $price=$product->price;
+                if($product->discount_price!=0){
+                    $price=$product->discount_price;
+                }
                 $cart[$cartKey] = [
                     'name'     => $product->name,
-                    'price'    => $product->price,
+                    'price'    => $price,
                     'quantity' => 1,
                     'image'    => $images->thumb,
                     'code'     => $code,
@@ -80,7 +84,7 @@ class CartController extends Controller
                     'id' => $item->product_id,
                     'name' => optional($item->product)->name,
                     'quantity' => $item->quantity,
-                    'price' => $item->product->price,
+                    'price' => $item->product->discount_price > 0 ? $item->product->discount_price : $item->product->price,
                     'code' => $item->code,
                 ];
             }

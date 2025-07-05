@@ -33,20 +33,20 @@
     <div class="flex flex-col justify-between flex-1 p-2 space-y-2">
 {{--        <div class="text-center text-xs text-gray-500">ارسال اکسپرس</div>--}}
 
-        <div class="text-center text-xs font-semibold leading-tight line-clamp-2 h-[3.5em]">
+        <div class="text-center text-xs font-semibold leading-tight line-clamp-2">
             {{ $product->name }}
         </div>
 
         @if($product->discount_price!=0)
             <div class="text-center text-green-600 text-sm font-bold">
-                {{ $product->discount_price }}
+                {{ number_format($product->discount_price) }}تومان
                 <span class="text-xs  text-red-500 ">
-              تومان  ({{ round((($product->price - $product->discount_price) / $product->price) * 100) }}٪ تخفیف)
+                ({{  number_format((($product->price - $product->discount_price) / $product->price) * 100) }}٪ تخفیف)
             </span>
             </div>
-            <div class="text-center line-through text-sm text-gray-500">{{ $product->price }} تومان</div>
+            <div class="text-center line-through text-sm text-gray-500">{{ number_format($product->price )}} تومان</div>
         @else
-            <div class="text-center text-base text-gray-800">{{ $product->price }} تومان </div>
+            <div class="text-center text-base text-gray-800">{{ number_format($product->price) }} تومان </div>
         @endif
     </div>
 </div>
