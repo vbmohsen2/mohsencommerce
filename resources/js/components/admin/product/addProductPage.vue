@@ -187,8 +187,39 @@
                     >
                         + افزودن ویژگی جدید
                     </button>
-                </div>
 
+                </div>
+                <!-- فیلد کد یا رنگ محصول -->
+                <div class="border p-2">
+                    <label class="block font-semibold mb-2">کدها / رنگ‌های محصول</label>
+                    <div
+                        v-for="(item, index) in productCodes"
+                        :key="index"
+                        class="flex items-center gap-2 mb-2"
+                    >
+                        <input
+                            v-model="item.label"
+                            placeholder="نام یا کد (مثل قرمز یا code123)"
+                            class="border px-2 py-1 rounded w-1/2"
+                        />
+                        <input
+                            v-model="item.color"
+                            type="color"
+                            class="w-10 h-10 rounded border"
+                        />
+                        <button
+                            type="button"
+                            class="bg-red-500 text-white px-2 rounded"
+                            @click="removeCode(index)"
+                        >✕</button>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="bg-green-500 text-white px-3 py-1 rounded"
+                        @click="addCode"
+                    >+ افزودن کد رنگ</button>
+                </div>
                 <!-- دکمه‌ها -->
                 <div class="flex justify-between items-center pt-4">
 
@@ -299,6 +330,17 @@ const addExtraField = () => {
     }
 
 }
+const productCodes = ref([
+    { label: '', color: '#000000' }
+]);
+
+const addCode = () => {
+    productCodes.value.push({ label: '', color: '#000000' });
+};
+
+const removeCode = (index) => {
+    productCodes.value.splice(index, 1);
+};
 const handleSlug=async (newVal) => {
 
     let slug
@@ -452,6 +494,7 @@ const submitForm = async () => {
     formData.append('brand', productBrand.value)
     formData.append('weight', productWeight.value)
     formData.append('attributes', JSON.stringify(attributes))
+    formData.append('code', JSON.stringify(productCodes.value));
 
 
 

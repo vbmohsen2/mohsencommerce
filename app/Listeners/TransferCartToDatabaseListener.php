@@ -28,14 +28,20 @@ class TransferCartToDatabaseListener
         $cart = Session::get('cart', []);
 
         if (!empty($cart)) {
-            foreach ($cart as $productId => $item) {
-                Carts::updateOrCreate(
+            foreach ($cart as $key => $item) {
+                // استخراج product_id و code از کلید (مثلاً "162_;n5")
+                [$productId] = explode('_', $key);
+                $code = $item['code'] ?? null;
+
+                // ذخیره یا به‌روزرسانی رکورد در جدول carts
+             Carts::updateOrCreate(
                     [
-                        'user_id' => $user->id,
-                        'product_id' => $productId,
+                        'user_id'    => $user->id,
+                        'product_id' => (int) $productId,
+                        'code'       => $code,
                     ],
                     [
-                        'quantity' => $item['quantity']
+                        'quantity'   => (int) $item['quantity'],
                     ]
                 );
             }

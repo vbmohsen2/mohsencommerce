@@ -1,4 +1,4 @@
-<div class="my-4 mx-auto     items-center   flex flex-wrap  ">
+<div class="my-4 mx-auto      items-center   flex flex-wrap  ">
 
     @include('components.big-banner')
 

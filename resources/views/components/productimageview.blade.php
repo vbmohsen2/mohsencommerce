@@ -1,4 +1,4 @@
-<div class="flex flex-col lg:flex-row w-full md:w-2/5 order-2 md:order-1 pb-6">
+<div class="flex flex-col lg:flex-row w-full md:w-2/5  md:order-1 pb-6">
     <div class="flex lg:flex-col align-top text-2xl lg:w-1/12   ">
         <ul class="float-left">
             <li class="inline-block" >

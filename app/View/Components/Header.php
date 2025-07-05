@@ -41,7 +41,7 @@ class Header extends Component
                     'name' => optional($item->product)->name,
                     'quantity' => $item->quantity,
                     'price' => $item->product->price,
-
+                    'code' => $item->code,
                 ];
             }
         } else {
@@ -52,6 +52,7 @@ class Header extends Component
                     'name' => $item['name'],
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
+                    'code'=>$item['code'],
                 ];
             }
         }

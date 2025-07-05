@@ -7,9 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
-    <title>
-        فروشگاه
-    </title>
+
+        <title>@yield('title', 'صفحه اصلی')</title>
+         <meta name="description" content=@yield('description','بهترین فروشگاه برای خرید انواع لپ‌تاپ، گوشی موبایل، تجهیزات کامپیوتری و لوازم جانبی با قیمت مناسب. تحویل سریع در سراسر کشور.')>
+
 
 
 </head>

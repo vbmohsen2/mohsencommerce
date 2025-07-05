@@ -9,6 +9,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\UserController;
+use App\Livewire\Mainpage;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,7 +47,7 @@ Route::get('/admin/orders/{any}', function () {
 Route::post('/slugify', [admin::class, 'slugify']);
 
 
-
+//blog
 
 Route::get('/admin/blog/categories', [blogAdmin::class, 'indexCategoreis'])->name('admin.blog.categories');
 
@@ -71,9 +72,9 @@ Route::get('/admin/users', function () {
 
 
 //commerce
-Route::get('/', [\App\Livewire\Mainpage::class, 'index'])->name('home');
+Route::get('/', [Mainpage::class, 'index'])->name('home');
 route::get('/product/{slug}', ProductsController::class . '@show');
-route::get('/addtocart/{productId}', ProductsController::class . '@addToCart');
+
 route::get('/category/{slug}', CategoryController::class . '@show');
 Route::get('/products/search', [ProductsController::class, 'search']);
 
@@ -83,12 +84,14 @@ Route::post('/cart/increase/{id}', [CartController::class, 'increase'])->name('c
 Route::post('/cart/decrease/{id}', [CartController::class, 'decrease'])->name('cart.decrease');
 Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
-
+route::get('/addtocart/{productId}', [CartController::class , 'addToCart'])->name('cart.addToCart');
 
 Route::get('/shipping', [OrderController::class, 'index'])->name('shipping')->middleware('auth');
 
 
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
+
+
 
 
 

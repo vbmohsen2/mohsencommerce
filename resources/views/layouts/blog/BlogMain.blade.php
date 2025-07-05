@@ -1,4 +1,5 @@
 @extends( 'layouts.blog.blog')
+
 @section('content')
 <main class=" container mx-auto mt-36  my-10 ">
    <section class="flex flex-col   sm:flex-row  flex-wrap rounded-md">

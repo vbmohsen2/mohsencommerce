@@ -1,4 +1,4 @@
-<div class="flex flex-col h-full border border-gray-300 rounded-md overflow-hidden">
+<div class="flex flex-col h-full  border-2 hover:border-blue-500 border-white rounded-md overflow-hidden">
 
     @php
         $mainImage = "";
@@ -16,7 +16,7 @@
     @endphp
 
     {{-- عنوان یا برچسب بالا --}}
-    <div class="text-center text-sm text-gray-600">ارسال اکسپرس</div>
+{{--    <div class="text-center text-sm text-gray-600">ارسال اکسپرس</div>--}}
 
     {{-- تصویر محصول با نسبت ثابت --}}
     <a href="/product/{{ $product->slug }}">
@@ -31,7 +31,7 @@
 
     {{-- نام محصول --}}
     <div class="flex flex-col justify-between flex-1 p-2 space-y-2">
-        <div class="text-center text-xs text-gray-500">ارسال اکسپرس</div>
+{{--        <div class="text-center text-xs text-gray-500">ارسال اکسپرس</div>--}}
 
         <div class="text-center text-xs font-semibold leading-tight line-clamp-2 h-[3.5em]">
             {{ $product->name }}
@@ -41,12 +41,12 @@
             <div class="text-center text-green-600 text-sm font-bold">
                 {{ $product->discount_price }}
                 <span class="text-xs  text-red-500 ">
-                ({{ round((($product->price - $product->discount_price) / $product->price) * 100) }}٪ تخفیف)
+              تومان  ({{ round((($product->price - $product->discount_price) / $product->price) * 100) }}٪ تخفیف)
             </span>
             </div>
-            <div class="text-center line-through text-sm text-gray-500">{{ $product->price }}</div>
+            <div class="text-center line-through text-sm text-gray-500">{{ $product->price }} تومان</div>
         @else
-            <div class="text-center text-base text-gray-800">{{ $product->price }}</div>
+            <div class="text-center text-base text-gray-800">{{ $product->price }} تومان </div>
         @endif
     </div>
 </div>

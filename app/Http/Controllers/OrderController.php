@@ -90,6 +90,7 @@ class OrderController extends Controller
                 'quantity' => $item->quantity,
                 'price' => $item->product->price,
                 'totalPrice' => $item->product->price * $item->quantity,
+                'code' => $item->code,
             ]);
         }
 

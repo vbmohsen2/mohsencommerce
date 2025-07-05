@@ -7,10 +7,13 @@ use Livewire\Component;
 class Carousel extends Component
 {
     public $images = [
-        'images/slides/Accessories pc v1 copy-1600x400.jpg',
-        'images/slides/Gaming Consoles slider pc v1 copy-1600x400.jpg',
-        'images/slides/Gaming System slider pc v1 copy-1600x400.jpg',
-        'images/slides/Gpus slider pc v1 copy (2)-1600x400.jpg'
+        'images/slides/shal.png',
+        'images/slides/romanoscarf2.png',
+        'images/slides/gemini shal.png',
+//        'images/slides/Accessories pc v1 copy-1600x400.jpg',
+//        'images/slides/Gaming Consoles slider pc v1 copy-1600x400.jpg',
+//        'images/slides/Gaming System slider pc v1 copy-1600x400.jpg',
+//        'images/slides/Gpus slider pc v1 copy (2)-1600x400.jpg'
 
     ];
 

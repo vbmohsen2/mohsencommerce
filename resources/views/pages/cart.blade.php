@@ -1,4 +1,5 @@
 @extends('layouts.master')
+@section('title', 'سبد خرید')
 @section('content')
 
     <div class="w-full container mx-auto my-16 ">
@@ -47,6 +48,8 @@
                      alt="{{ $item['name'] }}">
                 <div class="flex-grow justify-between">
                     <h4 class="font-semibold">{{ $item['name'] }}</h4>
+
+                    <p>طرح:{{$item['code']}}</p>
                     <p class="text-sm text-gray-600">{{ number_format($price) }} تومان</p>
 
                 </div>

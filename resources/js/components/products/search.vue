@@ -1,5 +1,5 @@
 <template>
-    <div class="relative w-full mx-auto">
+    <div  class="relative w-full mx-auto">
 
         <input
             v-model="search"

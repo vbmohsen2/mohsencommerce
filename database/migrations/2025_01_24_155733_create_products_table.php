@@ -29,6 +29,7 @@ return new class extends Migration
             $table->json('attributes')->nullable();
             $table->unsignedBigInteger('views_count')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

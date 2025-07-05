@@ -49,35 +49,58 @@
                             :key="product.id"
                             class="border rounded-lg shadow-sm overflow-hidden transition hover:shadow-md"
                         >
-                            <a :href="`/admin/products/${product.id}`" class="block">
-                                <img
-                                    v-if="product.images"
-                                    :src="getMainImage(product.images)"
-                                    alt="product image"
-                                    class="w-full h-40 object-cover"
-                                />
-                                <div class="p-3">
-                                    <h4 class="font-semibold text-gray-800 text-lg mb-1 truncate">
-                                        {{ product.name }}
-                                    </h4>
-                                    <p class="text-sm text-gray-600 mb-2">
-                                        {{ product.price }} تومان
-                                    </p>
-                                    <p class="text-sm text-gray-600 mb-2">
-                                        شماره محصول: {{ product.id }}
-                                    </p>
-                                    <div class="flex justify-between items-center mt-2">
-                                        <span class="text-blue-500 text-sm hover:underline">مشاهده جزئیات</span>
-                                        <input
-                                            type="checkbox"
-                                            v-model="product.is_active"
-                                            @change="changeIsActive(product)"
-                                            :true-value="1"
-                                            :false-value="0"
-                                        />
+                            <div class="border rounded-lg shadow-sm overflow-hidden transition hover:shadow-md flex flex-col h-full">
+
+                                <!-- بخش کلیک‌پذیر (تصویر + متن) -->
+                                <a
+                                    :href="`/admin/products/${product.id}`"
+                                    class="block cursor-pointer flex-grow"
+                                >
+                                    <img
+                                        v-if="product.images"
+                                        :src="getMainImage(product.images)"
+                                        alt="product image"
+                                        class="w-full h-40 object-cover"
+                                    />
+
+                                    <div class="p-3">
+                                        <h4 class="font-semibold text-gray-800 text-lg mb-1 truncate">
+                                            {{ product.name }}
+                                        </h4>
+
+                                        <p class="text-sm text-gray-600 mb-2">
+                                            {{ product.price }} تومان
+                                        </p>
+
+                                        <p class="text-sm text-gray-600">
+                                            شماره محصول: {{ product.id }}
+                                        </p>
                                     </div>
+                                </a>
+
+                                <!-- بخش دکمه‌ها (حذف و فعال/غیرفعال) -->
+                                <div class="p-3 border-t flex justify-between items-center bg-gray-50">
+                                    <button
+                                        @click="deleteProduct(product)"
+                                        class="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-red-500 text-white hover:bg-red-600 active:bg-red-700 transition shadow-sm"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                        <span class="hidden sm:inline">حذف</span>
+                                    </button>
+
+                                    <input
+                                        type="checkbox"
+                                        v-model="product.is_active"
+                                        @change="changeIsActive(product)"
+                                        :true-value="1"
+                                        :false-value="0"
+                                    />
                                 </div>
-                            </a>
+
+                            </div>
+
                         </div>
                     </div>
 
@@ -135,10 +158,27 @@ const fetchProducts = async () => {
     products.value = res.data
 
 }
-const changeIsActive=(product)=>{
-    const isChecked = product.is_active === 1; // یا Boolean(product.is_active)
-    console.log(isChecked); // فقط true یا false
-    //بعدا باید بنویسم
+const deleteProduct = async (product) => {
+    if (confirm(`آیا از حذف محصول "${product.name}" مطمئن هستید؟`)) {
+        try {
+           console.log(await axios.delete(`/api/product/${product.id}`));
+            fetchProducts(); // لیست را به‌روز کن
+        } catch (error) {
+            alert('خطا در حذف محصول');
+            console.error(error);
+        }
+    }
+}
+const changeIsActive = async (product) => {
+    try {
+        await axios.patch(`/api/product/${product.id}/toggle-active`, {
+            is_active: product.is_active
+        });
+        // اختیاری: پیام موفقیت یا نوتیفیکیشن
+    } catch (error) {
+        alert('خطا در تغییر وضعیت فعال بودن');
+        console.error(error);
+    }
 }
 const goToPage = (page) => {
     currentPage.value = page

@@ -41,6 +41,7 @@
                     <thead class="bg-gray-100">
                     <tr>
                         <th class="px-4 py-2">نام محصول</th>
+                        <th class="px-4 py-2">طرح محصول</th>
                         <th class="px-4 py-2">تعداد</th>
                         <th class="px-4 py-2">قیمت واحد</th>
                         <th class="px-4 py-2">مجموع</th>
@@ -49,9 +50,12 @@
                     <tbody>
                     <tr v-for="item in order.order_items" :key="item.id" class="border-t">
                         <td class="px-4 py-2">{{ item.product.name }}</td>
+                        <td class="px-4 py-2">{{ item.code }}</td>
                         <td class="px-4 py-2">{{ item.quantity }}</td>
                         <td class="px-4 py-2">{{ formatPrice(item.price) }}</td>
                         <td class="px-4 py-2">{{ formatPrice(item.price * item.quantity) }}</td>
+
+
                     </tr>
                     </tbody>
                 </table>

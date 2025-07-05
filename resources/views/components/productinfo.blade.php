@@ -38,7 +38,7 @@
 
 
         <div class="fixed  bottom-2 right-0  z-10 md:flex md:flex-col md:relative  w-full px-2">
-            <div class="hidden md:block text-2xl md:py-2 mx-auto"><h1>{{$product->price}}ریال </h1></div>
+            <div class="hidden md:block text-2xl md:py-2 mx-auto"><h1>{{$product->price}} تومان</h1></div>
 
             <div class="flex justify-center py-2 items-center w-1/2 mx-auto">
                 <label class="hidden md:block">تعداد</label>
@@ -50,8 +50,8 @@
             </div>
             <div>
 
-                <a href="/addtocart/{{$product->id}}" class=" flex text-center my-2 py-2 border rounded-lg lg:w-1/2  lg:mx-auto  w-full bg-green-600">
-                    <span class="md:hidden text-2xl md:py-2 mx-auto">{{$product->price}}  ریال </span>
+                <a id="addToCartBtn" href="#" class=" flex text-center my-2 py-2 border rounded-lg lg:w-1/2  lg:mx-auto  w-full bg-green-600">
+                    <span class="md:hidden text-2xl md:py-2 mx-auto">{{$product->price}}  تومان </span>
                     <svg width="30" height="30" class="md:hidden mx-2" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="15" cy="15" r="14.5" stroke="white"></circle>
                     <line style="stroke: rgb(255, 255, 255);stroke-width: 2px;" x1="15" y1="7.1" x2="15" y2="22.9"></line>
@@ -65,6 +65,15 @@
     </div>
     </div>
     </div>
+<script>
+        document.getElementById('addToCartBtn').addEventListener('click', function (e) {
+        e.preventDefault(); // از رفتن مستقیم جلوگیری کن
+        const code = document.getElementById('code').value;
+        const productId = {{ $product->id }};
+        const url = `/addtocart/${productId}?code=${encodeURIComponent(code)}`;
+        window.location.href = url;
+    });
+</script>
 
 
 

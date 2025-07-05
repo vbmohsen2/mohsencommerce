@@ -161,6 +161,7 @@ class admin extends Controller
 
             $product->name = $request->name;
             $product->slug = $request->slug;
+            $product->code = $request->code;
             $product->description = $request->description ;
             if($request->is_active=="true"){
                 $product->is_active = 1;
@@ -211,6 +212,20 @@ class admin extends Controller
 //            'message' => 'Product created successfully',
 //            'product' => $mainImagePath
 //        ]);
+    }
+
+    public function destroy(Products $product)
+    {
+
+        return response()->json(['message' => $product->delete()]);
+    }
+
+    public function toggleActive(Products $product)
+    {
+        $product->is_active = request('is_active');
+        $product->save();
+
+        return response()->json(['message' => $product->save()]);
     }
     public function getCategories()
     {

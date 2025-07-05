@@ -23,6 +23,8 @@ Route::get('/products', [admin::class, 'getProducts']);
 Route::get('/productsAll', [admin::class, 'getproductswihoutpagination']);
 Route::post('/addproduct', [admin::class, 'addProduct']);
 Route::get('/product/{id}', [admin::class, 'fetchProduct']);
+Route::delete('/product/{product}', [admin::class, 'destroy']);
+Route::patch('/product/{product}/toggle-active', [admin::class, 'toggleActive']);
 
 
 Route::get('/attributestemplate/{id}', [attributes::class, 'showAttributeTemplate'])->name('admin.attributes.getAttributeTemplate');

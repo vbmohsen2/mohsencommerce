@@ -24,6 +24,7 @@ import categoryProducts  from './components/products/CategoryProducts.vue'
 import router from "./router";
 
 const app = createApp({});
+const headerApp=createApp({});
 app.component('category-filter', CategoryFilter);
 app.component('CategoryTreeWithEdit',CategoryTreeWithEdit);
 app.component('addProductPage',addProductPage)
@@ -31,13 +32,14 @@ app.component('attributesedit',attributesedit)
 app.component('blogCategoryEdit',blogCategoryEdit)
 app.component('blogPosts',blogPosts)
 app.component('editProduct',editProduct)
-app.component('productsearch',search)
+headerApp.component('productsearch',search)
 app.component('users', users)
 app.component('orders',orders)
 app.component('category-products', categoryProducts);
 // app.component('CategoryList', CategoryList);
 app.use(router)
 app.mount('#app');
+headerApp.mount('#headerapp')
 
 
 document.addEventListener("DOMContentLoaded", function () {

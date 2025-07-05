@@ -1,4 +1,5 @@
-
+@section('title',$mainpost->title)
+@section('description',$mainpost->description)
 @extends( 'layouts.blog.blog')
 @section('content')
     <main class="container mx-auto mt-36 w-full my-10 ">

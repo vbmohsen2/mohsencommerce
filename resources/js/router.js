@@ -1,42 +1,31 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import blogPosts from './components/admin/blog/blogPosts.vue'
-import EditPost from './components/admin/blog/editPost.vue'
-import NewPost from  './components/admin/blog/newPost.vue'
-import orders from './components/admin/orders/orders.vue'
-import orderDetails from './components/admin/orders/OrderDetails.vue'
-
 const routes = [
     {
         path: '/admin/blog/posts',
         name: 'posts.list',
-        component: blogPosts
+        component: () => import('./components/admin/blog/blogPosts.vue')
     },
     {
         path: '/admin/blog/posts/edit/:slug',
         name: 'posts.edit',
-        component: EditPost
+        component: () => import('./components/admin/blog/editPost.vue')
     },
     {
         path: '/admin/blog/posts/edit/newpost',
         name: 'posts.new',
-        component: NewPost
+        component: () => import('./components/admin/blog/newPost.vue')
     },
     {
         path: '/admin/orders',
         name: 'orders',
-        component: orders
-
+        component: () => import('./components/admin/orders/orders.vue')
     },
     {
         path: '/admin/orders/:id',
         name: 'orderDetails',
-        component: orderDetails
-
+        component: () => import('./components/admin/orders/OrderDetails.vue')
     }
-
-
-
 ]
 
 const router = createRouter({

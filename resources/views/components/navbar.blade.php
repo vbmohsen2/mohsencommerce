@@ -30,9 +30,19 @@
             <button class="max-sm:hidden mx-2  hover:text-green-600 py-2" id="menu-button">
                 <i class="fa fa-bars pl-2 "></i><span class="px-2 font-thin"> دسته بندی </span>
             </button>
-            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" id="menu-button">
-                <i class="far fa-file-code pl-4"><span class="px-2 font-thin"> اسمبل هوشمند</span> </i>
+            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" >
+                <span class="px-2 font-thin"> شال</span>
             </button>
+            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" >
+                <span class="px-2 font-thin"> روسری</span>
+            </button>
+            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600">
+               <span class="px-2 font-thin"> اسکارف</span>
+            </button>
+            <button class="max-sm:hidden  mx-2 py-2 hover:text-green-600" >
+                <span class="px-2 font-thin">کیف</span>
+            </button>
+
             <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" id="menu-button">
                 <i class="fa-solid  fa-file-lines pl-4"><span class="px-2 font-thin"><a href="/blog">بلاگ</a></span></i>
             </button>
@@ -90,7 +100,8 @@
                                         @endforeach
                                     </div>
                                     <div class="flex w-1/2  mx-auto justify-center items-center">
-                                        <img src="images/slides/Accessories pc v1 copy-1600x400.jpg" alt="">
+{{--                                        <img src="images/slides/Accessories pc v1 copy-1600x400.jpg" alt="">--}}
+                                        بعدا عکس اضافه شود
                                     </div>
                                 </div>
                             </div>

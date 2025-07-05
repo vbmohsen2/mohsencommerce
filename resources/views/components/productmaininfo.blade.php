@@ -17,6 +17,16 @@
             @endforeach
 
         </ul>
+    <div class="w-full py-4">
+        <label for="code">انتخاب طرح:</label>
+        <select id="code" name="code" class="border rounded p-2 my-2 w-full">
+            @foreach(json_decode($product->code) as $codeItem)
+                <option value="{{ $codeItem->label }}" style="background-color: {{ $codeItem->color }}; color: white;">
+                    {{ $codeItem->label }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
 
 </div>

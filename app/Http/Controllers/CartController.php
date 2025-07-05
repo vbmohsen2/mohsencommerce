@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Carts;
+use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -10,6 +11,56 @@ use Illuminate\Support\Facades\Session;
 class CartController extends Controller
 {
 
+
+    public function addToCart(Request $request, $productId)
+    {
+
+        $product = Products::findOrFail($productId);
+        $images = json_decode($product->images);
+        $code = $request->query('code');
+        $cartKey = $productId . '_' . $code;
+
+        if (auth()->check()) {
+            // ✅ لاگین شده: ذخیره در دیتابیس
+            $user = auth()->user();
+
+            $cartItem = \App\Models\Carts::where('user_id', $user->id)
+                ->where('product_id', $productId)
+                ->where('code', $code)
+                ->first();
+
+            if ($cartItem) {
+                $cartItem->increment('quantity');
+            } else {
+                \App\Models\Carts::create([
+                    'user_id'    => $user->id,
+                    'product_id' => $productId,
+                    'quantity'   => 1,
+                    'code'       => $code,
+                ]);
+            }
+
+        } else {
+            // ❌ لاگین نیست: ذخیره در سشن
+            $cart = session()->get('cart', []);
+
+            if (isset($cart[$cartKey])) {
+                $cart[$cartKey]['quantity']++;
+            } else {
+                $cart[$cartKey] = [
+                    'name'     => $product->name,
+                    'price'    => $product->price,
+                    'quantity' => 1,
+                    'image'    => $images->thumb,
+                    'code'     => $code,
+                ];
+            }
+
+            session()->put('cart', $cart);
+        }
+
+        return redirect()->back()->with('success', 'محصول به سبد خرید اضافه شد!');
+    }
     public function index(){
 
         $cartCount = "" ;
@@ -30,7 +81,7 @@ class CartController extends Controller
                     'name' => optional($item->product)->name,
                     'quantity' => $item->quantity,
                     'price' => $item->product->price,
-
+                    'code' => $item->code,
                 ];
             }
         } else {
@@ -41,6 +92,7 @@ class CartController extends Controller
                     'name' => $item['name'],
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
+                    'code' => $item['code'],
                 ];
             }
         }

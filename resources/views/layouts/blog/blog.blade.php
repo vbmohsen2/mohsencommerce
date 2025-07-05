@@ -9,9 +9,9 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 
-    <title>
-        فروشگاه
-    </title>
+    <title>@yield('title', ' صفحه اصلی بلاگ')</title>
+    <meta name="description" content=@yield('description','بلاگ')>
+
 </head>
 <body style="direction: rtl">
 <div>
