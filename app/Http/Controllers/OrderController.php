@@ -70,7 +70,7 @@ class OrderController extends Controller
         // محاسبه جمع کل سفارش
         $total = 0;
         foreach ($cartItems as $item) {
-            $total += $item->product->price * $item->quantity;
+            $total += $item->product->discount_price > 0 ? $item->product->discount_price : $item->product->price * $item->quantity;
         }
 
         // ایجاد سفارش جدید
@@ -89,7 +89,7 @@ class OrderController extends Controller
                 'product_id' => $item->product_id,
                 'quantity' => $item->quantity,
                 'price' => $item->product->discount_price > 0 ? $item->product->discount_price : $item->product->price,
-                'totalPrice' => $item->product->price * $item->quantity,
+                'totalPrice' => $item->product->discount_price > 0 ? $item->product->discount_price : $item->product->price * $item->quantity,
                 'code' => $item->code,
             ]);
         }

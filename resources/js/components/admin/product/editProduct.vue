@@ -121,12 +121,20 @@
                     <p>وزن: <input v-model="productWeight" class=" border px-2 py-1 rounded" type="text"> کیلوگرم</p>
                 </div>
                 <div class="border p-2">
-                    <span>قیمت: <input v-model="productPrice" class=" border px-2 py-1 rounded"
-                                       type="text"> تومان</span>
+                    <span>قیمت: <input
+                        :value="formattedPrice"
+                        @input="onPriceInput($event.target.value)"
+                        class="border px-2 py-1 rounded"
+                        type="text"
+                    /> تومان تومان</span>
                 </div>
                 <div class="border p-2">
-                    <span>تخفیف: <input v-model="productDiscount" class=" border px-2 py-1 rounded"
-                                        type="text"> تومان</span>
+                    <span>تخفیف: <input
+                        :value="formattedDiscountPrice"
+                        @input="onPriceDiscountInput($event.target.value)"
+                        class="border px-2 py-1 rounded"
+                        type="text"
+                    /> تومان</span>
                 </div>
                 <div class="flex flex-col border p-2">
                     <p class="text-2xl">خصوصیات</p>
@@ -291,10 +299,10 @@ const formValues = reactive({})
 const extraFields = reactive([])
 const productsku = ref();
 const productBrand = ref();
-const productPrice = ref();
+const productPrice = ref('');
 const productWeight = ref()
 const productName = ref()
-const productDiscount = ref()
+const productDiscount = ref('')
 const productStock = ref()
 const productIsActive = ref()
 const formError = ref([]);
@@ -342,7 +350,26 @@ const fetchProduct=async ()=>{
 
 
 }
-
+const formattedPrice = computed(() => {
+    if (productPrice.value === '') return ''
+    return Number(productPrice.value).toLocaleString('en-US')
+})
+const formattedDiscountPrice = computed(() => {
+    if (productDiscount.value === '') return ''
+    return Number(productDiscount.value).toLocaleString('en-US')
+})
+function onPriceInput(value) {
+    const raw = value.replace(/,/g, '')
+    if (!isNaN(raw)) {
+        productPrice.value = raw
+    }
+}
+function onPriceDiscountInput(value) {
+    const raw = value.replace(/,/g, '')
+    if (!isNaN(raw)) {
+        productDiscount.value = raw
+    }
+}
 const loadGalleryImages = async (galleryList) => {
     for (const item of galleryList) {
         const url = `/storage/images/products/gallery/${item}`

@@ -69,7 +69,7 @@
                                         </h4>
 
                                         <p class="text-sm text-gray-600 mb-2">
-                                            {{ product.price }} تومان
+                                            {{ Number(product.price).toLocaleString('en-US') }} تومان
                                         </p>
 
                                         <p class="text-sm text-gray-600">
