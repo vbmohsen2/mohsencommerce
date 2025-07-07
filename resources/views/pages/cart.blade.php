@@ -2,25 +2,7 @@
 @section('title', 'سبد خرید')
 @section('content')
 
-    <div class="w-full container mx-auto my-16 ">
 
-    <div class="w-full  shadow-lg rounded-md py-16 px-8  text-gray-500  sm:text-lg lg:text-2xl bg-green-400 my-4 flex items-center justify-between bg-opacity-10">
-                <div class="text-center text-opacity-100 !opacity-100 !text-green-400 ">
-                    <i class="fa fa-shopping-cart"></i>
-                    <p>سبد خرید</p>
-                </div>
-        <hr class="border flex-grow border-gray-700 mx-2 ">
-        <div class="text-center text-opacity-100 !opacity-100  ">
-            <i class="fas fa-shipping-fast"></i>
-            <p>جزئیات ارسال</p>
-        </div>
-        <hr class="border flex-grow border-gray-700 mx-2 ">
-        <div class="text-center text-opacity-100 !opacity-100  ">
-            <i class="fas fa-credit-card"></i>
-            <p>پرداخت</p>
-        </div>
-
-    </div>
     @if($cartItems && count($cartItems) > 0)
         @php $total = 0; @endphp
         @foreach($cartItems as $item)
@@ -41,7 +23,25 @@
                     }
 
             @endphp
+            <div class="w-full container mx-auto my-16  ">
 
+                <div class="w-full  shadow-lg rounded-md py-16 px-8  text-gray-500  sm:text-lg lg:text-2xl bg-green-400 my-4 flex items-center justify-between bg-opacity-10">
+                    <div class="text-center text-opacity-100 !opacity-100 !text-green-400 ">
+                        <i class="fa fa-shopping-cart"></i>
+                        <p>سبد خرید</p>
+                    </div>
+                    <hr class="border flex-grow border-gray-700 mx-2 ">
+                    <div class="text-center text-opacity-100 !opacity-100  ">
+                        <i class="fas fa-shipping-fast"></i>
+                        <p>جزئیات ارسال</p>
+                    </div>
+                    <hr class="border flex-grow border-gray-700 mx-2 ">
+                    <div class="text-center text-opacity-100 !opacity-100  ">
+                        <i class="fas fa-credit-card"></i>
+                        <p>پرداخت</p>
+                    </div>
+
+                </div>
             <div class="flex justify-between gap-3 mb-4 border-b pb-2 ">
                 <img src="{{ $item['image'] ?? asset('/storage/images/products/thumb/'.$thumbImage) }}"
                      class="w-16 h-16 rounded object-cover"

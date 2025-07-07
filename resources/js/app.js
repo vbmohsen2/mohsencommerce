@@ -21,6 +21,7 @@ import search from './components/products/search.vue';
 import users from './components/admin/user/user.vue'
 import orders from './components/admin/orders/orders.vue'
 import categoryProducts  from './components/products/CategoryProducts.vue'
+import romanoProductPage from './components/products/romano/romanoProductPage.vue'
 import router from "./router";
 
 const app = createApp({});
@@ -32,11 +33,14 @@ app.component('attributesedit',attributesedit)
 app.component('blogCategoryEdit',blogCategoryEdit)
 app.component('blogPosts',blogPosts)
 app.component('editProduct',editProduct)
-headerApp.component('productsearch',search)
 app.component('users', users)
 app.component('orders',orders)
 app.component('category-products', categoryProducts);
+app.component('romanoProductPage',romanoProductPage)
 // app.component('CategoryList', CategoryList);
+
+headerApp.component('productsearch',search)
+
 app.use(router)
 app.mount('#app');
 headerApp.mount('#headerapp')

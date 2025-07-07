@@ -81,7 +81,7 @@ class UserController extends Controller
         }
 
         if ($request->expectsJson()) {
-            return response()->json(['error' => 'نام کاربری یا رمز عبور اشتباه است'], 401);
+            return response()->json(['message' => 'نام کاربری یا رمز عبور اشتباه است'], 401);
         }
         return back()->withErrors(['email' => 'نام کاربری یا رمز عبور اشتباه است']);
     }

@@ -48,14 +48,14 @@
             @else
             <div class="hidden md:block text-2xl md:py-2 mx-auto"><h1>{{number_format($product->price)}}  <span class="text-sm ">تومان</span>  </h1> </div>
             @endif
-            <div class="flex justify-center py-2 items-center w-1/2 mx-auto">
-                <label class="hidden md:block">تعداد</label>
-                <div class="md:flex hidden justify-between flex-grow items-center border rounded-md">
-                    <span class="px-2">+</span>
-                    <input class="w-auto  border-none text-center p-2" value="1" size="2"  type="text">
-                    <span>-</span>
-                </div>
-            </div>
+{{--            <div class="flex justify-center py-2 items-center w-1/2 mx-auto">--}}
+{{--                <label class="hidden md:block">تعداد</label>--}}
+{{--                <div class="md:flex hidden justify-between flex-grow items-center border rounded-md">--}}
+{{--                    <span class="px-2">+</span>--}}
+{{--                    <input class="w-auto  border-none text-center p-2" value="1" size="2"  type="text">--}}
+{{--                    <span>-</span>--}}
+{{--                </div>--}}
+{{--            </div>--}}
             <div>
 
                 <a id="addToCartBtn" href="#" class=" flex justify-between items-center text-center my-2 py-2 border rounded-lg lg:w-1/2  lg:mx-auto  w-full bg-green-600">

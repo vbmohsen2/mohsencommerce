@@ -351,6 +351,19 @@ class admin extends Controller
         return response()->json(['attribute' => $attributes]);
 
     }
+    public function breadcrumb($id)
+    {
+        $category = \App\Models\Category::find($id);
+        $categories = [];
+
+        while ($category) {
+            $categories[] = $category;
+            if (!$category->parent_id || $category->parent_id == 0) break;
+            $category = \App\Models\Category::find($category->parent_id);
+        }
+
+        return response()->json(array_reverse($categories));
+    }
 
 
 }

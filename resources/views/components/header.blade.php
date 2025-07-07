@@ -18,10 +18,46 @@
                 </div>
             </div>
             {{--    login and cart--}}
-            <div class="flex  w-1/5  pb-3 sm-order-3 order-3  px-4 space-x-2 justify-end   ">
-                <button @auth() title="{{auth()->user()->name}}" @endauth onclick="openLoginModal()" class="pt-2 px-2">
+            <div  class="flex  w-1/5  pb-3 sm-order-3 order-3  px-4 space-x-2 justify-end   ">
+                <button id="loginbtn" @auth() title="{{auth()->user()->name}}" onclick="openUserInfoModal()" @endauth onclick="openLoginModal()" class="pt-2 px-2">
                     <img src="{{asset('images/user-01.svg')}} " class="max-w-8  sm:max-w-10" alt="">
                 </button>
+                @auth()
+                    <div id="userInfoModal"
+                         class="hidden sm:absolute sm:left-20 sm:mt-2 sm:w-48 top-16 bg-white border rounded shadow-2xl z-50 p-4 max-sm:hidden">
+                        <ul class="space-y-2">
+                            <li class="cursor-pointer">
+                                حساب کاربری
+                            </li>
+                            <li class="cursor-pointer">
+                                سفارشات
+                            </li>
+                            <li class="cursor-pointer">
+                                سفارشات
+                            </li>
+                            <li class="cursor-pointer" onclick="document.getElementById('logout-form').submit();">
+                                خروج
+                            </li>
+
+                        </ul>
+                        <form id="logout-form" action="{{ route('logout') }}" method="get" class="hidden">
+                            @csrf
+                        </form>
+                    </div>
+                    <script>
+                        const userInfoModal= document.getElementById("userInfoModal");
+                        function openUserInfoModal(){
+                            userInfoModal.classList.remove("hidden");
+                        }
+                        document.addEventListener('click', function (e) {
+                            if (!document.getElementById('loginbtn').contains(e.target)) {
+                                userInfoModal.classList.add('hidden');
+
+                            }
+                        });
+
+                    </script>
+                @endauth
 
                 {{--                بعدا وقتی خواستم دراپ داون برای کاربر درست کنم اینو درست میکنم--}}
                 {{--                <button onclick="openLoginModal()" class="pt-2 px-2 group relative">--}}
@@ -48,7 +84,7 @@
                                     </p>
                                 @endif
                             </div>
-                            <img src="{{ asset('images/shoppingcart.svg') }}" class="max-w-8 sm:max-w-10" alt="">
+                            <img src="{{ asset('images/shoppingcart.svg') }}" class="max-w-8 sm:max-w-10 mt-2 pt-1" alt="">
                         </div>
                     </button>
 
@@ -79,30 +115,55 @@
 
 
     </div>
-    <div id="loginModal" class="hidden fixed inset-0  items-center justify-center z-50 bg-black bg-opacity-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 class="text-xl font-semibold mb-4 text-center">ورود به حساب</h2>
+    <!-- Modal Overlay -->
+    <div id="loginModal"
+         class="hidden fixed inset-0 z-50  items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300">
 
-            <!-- پیام خطا -->
-            <div id="loginMessage" class="hidden text-center p-2 mb-3 rounded"></div>
+        <!-- Modal Box -->
+        <div class="bg-white w-full max-w-md mx-4 p-6 rounded-2xl shadow-xl border border-gray-200 animate-fadeIn">
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">ورود به حساب کاربری</h2>
+
+            <!-- پیام -->
+            <div id="loginMessage" class="hidden text-center p-3 mb-4 rounded font-medium"></div>
 
             <!-- فرم ورود -->
             <form method="POST" id="loginForm" action="{{ route('login') }}">
                 @csrf
-                <input type="email" name="email" id="email" placeholder="ایمیل" class="w-full border p-2 rounded mb-2">
-                <input type="password" name="password" id="password" placeholder="رمز عبور"
-                       class="w-full border p-2 rounded mb-4">
-                <div class="flex items-center mb-4">
-                    <input type="checkbox" id="remember" class="mr-2">
-                    <label for="remember">مرا به خاطر بسپار</label>
+                <div class="space-y-4">
+                    <input type="email" name="email" id="email"
+                           placeholder="ایمیل"
+                           class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    <input type="password" name="password" id="password"
+                           placeholder="رمز عبور"
+                           class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                 </div>
-                <div class="flex justify-between">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-400 text-white rounded-md">
+
+                <div class="flex items-center justify-between mt-4">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="remember" class="form-checkbox text-blue-600 rounded mr-2">
+                        <span class="text-sm text-gray-700">مرا به خاطر بسپار</span>
+                        <a href="{{ route('register') }}"
+                           class="w-full sm:w-auto text-xs text-blue-600 px-4 py-2 text-center ">
+                            ثبت‌نام
+                        </a>
+                    </label>
+
+                    <a href="#" class="text-sm text-blue-600 hover:underline">رمز را فراموش کرده‌اید؟</a>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-between gap-2 mt-6">
+                    <button type="button"
+                            onclick="closeModal()"
+                            class="w-full sm:w-auto px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-md transition">
                         بستن
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">
+
+                    <button type="submit"
+                            class="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition">
                         ورود
                     </button>
+
+
                 </div>
             </form>
         </div>
@@ -128,18 +189,15 @@
         let remember = document.getElementById("remember").checked;
         let messageDiv = document.getElementById("loginMessage");
 
-        // دریافت CSRF Token از متا تگ
         let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-        // آدرس صحیح مسیر ورود
-        let loginUrl = "{{ route('login') }}";
+        let loginUrl = "{{ route('login') }}"; // این مقدار در Blade باید به آدرس لاگین ترجمه شود
 
         fetch(loginUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "X-CSRF-TOKEN": csrfToken,
-                "Accept": "application/json" // اطمینان از دریافت پاسخ JSON
+                "Accept": "application/json"
             },
             body: JSON.stringify({
                 email: email,
@@ -147,17 +205,32 @@
                 remember: remember
             })
         })
-            .then(response => response.json().catch(() => {
-                throw new Error("پاسخ JSON نامعتبر است")
-            }))
-            .then(data => {
-                messageDiv.textContent = data.message;
-                messageDiv.className = data.success ? "bg-green-200 text-green-800 p-2 rounded mb-2" : "bg-red-200 text-red-800 p-2 rounded mb-2";
+            .then(response => {
+                const status = response.status;
+                return response.json().then(data => ({ data, status }));
+            })
+            .then(({ data, status }) => {
+                messageDiv.textContent = data.message || "عملیات انجام شد.";
+                messageDiv.className = (status === 200)
+                    ? "bg-green-200 text-green-800 p-2 rounded mb-2"
+                    : "bg-red-200 text-red-800 p-2 rounded mb-2";
                 messageDiv.classList.remove("hidden");
 
-                if (data.success) {
-                    window.location.href = "/"; // هدایت به صفحه اصلی پس از موفقیت
+                if (status === 200) {
+                    // بستن مودال (اگر وجود دارد)
+                    const modal = document.getElementById("loginModal");
+                    if (modal) {
+                        setTimeout(() => {
+                            closeModal()
+                            // window.location.href = "/";
+                        }, 2000);
+                    } else {
+                        setTimeout(() => {
+                            // window.location.href = "/";
+                        }, 2000);
+                    }
                 }
+                // اگر 401 یا خطای دیگر بود، فقط پیغام می‌ماند
             })
             .catch(error => {
                 console.error("خطا در درخواست:", error);
@@ -200,6 +273,7 @@
             e.stopPropagation();
             if (window.innerWidth >= 640) {
                 dropdown.classList.toggle('hidden');
+
             } else {
                 offcanvas.classList.remove('hidden');
                 offcanvas.classList.remove('-translate-x-full');
@@ -209,6 +283,7 @@
         document.addEventListener('click', function (e) {
             if (!document.getElementById('cart-wrapper').contains(e.target)) {
                 dropdown?.classList.add('hidden');
+
                 offcanvas?.classList.add('-translate-x-full');
                 setTimeout(() => {
                     offcanvas?.classList.add('hidden');

@@ -76,7 +76,7 @@
                                     <div><a href="#" class="block px-4 py-2   hover:bg-gray-200">Cameras</a></div>
                                 </div>
                                 <div class="flex w-1/2  mx-auto justify-center items-center">
-                                    <img src="images/slides/Accessories pc v1 copy-1600x400.jpg" alt="">
+{{--                                    <img src="images/slides/Accessories pc v1 copy-1600x400.jpg" alt="">--}}
                                 </div>
                             </div>
                         </div>

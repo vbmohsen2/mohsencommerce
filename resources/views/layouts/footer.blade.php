@@ -5,7 +5,7 @@
                 <hr class="mb-6">
                 <div dir="rtl" class="flex flex-wrap items-center md:justify-center  px-6 py-4">
                     <!-- لوگو -->
-                    <img src="/images/logo-footer.svg" alt="logo" class="lg:w-[110px] order-1 h-20 lg:h-auto w-full">
+                    <img src="/images/romanologo.jpg" alt="logo" class="lg:w-[110px] order-1 h-20 lg:h-auto w-full">
 
                     <!-- تماس با پشتیبانی -->
                     <div class="flex items-start  md:border-r-4 border-green-500 md:px-8  md:mr-6 order-2" style="">

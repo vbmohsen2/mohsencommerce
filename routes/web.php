@@ -73,7 +73,9 @@ Route::get('/admin/users', function () {
 
 //commerce
 Route::get('/', [Mainpage::class, 'index'])->name('home');
-route::get('/product/{slug}', ProductsController::class . '@show');
+//route::get('/product/{slug}', ProductsController::class . '@show');
+route::get('/product/{slug}', ProductsController::class . '@romanoShow');
+
 
 route::get('/category/{slug}', CategoryController::class . '@show');
 Route::get('/products/search', [ProductsController::class, 'search']);

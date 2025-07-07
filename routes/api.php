@@ -37,6 +37,7 @@ Route::get('/categories', [admin::class, 'getCategories']);
 Route::post('/categories/reorder', [admin::class, 'categoryReorder']);
 Route::post('/categories/delete', [admin::class, 'deleteCategory']);
 Route::post('/categories/attributes', [admin::class, 'attributesRet']);
+Route::get('/categories/breadcrumb/{id}', [admin::class, 'breadcrumb']);
 
 
 Route::get('/blog/categories', [blogAdmin::class, 'getBlogCategory']);
