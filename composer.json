@@ -12,7 +12,7 @@
         "php": "^8.2",
         "doctrine/dbal": "*",
         "laravel/framework": "^11.31",
-        "laravel/sanctum": "^4.0",
+        "laravel/sanctum": "^4.1",
         "laravel/tinker": "^2.9",
         "laravel/ui": "*",
         "livewire/livewire": "^3.5",

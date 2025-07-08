@@ -22,6 +22,7 @@ import users from './components/admin/user/user.vue'
 import orders from './components/admin/orders/orders.vue'
 import categoryProducts  from './components/products/CategoryProducts.vue'
 import romanoProductPage from './components/products/romano/romanoProductPage.vue'
+
 import router from "./router";
 
 const app = createApp({});
@@ -37,6 +38,7 @@ app.component('users', users)
 app.component('orders',orders)
 app.component('category-products', categoryProducts);
 app.component('romanoProductPage',romanoProductPage)
+
 // app.component('CategoryList', CategoryList);
 
 headerApp.component('productsearch',search)

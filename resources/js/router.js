@@ -1,4 +1,12 @@
+
 import { createRouter, createWebHistory } from 'vue-router'
+
+// importهای فعلی شما باقی می‌ماند
+// حالا مسیرهای مربوط به کاربر رو هم اضافه می‌کنیم:
+const UserPanel = () => import('./components/user/UserPanel.vue')
+const Dashboard = () => import('./components/user/Dashboard.vue')
+const Addresses = () => import('./components/user/Addresses.vue')
+const Orders = () => import('./components/user/Orders.vue')
 
 const routes = [
     {
@@ -25,6 +33,18 @@ const routes = [
         path: '/admin/orders/:id',
         name: 'orderDetails',
         component: () => import('./components/admin/orders/OrderDetails.vue')
+    },
+
+    // ✅ مسیرهای پنل کاربر
+    {
+        path: '/user',
+        component: UserPanel,
+        children: [
+            { path: '', redirect: '/user/dashboard' },
+            { path: 'dashboard', component: Dashboard },
+            { path: 'addresses', component: Addresses },
+            { path: 'orders', component: Orders }
+        ]
     }
 ]
 

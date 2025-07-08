@@ -61,6 +61,8 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
 });
 Route::post('/users/{user}/change-password', [UserController::class, 'changePassword']);
 
+
+
 Route::prefix('orders')->controller(OrderController::class)->group(function () {
     Route::get('/', 'indexordersforvue');
     Route::get('{id}', 'showorder');

@@ -91,5 +91,86 @@ class UserController extends Controller
         Auth::logout();
         return response()->json(['success' => true, 'message' => 'شما با موفقیت خارج شدید']);
     }
+    public function updateUserSelf(Request $request)
+    {
+        $user = Auth::user();
 
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'nullable|string|max:15',
+        ]);
+
+        $user->update($validated);
+
+        return response()->json(['message' => 'اطلاعات با موفقیت ذخیره شد.']);
+    }
+    public function updatephoneUserSelf(Request $request)
+    {
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'phone' => 'nullable|string|max:15',
+        ]);
+
+        $user->update($validated);
+
+        return response()->json(['message' => 'اطلاعات با موفقیت ذخیره شد.']);
+    }
+    public function changePasswordUserSelf(Request $request)
+    {
+        $user = Auth::user();
+
+        // اعتبارسنجی ورودی‌ها
+        $request->validate([
+            'old_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed', // confirmed یعنی باید فیلد new_password_confirmation هم ارسال بشه
+        ]);
+
+        // چک کردن رمز فعلی
+        if (!Hash::check($request->old_password, $user->password)) {
+            return response()->json([
+                'message' => 'رمز فعلی اشتباه است.'
+            ], 422);
+        }
+
+        // ذخیره رمز جدید (هش شده)
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json([
+            'message' => 'رمز عبور با موفقیت تغییر یافت.'
+        ]);
+    }
+    public function getAddresses()
+    {
+        $user = Auth::user();
+
+        // ستون addresses رو decode می‌کنیم اگر null بود خالی قرار میدیم
+        $addresses = json_decode($user->address, true) ?? [];
+
+        return response()->json([
+            'addresses' => $addresses,
+        ]);
+    }
+    public function updateAddresses(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'address' => 'required|array',
+            'address.*.city' => 'required|string|max:255',
+            'address.*.province' => 'required|string|max:255',
+            'address.*.address' => 'required|string|max:1000',
+        ]);
+
+        $addressesJson = json_encode($request->address);
+
+        $user->address = $addressesJson;
+        $user->save();
+
+        return response()->json([
+            'message' => 'آدرس‌ها با موفقیت ذخیره شدند.'
+        ]);
+    }
 }

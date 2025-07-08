@@ -113,6 +113,22 @@ route::get('/blog', PostsController::class . '@index');
 Route::get('/blog/{post}', PostsController::class . '@show');
 
 
+Route::middleware('auth')->group(function () {
+    Route::get('/api/user', function() {
+        return auth()->user();
+    });
+
+    Route::post('/user/update', [UserController::class, 'updateUserSelf']);
+    Route::post('/user/updatephone', [UserController::class, 'updatephoneUserSelf']);
+    Route::post('/user/change-password', [UserController::class, 'changePasswordUserSelf']);
+    Route::middleware('auth')->group(function () {
+        Route::get('/api/user/addresses', [UserController::class, 'getAddresses']);
+        Route::post('/user/addresses/update', [UserController::class, 'updateAddresses']);
+    });
+    Route::view('/user/{any?}', 'pages.user')->where('any', '.*');
+});
+
+
 //api
 //Route::view('dashboard', 'dashboard')
 //    ->middleware(['auth', 'verified'])
