@@ -56,54 +56,55 @@
                 <span>{{ formatNumber(finalPrice) }} <span class="text-sm">تومان</span></span>
             </div>
 
-            <!-- دکمه خرید (موبایل و دسکتاپ) -->
-            <button
-                @click="handleAddToCart"
-                class="flex justify-between items-center text-center my-2 py-2 border rounded-lg lg:w-1/2 lg:mx-auto w-full bg-green-600 text-white"
-            >
-                <!-- موبایل -->
-                <div class="md:hidden mx-auto flex-col text-center">
-                    <div v-if="hasDiscount">
-            <span class="rounded-lg text-sm bg-red-500 px-1">
-              {{ discountPercent }}%
-            </span>
-                        <span class="line-through text-sm px-2">{{ formatNumber(product.price) }} تومان</span>
-                    </div>
-                    <div>
-                        <span class="text-xl">{{ formatNumber(finalPrice) }} تومان</span>
-                    </div>
-                </div>
-
-                <!-- آیکون -->
-                <svg
-                    width="30"
-                    height="30"
-                    class="md:hidden mx-2"
-                    viewBox="0 0 30 30"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+            <div class="fixed bottom-2 right-0 z-10 w-full px-2 md:static md:px-0">
+                <button
+                    @click="handleAddToCart"
+                    class="flex justify-between items-center text-center my-2 py-2 border rounded-lg lg:w-1/2 lg:mx-auto w-full bg-green-600 text-white"
                 >
-                    <circle cx="15" cy="15" r="14.5" stroke="white" />
-                    <line
-                        x1="15"
-                        y1="7.1"
-                        x2="15"
-                        y2="22.9"
-                        stroke="white"
-                        stroke-width="2"
-                    />
-                    <line
-                        x1="7.132"
-                        y1="14.966"
-                        x2="22.868"
-                        y2="15.034"
-                        stroke="white"
-                        stroke-width="2"
-                    />
-                </svg>
+                    <!-- موبایل -->
+                    <div class="md:hidden mx-auto flex-col text-center">
+                        <div v-if="hasDiscount">
+              <span class="rounded-lg text-sm bg-red-500 px-1">
+                {{ discountPercent }}%
+              </span>
+                            <span class="line-through text-sm px-2">{{ formatNumber(product.price) }} تومان</span>
+                        </div>
+                        <div>
+                            <span class="text-xl">{{ formatNumber(finalPrice) }} تومان</span>
+                        </div>
+                    </div>
 
-                <span class="hidden md:block mx-auto">افزودن سبد خرید</span>
-            </button>
+                    <!-- آیکون -->
+                    <svg
+                        width="30"
+                        height="30"
+                        class="md:hidden mx-2"
+                        viewBox="0 0 30 30"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <circle cx="15" cy="15" r="14.5" stroke="white" />
+                        <line
+                            x1="15"
+                            y1="7.1"
+                            x2="15"
+                            y2="22.9"
+                            stroke="white"
+                            stroke-width="2"
+                        />
+                        <line
+                            x1="7.132"
+                            y1="14.966"
+                            x2="22.868"
+                            y2="15.034"
+                            stroke="white"
+                            stroke-width="2"
+                        />
+                    </svg>
+
+                    <span class="hidden md:block mx-auto">افزودن سبد خرید</span>
+                </button>
+            </div>
 
             <!-- پیام موفقیت -->
             <div v-if="successMessage" class="text-green-600 text-sm mt-2 text-center">

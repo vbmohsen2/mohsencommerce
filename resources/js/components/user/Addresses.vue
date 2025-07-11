@@ -60,10 +60,45 @@
         </div>
 
         <!-- دکمه افزودن آدرس جدید -->
+        <!-- دکمه افزودن -->
         <div class="mt-6 text-center">
-            <button @click="addNewAddress" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+            <button @click="showAddModal = true" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
                 افزودن آدرس جدید
             </button>
+        </div>
+
+        <!-- مودال افزودن آدرس -->
+        <div v-if="showAddModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+
+                <h2 class="text-xl font-semibold mb-4 text-center">افزودن آدرس جدید</h2>
+
+                <input
+                    v-model="newAddress.city"
+                    type="text"
+                    placeholder="شهر"
+                    class="w-full mb-3 border rounded px-3 py-2"
+                />
+                <input
+                    v-model="newAddress.province"
+                    type="text"
+                    placeholder="استان"
+                    class="w-full mb-3 border rounded px-3 py-2"
+                />
+                <textarea
+                    v-model="newAddress.address"
+                    rows="3"
+                    placeholder="آدرس کامل"
+                    class="w-full border rounded px-3 py-2 resize-none"
+                ></textarea>
+
+                <div class="flex justify-end space-x-3 mt-4">
+                    <button @click="closeAddModal" class="px-3 py-1 bg-gray-400 text-white rounded hover:bg-gray-500">لغو</button>
+                    <button @click="saveNewAddress" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">ذخیره</button>
+                </div>
+
+                <button @click="closeAddModal" class="absolute top-2 left-2 text-gray-500 hover:text-black text-xl">&times;</button>
+            </div>
         </div>
 
     </div>
@@ -85,10 +120,27 @@ const editForm = reactive({
 
 const message = ref('')
 
+const newAddress = reactive({
+    city: '',
+    province: '',
+    address: ''
+})
+
+
+const closeAddModal = () => {
+    showAddModal.value = false
+    newAddress.city = ''
+    newAddress.province = ''
+    newAddress.address = ''
+}
+
+
+const showAddModal = ref(false)
+
 onMounted(async () => {
     try {
         const res = await axios.get('/api/user/addresses')
-        console.log(res)
+
         addresses.value = res.data.addresses || []
     } catch (e) {
         message.value = 'خطا در بارگذاری آدرس‌ها.'
@@ -120,9 +172,9 @@ const saveEditing = async () => {
             addresses.value.push({ ...editForm })
         }
 
-      consلهole.log( await axios.post('/user/addresses/update', {
+       await axios.post('/user/addresses/update', {
             address: addresses.value,
-        }))
+        })
 
         cancelEditing()
     } catch (error) {
@@ -150,6 +202,25 @@ const addNewAddress = () => {
     editForm.province = ''
     editForm.address = ''
 }
+
+const saveNewAddress = async () => {
+    if (!newAddress.city.trim() || !newAddress.province.trim() || !newAddress.address.trim()) {
+        alert('همه فیلدها الزامی هستند.')
+        return
+    }
+
+    try {
+        addresses.value.push({ ...newAddress })
+
+        await axios.post('/user/addresses/update', {
+            address: addresses.value,
+        })
+
+        closeAddModal()
+    } catch (error) {
+        alert('خطا در ذخیره آدرس جدید')
+    }
+}
 </script>
 
 <style scoped>
@@ -157,5 +228,9 @@ const addNewAddress = () => {
     .grid {
         grid-template-columns: 1fr !important;
     }
+    .modal {
+        width: 90% !important;
+    }
 }
+
 </style>

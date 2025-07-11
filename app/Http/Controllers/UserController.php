@@ -97,8 +97,8 @@ class UserController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'phone' => 'nullable|string|max:15',
+//            'email' => 'required|email',
+//            'phone' => 'nullable|string|max:15',
         ]);
 
         $user->update($validated);
@@ -110,7 +110,7 @@ class UserController extends Controller
         $user = Auth::user();
 
         $validated = $request->validate([
-            'phone' => 'nullable|string|max:15',
+            'phone' => ['nullable', 'numeric', 'digits_between:10,15'], // فقط عدد بین 10 تا 15 رقم
         ]);
 
         $user->update($validated);
@@ -171,6 +171,21 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'آدرس‌ها با موفقیت ذخیره شدند.'
+        ]);
+    }
+
+    public function orders()
+    {
+        $orders = Auth::user()->orders()->with(['orderItems.product'])->orderBy('created_at', 'desc')->paginate(5);;
+
+        return response()->json($orders);
+    }
+    public function ordershow($id)
+    {
+        $order = Auth::user()->orders()->with(['orderItems.product'])->findOrFail($id);
+
+        return response()->json([
+            'order' => $order,
         ]);
     }
 }

@@ -167,4 +167,9 @@ class OrderController extends Controller
 
         return response()->json(['message' => 'آدرس با موفقیت بروزرسانی شد']);
     }
+    public function userOrdercount(){
+        $user = Auth::user();
+        $ordercount=Order::where($user)->count();
+        return response()->json(['ordercount' => $ordercount]);
+    }
 }

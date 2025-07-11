@@ -70,10 +70,14 @@
                 <form @submit.prevent="submitEditPhone" style="margin-top: 12px;">
                     <input
                         v-model="form.phone"
-                        type="text"
+                        type="tel"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
                         placeholder="شماره تلفن"
                         style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"
+                        @input="validatePhone"
                     />
+
                     <div style="margin-top: 16px; text-align: right;">
                         <button type="button" @click="closeModals" style="margin-right: 8px; padding: 8px 14px; border: none; border-radius: 4px; background: #ccc; cursor: pointer;">
                             انصراف
@@ -162,9 +166,15 @@ const showChangePasswordModal = ref(false)
 const message = ref('')
 const messageColor = ref('green')
 
+
+const validatePhone = (e) => {
+    e.target.value = e.target.value.replace(/\D/g, '') // حذف تمام کاراکترهای غیر عددی
+    form.phone = e.target.value
+}
 onMounted(async () => {
     try {
         const res = await axios.get('/api/user')
+        console.log(res)
         user.value = {
             name: res.data.name,
             email: res.data.email,
@@ -176,9 +186,13 @@ onMounted(async () => {
         // مقدار موقت سفارشات
         ordersCount.value = 0
     } catch (error) {
+
         message.value = 'خطا در دریافت اطلاعات کاربر.'
         messageColor.value = 'red'
     }
+    const resOrderCount=await axios.get('/api/orders/ordercount')
+    ordersCount.value=resOrderCount.data.ordercount
+
 })
 
 const closeModals = () => {
@@ -192,11 +206,13 @@ const closeModals = () => {
 const submitEditName = async () => {
     try {
         const res = await axios.post('/user/update', { name: form.value.name })
+
         user.value.name = form.value.name
         message.value = res.data.message || 'نام با موفقیت به‌روزرسانی شد.'
         messageColor.value = 'green'
         closeModals()
     } catch (error) {
+        console.log(error)
         message.value = 'خطا در به‌روزرسانی نام.'
         messageColor.value = 'red'
     }

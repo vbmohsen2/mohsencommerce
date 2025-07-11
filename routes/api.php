@@ -59,12 +59,19 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
     Route::put('{id}', 'update');
     Route::delete('{id}', 'destroy');
 });
+
+
+
+
 Route::post('/users/{user}/change-password', [UserController::class, 'changePassword']);
+
+
 
 
 
 Route::prefix('orders')->controller(OrderController::class)->group(function () {
     Route::get('/', 'indexordersforvue');
+    Route::get('/ordercount', 'userOrdercount');
     Route::get('{id}', 'showorder');
     Route::put('{id}', 'update');
     Route::put('{id}/status', 'updateStatus');

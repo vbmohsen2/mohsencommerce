@@ -8,6 +8,10 @@
                 <span class="px-2">نام محصول: <input v-model="productName" class=" border px-2 py-1 rounded" type="text"></span>
                 <span>اسلاگ : <input v-model="productSlug" class=" border px-2 py-1 rounded" type="text"></span>
             </div>
+            <div class="flex items-center px-2">
+                <label class="mr-2">توضیحات سئو:</label>
+                <textarea v-model="seodescription" class="border px-2 py-1 rounded"></textarea>
+            </div>
             <div class="border p-2">
                 <span>تعداد: <input v-model="productStock" class=" border px-2 py-1 rounded" type="text"></span>
             </div>
@@ -293,6 +297,7 @@ const uploadProgress = ref(0)
 
 const selectedCategory = ref(null)
 const prodcutdesription = ref()
+const seodescription=ref()
 const productattributes = ref([])
 const product=ref()
 const formValues = reactive({})
@@ -610,6 +615,7 @@ const submitForm = async () => {
     formData.append('name', productName.value)
     formData.append('slug',productSlug.value)
     formData.append('description', prodcutdesription.value)
+    formData.append('seodescription',seodescription.value)
     formData.append('price', productPrice.value)
     formData.append('discount', productDiscount.value)
     formData.append('stock', productStock.value)

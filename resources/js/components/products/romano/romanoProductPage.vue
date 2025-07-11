@@ -12,7 +12,10 @@
 
     <product-gallery :product="product" />
         <product-info :product="product"/>
+
+
     </div>
+    <div class="pt-2 pb-4 w-full" v-html="product.description"></div>
 </template>
 <script setup>
 import {onMounted, ref} from "vue";

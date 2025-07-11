@@ -38,12 +38,18 @@ const routes = [
     // ✅ مسیرهای پنل کاربر
     {
         path: '/user',
+
         component: UserPanel,
         children: [
             { path: '', redirect: '/user/dashboard' },
             { path: 'dashboard', component: Dashboard },
             { path: 'addresses', component: Addresses },
-            { path: 'orders', component: Orders }
+            { path: 'orders',name:'user.orders', component: Orders },
+            {
+                path: '/user/orders/:id',
+                name: 'user.order.detail',
+                component: () => import('./components/user/OrderDetail.vue')
+            }
         ]
     }
 ]

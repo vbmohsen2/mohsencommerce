@@ -163,6 +163,7 @@ class admin extends Controller
             $product->slug = $request->slug;
             $product->code = $request->code;
             $product->description = $request->description ;
+            $product->seo_description=$request->seodescription;
             if($request->is_active=="true"){
                 $product->is_active = 1;
             }
@@ -216,8 +217,57 @@ class admin extends Controller
 
     public function destroy(Products $product)
     {
+        $images = json_decode($product->images, true);
 
-        return response()->json(['message' => $product->delete()]);
+        if (is_array($images)) {
+            // انتقال تصویر اصلی
+            if (!empty($images['main'])) {
+                $from = 'images/products/' . $images['main'];
+                $to = 'deleted_images/products/' . $images['main'];
+
+                if (Storage::disk('public')->exists($from)) {
+                    Storage::disk('public')->move($from, $to);
+                    Log::info("تصویر اصلی منتقل شد: $from -> $to");
+                } else {
+                    Log::warning("تصویر اصلی پیدا نشد: $from");
+                }
+            }
+
+            // انتقال تصویر بندانگشتی
+            if (!empty($images['thumb'])) {
+                $from = 'images/products/thumb/' . $images['thumb'];
+                $to = 'deleted_images/products/thumb/' . $images['thumb'];
+
+                if (Storage::disk('public')->exists($from)) {
+                    Storage::disk('public')->move($from, $to);
+                    Log::info("تصویر بندانگشتی منتقل شد: $from -> $to");
+                } else {
+                    Log::warning("تصویر بندانگشتی پیدا نشد: $from");
+                }
+            }
+
+            // انتقال تصاویر گالری
+            if (!empty($images['gallery']) && is_array($images['gallery'])) {
+                foreach ($images['gallery'] as $galleryImage) {
+                    $from = 'images/products/gallery/' . $galleryImage;
+                    $to = 'deleted_images/products/gallery/' . $galleryImage;
+
+                    if (Storage::disk('public')->exists($from)) {
+                        Storage::disk('public')->move($from, $to);
+                        Log::info("تصویر گالری منتقل شد: $from -> $to");
+                    } else {
+                        Log::warning("تصویر گالری پیدا نشد: $from");
+                    }
+                }
+            }
+        }
+
+        // حذف محصول از دیتابیس
+        $product->delete();
+
+        return response()->json(['message' => 'محصول و تصاویر آن با موفقیت به سطل زباله منتقل شدند.']);
+
+
     }
 
     public function toggleActive(Products $product)

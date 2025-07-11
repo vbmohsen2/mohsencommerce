@@ -1,7 +1,7 @@
 @extends('layouts.master')
 {{--بعدا حل شود--}}
 @section('title',$product->name)
-@section('description',$product->description)
+@section('description',$product->seo_description)
 {{--بعدا حل شود--}}
 @section('content')
 
@@ -9,7 +9,6 @@
 
 
        <romano-product-page :product='@json($product)'>
-
        </romano-product-page>
     </div>
 @endsection

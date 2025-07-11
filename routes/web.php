@@ -125,9 +125,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/api/user/addresses', [UserController::class, 'getAddresses']);
         Route::post('/user/addresses/update', [UserController::class, 'updateAddresses']);
     });
-    Route::view('/user/{any?}', 'pages.user')->where('any', '.*');
+
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/api/user/orders', [userController::class, 'orders']);
+    Route::get('/api/user/orders/{id}', [userController::class, 'ordershow']);
+});
+
+
+Route::view('/user/{any?}', 'pages.user')->where('any', '.*');
 
 //api
 //Route::view('dashboard', 'dashboard')
