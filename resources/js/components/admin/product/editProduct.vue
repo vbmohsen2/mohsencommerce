@@ -492,21 +492,29 @@ const handleSlug=async (newVal) => {
 
 }
 const handleThumbnailUpload = async (e) => {
-    const file = e.target.files[0]
-    thumbnail.value = await compressImage(file, "thumb");
-    thumbnailPreview.value = URL.createObjectURL(file)
-}
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const { webp } = await compressImage(file, "thumb");
+
+    thumbnail.value = webp;
+    thumbnailPreview.value = URL.createObjectURL(webp);
+};
 
 
 
 const handleMainImageUpload = async (e) => {
-    const file = e.target.files[0]
+    const file = e.target.files[0];
+    if (!file) return;
 
-    const compressedFile = await compressImage(file, "main");
-    mainImage.value = compressedFile
-    mainImagePreview.value = URL.createObjectURL(compressedFile)
-    console.log(mainImage)
-}
+    const { jpeg, webp } = await compressImage(file, "main");
+
+    mainImage.value = webp; // ← اگر ترجیح میدی WebP ذخیره بشه
+    mainImagePreview.value = URL.createObjectURL(webp); // نمایش WebP
+
+    // اگر لازم داری هر دو فرمت رو ذخیره کنی (مثلاً برای fallback)
+    // mainImageJpeg.value = jpeg;
+};
 
 // اضافه کردن تصاویر گالری
 // اضافه کردن تصاویر گالری با فشرده سازی
@@ -524,21 +532,15 @@ const handleGalleryChange = async (event) => {
             continue;
         }
 
-        const compressedFile = await compressImage(file, "gallery");
+        const { webp } = await compressImage(file, "gallery");
 
-        await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                galleryPreviews.value.push(URL.createObjectURL(compressedFile));
-                galleryImages.value.push(compressedFile);
-                resolve();  // اینجا میگه فایل تموم شد، برو بعدی
-            };
-            reader.readAsDataURL(compressedFile);
-        });
+        galleryPreviews.value.push(URL.createObjectURL(webp));
+        galleryImages.value.push(webp);
     }
 
     event.target.value = '';
 };
+
 
 
 // حذف تصویر خاص از گالری
@@ -549,44 +551,73 @@ const removeGalleryImage = (index) => {
 }
 
 // فشرده سازی عکس (با Canvas)
-const compressImage = (file, type) => {
-    let MAX_WIDTH = 800;
-    if (type === "thumb") {
-        MAX_WIDTH = 200
-    }
-    if (type === "gallery") {
-        MAX_WIDTH = 800
-    }
-    if (type === "main") {
-        MAX_WIDTH = 1600
-    }
-    return new Promise((resolve) => {
-        const img = new Image()
-        const reader = new FileReader()
+const compressImage = (file, type = 'main') => {
+    const MAX_WIDTHS = {
+        thumb: 200,
+        gallery: 800,
+        main: 1200, // کاهش از 1600 به 1200 برای LCP بهتر
+    };
+
+    const quality = {
+        jpeg: 0.7,
+        webp: 0.8,
+    };
+
+    const MAX_WIDTH = MAX_WIDTHS[type] || 800;
+
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        const reader = new FileReader();
 
         reader.onload = (e) => {
-            img.src = e.target.result
-        }
+            img.src = e.target.result;
+        };
+
+        reader.onerror = () => reject("خطا در خواندن فایل");
 
         img.onload = () => {
-            const canvas = document.createElement('canvas')
-            const ctx = canvas.getContext('2d')
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
 
+            const scale = Math.min(1, MAX_WIDTH / img.width);
+            const newWidth = img.width * scale;
+            const newHeight = img.height * scale;
 
-            const scaleSize = MAX_WIDTH / img.width
-            canvas.width = MAX_WIDTH
-            canvas.height = img.height * scaleSize
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+            ctx.drawImage(img, 0, 0, newWidth, newHeight);
 
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+            const originalName = file.name.replace(/\.\w+$/, '');
 
-            canvas.toBlob((blob) => {
-                resolve(new File([blob], file.name, {type: file.type}))
-            }, file.type, 0.7)
-        }
+            // خروجی JPEG
+            const jpegBlobPromise = new Promise((res) => {
+                canvas.toBlob((blob) => {
+                    res(new File([blob], `${originalName}.jpg`, { type: 'image/jpeg' }));
+                }, 'image/jpeg', quality.jpeg);
+            });
 
-        reader.readAsDataURL(file)
-    })
-}
+            // خروجی WebP
+            const webpBlobPromise = new Promise((res) => {
+                canvas.toBlob((blob) => {
+                    res(new File([blob], `${originalName}.webp`, { type: 'image/webp' }));
+                }, 'image/webp', quality.webp);
+            });
+
+            Promise.all([jpegBlobPromise, webpBlobPromise])
+                .then(([jpegFile, webpFile]) => {
+                    resolve({
+                        jpeg: jpegFile,
+                        webp: webpFile,
+                    });
+                })
+                .catch(() => reject("خطا در فشرده‌سازی تصویر"));
+        };
+
+        img.onerror = () => reject("خطا در بارگذاری تصویر");
+
+        reader.readAsDataURL(file);
+    });
+};
 
 // ارسال فرم با نوار پیشرفت
 const submitForm = async () => {

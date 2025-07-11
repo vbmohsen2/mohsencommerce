@@ -15,7 +15,11 @@
             <div class="mx-4 rounded-md hidden md:block relative overflow-hidden" ref="mainImageContainer">
                 <img
                     :src="mainImageUrl"
-                    :alt="'Main Image ' + product.name"
+                    loading="lazy"
+                    alt="'Main Image ' + product.name"
+                    decoding="async"
+                    width="400"
+                    height="400"
                     class="w-full transition-transform duration-300 ease-in-out object-scale-down rounded-2xl"
                     ref="mainImageEl"
                 />
