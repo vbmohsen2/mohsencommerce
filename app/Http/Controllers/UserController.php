@@ -89,7 +89,10 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        return response()->json(['success' => true, 'message' => 'شما با موفقیت خارج شدید']);
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('message', 'شما با موفقیت خارج شدید.');
     }
     public function updateUserSelf(Request $request)
     {

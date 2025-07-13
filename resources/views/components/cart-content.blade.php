@@ -41,6 +41,7 @@
                 </form>
                 <form action="{{ route('cart.remove', $item['id']) }}" method="POST">
                     @csrf @method('DELETE')
+                    <input type="hidden" name="code" value="{{ $item['code'] }}">
                     <button class="text-red-500 text-lg hover:text-red-700 ml-2" title="حذف">🗑</button>
                 </form>
             </div>

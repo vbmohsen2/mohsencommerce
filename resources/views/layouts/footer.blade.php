@@ -5,15 +5,16 @@
                 <hr class="mb-6">
                 <div dir="rtl" class="flex flex-wrap items-center md:justify-center  px-6 py-4">
                     <!-- لوگو -->
-                    <img src="/images/romanologo.jpg" alt="logo" class="lg:w-[110px] order-1 h-20 lg:h-auto w-full">
-
+                    <div class="flex mb-6 lg:w-[110px] w-full justify-center order-1 ">
+                    <img src="/images/romanologo.jpg" alt="logo"  class="  h-20 lg:h-auto">
+                    </div>
                     <!-- تماس با پشتیبانی -->
                     <div class="flex items-start  md:border-r-4 border-green-500 md:px-8  md:mr-6 order-2" style="">
                         <i class="fa fa-phone text-green-500  ml-3 mt-1"></i>
                         <div class="flex flex-col  text-xl">
                             <small>تماس با پشتیبانی</small>
-                            <small class="my-1 leading-5">0914-7524002</small>
-                            <small class="leading-5  "> 0914-7524002</small>
+                            <small class="my-1 leading-5">0914-752-4002</small>
+                            <small class="leading-5  "> 0914-752-4002</small>
 
                         </div>
                     </div>

@@ -17,46 +17,46 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 
-//admin
-
-Route::get('/admin', [admin::class, 'index'])->name('adminhome');
-Route::get('/admin/products', [admin::class, 'ProductsIndex'])->name('admin.products');
-Route::get('/admin/addproduct', [admin::class, 'addProductPage'])->name('admin.addProduct');
-Route::get('/admin/products/{id}', [admin::class, 'editproduct'])->name('admin.editProduct');
 
 
-Route::get('/admin/categories', [admin::class, 'CategoriesIndex'])->name('admin.categories');
-Route::get('/admin/categoriestree', [admin::class, 'categoriesIndexTree'])->name('admin.categoriestree');
+// گروه مسیرهای ادمین با middleware
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
 
+    // داشبورد
+    Route::get('/', [admin::class, 'index'])->name('home');
 
-Route::get('/admin/attributes/templates', [attributes::class, 'index'])->name('admin.attributes.templates');
-Route::get('/admin/attributes/storeTemplate', [attributes::class, 'store'])->name('admin.attributes.storeTemplate');
-Route::post('/admin/attributes/deletetemplate', [attributes::class, 'deletetemplate'])->name('admin.attributes.deleteTemplate');
-Route::get('/admin/attributes/{id}', [attributes::class, 'edit'])->name('admin.attributes.showAttribute');
+    // محصولات
+    Route::get('/products', [admin::class, 'ProductsIndex'])->name('products');
+    Route::get('/addproduct', [admin::class, 'addProductPage'])->name('addProduct');
+    Route::get('/products/{id}', [admin::class, 'editproduct'])->name('editProduct');
 
-//vue orders route
+    // دسته‌بندی‌ها
+    Route::get('/categories', [admin::class, 'CategoriesIndex'])->name('categories');
+    Route::get('/categoriestree', [admin::class, 'categoriesIndexTree'])->name('categoriestree');
 
-Route::get('/admin/orders/', [OrderController::class, 'show'])->name('admin.orders');
+    // ویژگی‌ها (attributes)
+    Route::get('/attributes/templates', [attributes::class, 'index'])->name('attributes.templates');
+    Route::get('/attributes/storeTemplate', [attributes::class, 'store'])->name('attributes.storeTemplate');
+    Route::post('/attributes/deletetemplate', [attributes::class, 'deletetemplate'])->name('attributes.deleteTemplate');
+    Route::get('/attributes/{id}', [attributes::class, 'edit'])->name('attributes.showAttribute');
 
-Route::get('/admin/orders/{any}', function () {
-    return view('admin.orders/ordersvue'); // این فایل Blade هست که Vue app رو لود می‌کنه
-})->where('any', '.*');
+    // سفارشات
+    Route::get('/orders', [OrderController::class, 'show'])->name('orders');
+    Route::get('/orders/{any}', function () {
+        return view('admin.orders.ordersvue');
+    })->where('any', '.*');
 
+    // بلاگ
+    Route::get('/blog/categories', [blogAdmin::class, 'indexCategoreis'])->name('blog.categories');
+    Route::get('/blog/posts', [blogAdmin::class, 'indexPosts'])->name('blog.posts');
+    Route::get('/blog/posts/{any}', function () {
+        return view('admin.blog.blogPostsvue');
+    })->where('any', '.*');
 
+    // ابزارها
+    Route::post('/slugify', [admin::class, 'slugify']);
+});
 
-Route::post('/slugify', [admin::class, 'slugify']);
-
-
-//blog
-
-Route::get('/admin/blog/categories', [blogAdmin::class, 'indexCategoreis'])->name('admin.blog.categories');
-
-Route::get('/admin/blog/posts', [blogAdmin::class, 'indexPosts'])->name('admin.blog.posts');
-
-
-Route::get('/admin/blog/posts/{any}', function () {
-    return view('admin.blog.blogPostsvue'); // این فایل Blade هست که Vue app رو لود می‌کنه
-})->where('any', '.*');
 
 
 

@@ -5,7 +5,8 @@
             <div class="slide w-full flex-shrink-0 flex items-center justify-center">
                 <a href="#">
                     <img src="{{ asset($image) }}"
-                         class="w-full h-[18vh] object-cover object-center sm:h-full sm:max-h-screen"
+                         loading="lazy"
+                         class="w-full h-[16vh] object-cover object-center sm:h-full sm:max-h-screen"
                          alt="Slide {{ $index }}">
                 </a>
             </div>

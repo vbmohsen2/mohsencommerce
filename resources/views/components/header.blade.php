@@ -27,13 +27,13 @@
                          class="hidden sm:absolute sm:left-20 sm:mt-2 sm:w-48 top-16 bg-white border rounded shadow-2xl z-50 p-4 max-sm:hidden">
                         <ul class="space-y-2">
                             <li class="cursor-pointer">
-                                حساب کاربری
+                                <a href="/user/dashboard">  حساب کاربری</a>
                             </li>
                             <li class="cursor-pointer">
-                                سفارشات
+                                <a href="/user/orders">سفارشات</a>
                             </li>
                             <li class="cursor-pointer">
-                                سفارشات
+                                <a href="/user/addresses">آدرس ها</a>
                             </li>
                             <li class="cursor-pointer" onclick="document.getElementById('logout-form').submit();">
                                 خروج

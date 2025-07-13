@@ -24,6 +24,7 @@
             <img
                 src="/storage/images/products/{{ $mainImage }}"
                 alt="{{ $product->name }}"
+                loading="lazy"
                 class="w-full h-full object-cover rounded object-center"
             >
         </div>

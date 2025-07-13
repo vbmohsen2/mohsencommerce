@@ -141,11 +141,12 @@ class CartController extends Controller
     }
 
 
-    public function remove($id)
+    public function remove(Request $request,$id)
     {
         if (Auth::check()) {
+            $code = $request->input('code');
             // اگر کاربر لاگین کرده باشد، حذف از دیتابیس
-            Carts::where('user_id', Auth::id())->where('product_id', $id)->delete();
+            Carts::where('user_id', Auth::id())->where('product_id', $id)->where('code',$code)->delete();
         } else {
             // اگر مهمان است، حذف از سشن
             $cart = Session::get('cart', []);
