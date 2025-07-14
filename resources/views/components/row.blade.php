@@ -11,5 +11,5 @@
 
     @include('components.banner')
 
-    @include('components.banner')
+{{--    @include('components.banner')--}}
 </div>

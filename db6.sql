@@ -14,11 +14,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
--- Dumping database structure for mohsencommerce
-CREATE DATABASE IF NOT EXISTS `mohsencommerce` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `mohsencommerce`;
-
 -- Dumping structure for table mohsencommerce.attributes
 CREATE TABLE IF NOT EXISTS `attributes` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -72,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `attribute_templates` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table mohsencommerce.attribute_templates: ~7 rows (approximately)
+-- Dumping data for table mohsencommerce.attribute_templates: ~8 rows (approximately)
 INSERT INTO `attribute_templates` (`id`, `name`, `created_at`, `updated_at`) VALUES
 	(3, 'تلوزیون', NULL, NULL),
 	(6, 'شسیی', '2025-05-03 15:12:23', '2025-05-03 15:12:23'),
@@ -91,7 +86,12 @@ CREATE TABLE IF NOT EXISTS `cache` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table mohsencommerce.cache: ~0 rows (approximately)
+-- Dumping data for table mohsencommerce.cache: ~4 rows (approximately)
+INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
+	('a@d.com|127.0.0.1', 'i:1;', 1751727449),
+	('a@d.com|127.0.0.1:timer', 'i:1751727449;', 1751727449),
+	('vb.mohsen2@gmail.com|127.0.0.1', 'i:1;', 1751719412),
+	('vb.mohsen2@gmail.com|127.0.0.1:timer', 'i:1751719412;', 1751719412);
 
 -- Dumping structure for table mohsencommerce.cache_locks
 CREATE TABLE IF NOT EXISTS `cache_locks` (
@@ -111,14 +111,18 @@ CREATE TABLE IF NOT EXISTS `carts` (
   `quantity` int NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `carts_user_id_foreign` (`user_id`),
   KEY `carts_product_id_foreign` (`product_id`),
   CONSTRAINT `carts_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
   CONSTRAINT `carts_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table mohsencommerce.carts: ~0 rows (approximately)
+-- Dumping data for table mohsencommerce.carts: ~2 rows (approximately)
+INSERT INTO `carts` (`id`, `user_id`, `product_id`, `quantity`, `created_at`, `updated_at`, `code`) VALUES
+	(41, 54, 163, 1, '2025-07-12 19:17:47', '2025-07-12 19:17:47', 'کد یک'),
+	(42, 54, 162, 1, '2025-07-12 19:22:35', '2025-07-12 19:22:35', 'کد45');
 
 -- Dumping structure for table mohsencommerce.categories
 CREATE TABLE IF NOT EXISTS `categories` (
@@ -136,34 +140,15 @@ CREATE TABLE IF NOT EXISTS `categories` (
   PRIMARY KEY (`id`),
   KEY `categories_attribute_template_id_foreign` (`attribute_template_id`),
   CONSTRAINT `categories_attribute_template_id_foreign` FOREIGN KEY (`attribute_template_id`) REFERENCES `attribute_templates` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table mohsencommerce.categories: ~38 rows (approximately)
+-- Dumping data for table mohsencommerce.categories: ~5 rows (approximately)
 INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`, `parent_id`, `order`, `is_active`, `created_at`, `updated_at`, `attribute_template_id`) VALUES
-	(32, 'شال', 'شال', 'توضیحات', NULL, 5, 5, 0, '2025-05-10 14:11:14', '2025-05-10 14:11:14', 19),
-	(46, '1', '1', 'توضیحات', NULL, 1, 4, 0, '2025-04-27 14:59:22', '2025-04-27 14:59:30', NULL),
-	(47, '2', '2', 'توضیحات', NULL, 1, 2, 0, '2025-04-27 14:59:23', '2025-04-27 14:59:30', NULL),
-	(48, '3', '3', 'توضیحات', NULL, 1, 3, 0, '2025-04-27 14:59:23', '2025-04-27 14:59:30', NULL),
-	(50, 'الکترونیک', 'electronics', 'محصولات الکترونیکی', NULL, NULL, 6, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', 20),
-	(51, 'پوشاک', 'clothing', 'انواع پوشاک مردانه و زنانه', NULL, NULL, 11, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(52, 'خانه و آشپزخانه', 'home-kitchen', 'وسایل منزل و آشپزخانه', NULL, NULL, 16, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(53, 'ورزش و سفر', 'sports-travel', 'تجهیزات ورزشی و مسافرتی', NULL, NULL, 21, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(54, 'گوشی موبایل', 'mobile-phones', NULL, NULL, 50, 7, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(55, 'لپ‌تاپ', 'laptops', 'لپتاپ', NULL, 50, 8, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', 29),
-	(56, 'دوربین', 'cameras', 'دوربین', NULL, 50, 9, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(57, 'تلویزیون', 'tv', 'تلوزیون', NULL, 50, 10, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(58, 'مردانه', 'men', NULL, NULL, 51, 12, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(59, 'زنانه', 'women', NULL, NULL, 51, 13, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(60, 'بچگانه', 'kids', NULL, NULL, 51, 14, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(61, 'اکسسوری', 'accessories', NULL, NULL, 51, 15, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(62, 'لوازم آشپزخانه', 'kitchen-tools', NULL, NULL, 52, 17, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(63, 'مبلمان', 'furniture', NULL, NULL, 52, 18, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(64, 'دکوراسیون', 'decor', NULL, NULL, 52, 19, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(65, 'نورپردازی', 'lighting', NULL, NULL, 52, 20, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(66, 'تناسب اندام', 'fitness', NULL, NULL, 53, 22, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(67, 'کوهنوردی', 'hiking', NULL, NULL, 53, 23, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(68, 'دوچرخه‌سواری', 'cycling', NULL, NULL, 53, 24, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL),
-	(69, 'چمدان', 'luggage', NULL, NULL, 53, 25, 1, '2025-05-27 13:53:37', '2025-06-06 15:52:27', NULL);
+	(70, 'شال', 'شال', 'توضیحات', NULL, NULL, 0, 1, '2025-07-03 14:31:50', '2025-07-03 14:31:50', NULL),
+	(71, 'رومانو', 'رومانو', 'توضیحات', NULL, 70, 1, 1, '2025-07-03 14:33:07', '2025-07-03 14:33:07', NULL),
+	(72, 'روسری', 'روسری', 'توضیحات', NULL, NULL, 2, 1, '2025-07-03 14:33:07', '2025-07-03 14:33:07', NULL),
+	(73, 'اسکارف', 'اسکارف', 'توضیحات', NULL, NULL, 3, 1, '2025-07-03 14:33:07', '2025-07-03 14:33:07', NULL),
+	(74, 'کیف', 'کیف', 'توضیحات', NULL, NULL, 4, 1, '2025-07-03 14:33:07', '2025-07-03 14:33:07', NULL);
 
 -- Dumping structure for table mohsencommerce.failed_jobs
 CREATE TABLE IF NOT EXISTS `failed_jobs` (
@@ -218,9 +203,9 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table mohsencommerce.migrations: ~21 rows (approximately)
+-- Dumping data for table mohsencommerce.migrations: ~42 rows (approximately)
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(1, '0001_01_01_000000_create_users_table', 1),
 	(2, '0001_01_01_000001_create_cache_table', 1),
@@ -256,7 +241,14 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(34, '2025_05_03_175843_add_unit_to_attributes_table', 11),
 	(35, '2025_05_03_185715_add_order_to_attributes_table', 12),
 	(36, '2025_06_08_165003_add_user_name_to_orders_table', 13),
-	(37, '2025_06_08_165427_drop_user_id_foreign_from_orders', 14);
+	(37, '2025_06_08_165427_drop_user_id_foreign_from_orders', 14),
+	(38, '2025_07_05_163559_add__code_to__products', 15),
+	(39, '2025_07_05_175404_add_code_to_cart', 16),
+	(40, '2025_07_05_175404_add_code_to_carts', 17),
+	(41, '2025_07_05_191608_add_code_to_orderitem', 18),
+	(42, '2025_07_08_174148_add_phone_to_users', 19),
+	(43, '2025_07_10_165746_add_seo_description_to_products', 20),
+	(44, '2025_07_12_215813_add_role_to_users', 21);
 
 -- Dumping structure for table mohsencommerce.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -274,9 +266,18 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `user_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `orders_user_id_foreign` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table mohsencommerce.orders: ~0 rows (approximately)
+-- Dumping data for table mohsencommerce.orders: ~8 rows (approximately)
+INSERT INTO `orders` (`id`, `user_id`, `status`, `address`, `shipping_method`, `tracking_number`, `coupon_code`, `totalDiscount`, `total`, `created_at`, `updated_at`, `user_name`) VALUES
+	(13, 54, 'معلق', '{"city":"اردبیل","address":"شهرک دادگستری پردیسان 3\\r\\nقطعه آخر(136)همه طبقات","province":"اردبیل"}', '', NULL, NULL, NULL, 1682512.00, '2025-07-05 15:49:58', '2025-07-05 15:49:58', 'محسن علی محمدی'),
+	(14, 54, 'معلق', '{"city":"اردبیل","address":"شهرک دادگستری پردیسان 3\\r\\nقطعه آخر(136)همه طبقات","province":"اردبیل"}', '', NULL, NULL, NULL, 1682512.00, '2025-07-05 15:52:42', '2025-07-05 15:52:42', 'محسن علی محمدی'),
+	(15, 54, 'معلق', '{"city":"اردبیل","address":"شهرک دادگستری پردیسان 3\\r\\nقطعه آخر(136)همه طبقات","province":"اردبیل"}', '', NULL, NULL, NULL, 1682512.00, '2025-07-05 16:03:01', '2025-07-05 16:03:01', 'محسن علی محمدی'),
+	(16, 54, 'معلق', '{"city":"اردبیل","address":"شهرک دادگستری پردیسان 3\\r\\nقطعه آخر(136)همه طبقات","province":"اردبیل"}', '', NULL, NULL, NULL, 8547000.00, '2025-07-05 20:27:31', '2025-07-05 20:27:31', 'محسن علی محمدی'),
+	(17, 54, 'معلق', '{"city":"اردبیل","address":"شهرک دادگستری پردیسان 3\\r\\nقطعه آخر(136)همه طبقات","province":"اردبیل"}', '', NULL, NULL, NULL, 841256.00, '2025-07-05 20:44:25', '2025-07-05 20:44:25', 'محسن علی محمدی'),
+	(18, 54, 'معلق', '{"city":"اردبیل","address":"شهرک دادگستری پردیسان 3\\r\\nقطعه آخر(136)همه طبقات","province":"اردبیل"}', '', NULL, NULL, NULL, 15000.00, '2025-07-05 20:45:28', '2025-07-05 20:45:28', 'محسن علی محمدی'),
+	(19, 54, 'ارسال شده', '{"city":"اردبیل","address":"شهرک دادگستری پردیسان 3\\r\\nقطعه آخر(136)همه طبقات","province":"اردبیل"}', 'پست', '5646548564', NULL, NULL, 878549.00, '2025-07-09 09:12:48', '2025-07-10 13:25:17', 'محسن علی محمدی'),
+	(20, 54, 'معلق', '{"city":"dsf","address":"sdf","province":"sdf"}', '', NULL, NULL, NULL, 215000.00, '2025-07-12 19:03:00', '2025-07-12 19:03:00', 'محسن علی محمدیgg');
 
 -- Dumping structure for table mohsencommerce.order_items
 CREATE TABLE IF NOT EXISTS `order_items` (
@@ -289,14 +290,28 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   `totalPrice` decimal(15,2) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `order_items_order_id_foreign` (`order_id`),
   KEY `order_items_product_id_foreign` (`product_id`),
   CONSTRAINT `order_items_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
   CONSTRAINT `order_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table mohsencommerce.order_items: ~0 rows (approximately)
+-- Dumping data for table mohsencommerce.order_items: ~12 rows (approximately)
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `discount`, `price`, `totalPrice`, `created_at`, `updated_at`, `code`) VALUES
+	(7, 13, 162, 1.00, 0.00, 841256.00, NULL, '2025-07-05 15:49:58', '2025-07-05 15:49:58', NULL),
+	(8, 13, 162, 1.00, 0.00, 841256.00, NULL, '2025-07-05 15:49:58', '2025-07-05 15:49:58', NULL),
+	(9, 14, 162, 2.00, 0.00, 841256.00, NULL, '2025-07-05 15:52:42', '2025-07-05 15:52:42', NULL),
+	(10, 15, 162, 1.00, 0.00, 841256.00, NULL, '2025-07-05 16:03:01', '2025-07-05 16:03:01', ';n5'),
+	(11, 15, 162, 1.00, 0.00, 841256.00, NULL, '2025-07-05 16:03:01', '2025-07-05 16:03:01', 'ldf'),
+	(12, 16, 159, 1.00, 0.00, 854.00, NULL, '2025-07-05 20:27:31', '2025-07-05 20:27:31', 'fdgg'),
+	(13, 17, 162, 1.00, 0.00, 15000.00, NULL, '2025-07-05 20:44:25', '2025-07-05 20:44:25', ';n5'),
+	(14, 18, 162, 1.00, 0.00, 15000.00, NULL, '2025-07-05 20:45:28', '2025-07-05 20:45:28', ';n5'),
+	(15, 19, 161, 1.00, 0.00, 878549.00, NULL, '2025-07-09 09:12:48', '2025-07-09 09:12:48', 'gfhfh'),
+	(16, 20, 162, 1.00, 0.00, 15000.00, NULL, '2025-07-12 19:03:00', '2025-07-12 19:03:00', 'کد45'),
+	(17, 20, 164, 1.00, 0.00, 100000.00, NULL, '2025-07-12 19:03:00', '2025-07-12 19:03:00', 'دوست پسر حول'),
+	(18, 20, 164, 1.00, 0.00, 100000.00, NULL, '2025-07-12 19:03:00', '2025-07-12 19:03:00', 'دوست پسر خنگ');
 
 -- Dumping structure for table mohsencommerce.password_reset_tokens
 CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
@@ -392,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `post_categories` (
   UNIQUE KEY `post_categories_name_unique` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table mohsencommerce.post_categories: ~12 rows (approximately)
+-- Dumping data for table mohsencommerce.post_categories: ~13 rows (approximately)
 INSERT INTO `post_categories` (`id`, `name`, `icon`, `created_at`, `updated_at`, `slug`) VALUES
 	(2, 'بهداشت', 'fa fa-heartbeat', NULL, NULL, 'بهداشت'),
 	(3, 'gdf dfg dfgdf', 'fa fa-laptop', NULL, '2025-05-11 16:04:38', 'gdf-dfg-dfgdf'),
@@ -423,7 +438,7 @@ CREATE TABLE IF NOT EXISTS `post_comments` (
   CONSTRAINT `post_comments_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table mohsencommerce.post_comments: ~4 rows (approximately)
+-- Dumping data for table mohsencommerce.post_comments: ~3 rows (approximately)
 INSERT INTO `post_comments` (`id`, `user_id`, `post_id`, `content`, `created_at`, `updated_at`) VALUES
 	(1, 3, 4, 'fdgsdfsdfsd', NULL, NULL),
 	(2, 3, 4, 'fdgsdfsdfsd', NULL, NULL),
@@ -559,6 +574,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seo_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` decimal(12,2) NOT NULL,
   `discount_price` decimal(12,2) DEFAULT NULL,
   `stock` int unsigned NOT NULL,
@@ -575,6 +591,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `attribute_template_id` bigint unsigned DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
+  `code` json DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `products_slug_unique` (`slug`),
   UNIQUE KEY `products_sku_unique` (`sku`),
@@ -582,13 +599,18 @@ CREATE TABLE IF NOT EXISTS `products` (
   KEY `products_attribute_template_id_foreign` (`attribute_template_id`),
   CONSTRAINT `products_attribute_template_id_foreign` FOREIGN KEY (`attribute_template_id`) REFERENCES `attribute_templates` (`id`) ON DELETE SET NULL,
   CONSTRAINT `products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table mohsencommerce.products: ~3 rows (approximately)
-INSERT INTO `products` (`id`, `name`, `slug`, `description`, `price`, `discount_price`, `stock`, `sku`, `category_id`, `is_active`, `images`, `brand`, `weight`, `dimension`, `attributes`, `views_count`, `created_at`, `updated_at`, `attribute_template_id`, `deleted_at`) VALUES
-	(158, 'کلاه', 'کلاه', '<p>کلاه ترند</p>', 3500000.00, 0.00, 50, '8973146', 32, 1, '{"main": "main_کلاه-686674428b606.jpg", "thumb": "thumb_کلاه-686674428ebc0.jpg", "gallery": ["کلاه-686674428f0a1.jpg", "کلاه-686674428f928.jpg", "کلاه-686674428fe8d.png"]}', 'رومانو', 1, NULL, '[{"name": "رنگ", "value": "یشمی"}, {"name": "اندازه", "value": "50"}, {"name": "جنس", "value": "نخی"}, {"name": "کیفیت", "value": "عالی"}]', 0, '2025-07-03 12:14:58', '2025-07-03 12:14:58', NULL, NULL),
-	(159, 'روسری قواره', 'روسری-قواره', '<p>روسری قواره</p>', 8547000.00, 0.00, 50, '89732465', 32, 1, '{"main": "main_روسری-قواره-68667628c31e4.jpg", "thumb": "thumb_روسری-قواره-68667628c69c1.jpg", "gallery": ["روسری-قواره-68667628c6dd7.jpg", "روسری-قواره-68667628c7691.jpg"]}', 'رومانو', 1, NULL, '[{"name": "رنگ", "value": "یشمی"}, {"name": "اندازه", "value": "5"}, {"name": "جنس", "value": "84"}, {"name": "کیفیت", "value": "خوب"}]', 0, '2025-07-03 12:23:04', '2025-07-03 12:23:04', NULL, NULL),
-	(160, 'روسری تابستانه', 'روسری-تابستانه', '<p>روسری تابستانه</p>', 479517.00, 15000.00, 48, '456345345', 32, 1, '{"main": "main_روسری-تابستانه-686676c181dfb.jpg", "thumb": "thumb_روسری-تابستانه-686676c18e8db.jpg", "gallery": ["روسری-تابستانه-686676c18ece9.jpg", "روسری-تابستانه-686676c18f3e5.jpg"]}', 'رومانو', 5, NULL, '[{"name": "رنگ", "value": "قرمز"}, {"name": "اندازه", "value": "یس"}, {"name": "جنس", "value": "213"}, {"name": "کیفیت", "value": "234"}]', 0, '2025-07-03 12:25:37', '2025-07-03 12:25:37', NULL, NULL);
+-- Dumping data for table mohsencommerce.products: ~8 rows (approximately)
+INSERT INTO `products` (`id`, `name`, `slug`, `description`, `seo_description`, `price`, `discount_price`, `stock`, `sku`, `category_id`, `is_active`, `images`, `brand`, `weight`, `dimension`, `attributes`, `views_count`, `created_at`, `updated_at`, `attribute_template_id`, `deleted_at`, `code`) VALUES
+	(158, 'کلاه', 'کلاه', '<p>کلاه ترند</p>', NULL, 3500000.00, 3350000.00, 50, '8973146', 70, 1, '{"main": "main_کلاه-686fb4b19bfcf.jpg", "thumb": "thumb_کلاه-686fb4b213c74.jpg", "gallery": ["کلاه-686fb4b214249.jpg", "کلاه-686fb4b214ad5.jpg", "کلاه-686fb4b214f25.png"]}', 'رومانو', 1, NULL, '[{"name": "رنگ", "value": "یشمی"}, {"name": "اندازه", "value": "50"}, {"name": "جنس", "value": "نخی"}, {"name": "کیفیت", "value": "عالی"}]', 4, '2025-07-03 12:14:58', '2025-07-10 13:10:10', NULL, '2025-07-10 13:10:10', '[{"color": "#000000", "label": "sdad"}]'),
+	(159, 'روسری قواره', 'روسری-قواره', '<p>روسری قواره</p>', NULL, 8547000.00, 854.00, 50, '89732465', 70, 1, '{"main": "main_روسری-قواره-68697dfe9e87d.jpg", "thumb": "thumb_روسری-قواره-68697dfea1ad0.jpg", "gallery": ["روسری-قواره-68697dfea206f.jpg", "روسری-قواره-68697dfea2adb.jpg"]}', 'رومانو', 1, NULL, '[{"name": "رنگ", "value": "یشمی"}, {"name": "اندازه", "value": "5"}, {"name": "جنس", "value": "84"}, {"name": "کیفیت", "value": "خوب"}]', 31, '2025-07-03 12:23:04', '2025-07-12 18:50:24', NULL, NULL, '[{"color": "#000000", "label": "fdgg"}]'),
+	(160, 'روسری تابستانه', 'روسری-تابستانه', '<p>روسری تابستانه</p>', NULL, 479517.00, 15000.00, 48, '456345345', 71, 1, '{"main": "main_روسری-تابستانه-686be20855eaa.jpg", "thumb": "thumb_روسری-تابستانه-686be208b6dde.jpg", "gallery": ["روسری-تابستانه-686be208b733d.jpg", "روسری-تابستانه-686be208b7bcd.jpg"]}', 'رومانو', 5, NULL, '[{"name": "ش", "value": "ش"}]', 161, '2025-07-03 12:25:37', '2025-07-07 19:37:36', NULL, NULL, '[{"color": "#000000", "label": "gfdhgfh"}, {"color": "#000000", "label": ""}]'),
+	(161, 'روسری محرم', 'روسری-محرم', '<p><span style="background-color: rgb(0, 0, 0); color: rgb(245, 245, 245);">کالکشن جدید رومانو⭕️</span></p><p><br></p><p><span style="background-color: rgb(0, 0, 0); color: rgb(245, 245, 245);">کلی کار خاص برای خانومایی خاص و لاکچری</span></p><p><br></p><p><span style="background-color: rgb(0, 0, 0); color: rgb(245, 245, 245);">شما کدوم اسلاید رو بیشتر دوس داشتید !!!</span></p>', NULL, 878549.00, 0.00, 47, '324634543', 71, 1, '{"main": "main_روسری-محرم-68697e0b19978.jpg", "thumb": "thumb_روسری-محرم-68697e0b1c8ab.jpg", "gallery": ["روسری-محرم-68697e0b1cd31.jpg", "روسری-محرم-68697e0b1d4ee.jpg", "روسری-محرم-68697e0b1d92b.jpg"]}', 'رومانو', 1, NULL, '[{"name": "رنگ ها", "value": "سبز و قرمز"}]', 15, '2025-07-03 18:55:57', '2025-07-12 18:48:56', NULL, NULL, '[{"color": "#000000", "label": "gfhfh"}]'),
+	(162, 'شال تور', 'شال-تور', '<p>شال تور</p>', NULL, 841256.00, 15000.00, 50, '657435234', 70, 1, '{"main": "main_شال-تور-68692ba003fa9.png", "thumb": "thumb_شال-تور-68692ba0076db.png", "gallery": []}', 'رومانو', 1, NULL, '[{"name": "کیفیت ", "value": "عالی"}, {"name": "جنس", "value": "نخی"}]', 80, '2025-07-04 10:43:36', '2025-07-12 19:22:35', NULL, NULL, '[{"color": "#8b137b", "label": ";n5"}, {"color": "#cb2a2a", "label": "کد45"}, {"color": "#166426", "label": "ldf"}]'),
+	(163, 'شال مجلسی', 'شال-مجلسی', '<p>شال مجلسی 2</p>', NULL, 478951.00, 0.00, 50, 'undefined', 70, 1, '{"main": "main_شال-مجلسی-686925e40d9a7.jpg", "thumb": "thumb_شال-مجلسی-686925e45cd9f.jpg", "gallery": ["شال-مجلسی-686925e45d26b.png"]}', 'رومانو', 1, NULL, '[{"name": "جنس", "value": "نخی"}]', 161, '2025-07-05 13:17:24', '2025-07-12 19:17:47', NULL, NULL, '[{"color": "#000000", "label": "کد یک"}, {"color": "#000000", "label": "کد 2"}]'),
+	(164, 'شال دوست پسر حساس', 'شال-دوست-پسر-حساس', '<p><span style="background-color: rgb(33, 35, 40); color: rgb(245, 245, 245);">قتی میری پیش دوس پسرت حساسه نمیخواد شالت از سرت بیفته این مدلی ببند که اصلا تکون نخوره&nbsp;</span></p>', 'قتی میری پیش دوس پسرت حساسه نمیخواد شالت از سرت بیفته این مدلی ببند که اصلا تکون نخوره', 600000.00, 100000.00, 25, '56765324324', 70, 1, '{"main": "main_شال-دوست-پسر-حساس-6870d81f0bd8a.jpg", "thumb": "thumb_شال-دوست-پسر-حساس-6870d81f79092.jpg", "gallery": ["شال-دوست-پسر-حساس-6870d81f795e5.jpg", "شال-دوست-پسر-حساس-6870d81f79b85.jpg"]}', 'رومانو', 1, NULL, '[{"name": "میزان حساسیت دوست پسر", "value": "زیاد"}, {"name": "جنس", "value": "نخی"}, {"name": "اندازه", "value": "استاندارد"}]', 11, '2025-07-11 09:23:43', '2025-07-12 19:02:46', NULL, NULL, '[{"color": "#000000", "label": "دوست پسر خنگ"}, {"color": "#000000", "label": "دوست پسر حول"}]'),
+	(165, 'شال خاص پسند', 'شال-خاص-پسند', '<p><span style="background-color: rgb(33, 35, 40); color: rgb(245, 245, 245);">این پست رو بفرس فقط برای دخترای خوشگل اردبیل</span></p>', 'این پست رو بفرس فقط برای دخترای خوشگل اردبیل', 350000.00, 335000.00, 23, '9870231', 70, 1, '{"main": "main_شال-خاص-پسند-6870e74c3b5b4.webp", "thumb": "thumb_شال-خاص-پسند-6870e74c3ebcb.webp", "gallery": ["شال-خاص-پسند-6870e74c3f0fb.webp", "شال-خاص-پسند-6870e74c3f726.webp"]}', 'رومانو', 1, NULL, '[{"name": "جنس", "value": "نخی"}, {"name": "اردبیل", "value": "پسند"}]', 5, '2025-07-11 10:17:53', '2025-07-11 10:28:48', NULL, NULL, '[{"color": "#000000", "label": "ادربیل"}, {"color": "#000000", "label": "گرمی لی"}, {"color": "#000000", "label": "مشگینی"}]');
 
 -- Dumping structure for table mohsencommerce.sessions
 CREATE TABLE IF NOT EXISTS `sessions` (
@@ -605,13 +627,15 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 
 -- Dumping data for table mohsencommerce.sessions: ~1 rows (approximately)
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-	('szN7zVrMpPSn6lf3onGmSy8oFBGsXd5nRSQo05KG', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiRzF3NHdCZ0o3QkpCU0pyM0hWekdpTnR5NEhNQmJMNFRiVk9MVEFzMSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1751552903);
+	('PVoxV7kB4gkfGmzrJu8gO3xfsijjNeNgONhRmACv', 54, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiOVduR3BDWlJSYmpsQUozVzFqZDBRZXh4NXhPa3Y4b1p1SDZ1VmV3cCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9zaGlwcGluZyI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjU0O30=', 1752348191);
 
 -- Dumping structure for table mohsencommerce.users
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` json DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -620,59 +644,60 @@ CREATE TABLE IF NOT EXISTS `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table mohsencommerce.users: ~51 rows (approximately)
-INSERT INTO `users` (`id`, `name`, `email`, `address`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, 'Miss Brianne Trantow', 'armstrong.lucy@example.net', '{"address": "352 Hintz Track\\nErnestofurt, NE 73404"}', '2025-03-14 14:57:50', '$2y$2y$12$sKrfCKY2ola05H25xCyeduqb1u2yhVrs027Z/sPQbY8ZZCBhWVLS6', 'dZ7gwitwGL', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
-	(2, 'Miss Kathleen Mante Sr.', 'walker.jerry@example.net', '{"address": "738 Breitenberg Vista\\nSchambergermouth, AL 75469-3886"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'IM2OlsrR2y', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
-	(3, 'Llewellyn Considine', 'ismael.dubuque@example.net', '{"address": "88115 Fletcher Spur Apt. 379\\nSouth Bettye, DC 64967-4648"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'evpnljhFmB', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
-	(4, 'Mr. Ike McDermott', 'dario.pacocha@example.net', '{"address": "701 Elenora Springs Suite 375\\nWest Corrine, LA 15863"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'ReteNvITM4', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
-	(5, 'Miss Laurine Parker MD', 'abdul.farrell@example.com', '{"address": "2125 Paige Pines\\nAlvaburgh, IL 20262-2807"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'YjwXJHi3gs', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
-	(6, 'Mose Jerde', 'omarquardt@example.net', '{"address": "151 Birdie Cape Suite 237\\nGonzalomouth, MO 11560"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'j150DDCS0r', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
-	(7, 'Jedediah Towne', 'ndaniel@example.org', '{"address": "44489 Janie Isle Apt. 245\\nEffertzside, DC 62821-1485"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'gEy9xCiKTd', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
-	(8, 'Virginia Kerluke', 'gleannon@example.org', '{"address": "776 O\'Hara Pine\\nChristatown, OK 14841-7662"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'us1PEcAZIh', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
-	(9, 'Cathryn Ward', 'zromaguera@example.com', '{"address": "78174 Wolf Brooks Apt. 564\\nCruzfurt, NY 70390"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'UUe5iqFyGY', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
-	(10, 'Valerie McCullough', 'deckow.garth@example.com', '{"address": "64567 Burley Tunnel Suite 511\\nLueilwitzland, KS 54232-9594"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'hcICAkWdxx', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
-	(11, 'Miss Mikayla Strosin', 'ysenger@example.net', '{"address": "1080 Mollie Center\\nPort Aliceland, KS 15823-0671"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'UyHl2tSzz6', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(12, 'Anibal Weber III', 'roberto49@example.org', '{"address": "7910 Paolo Lake Apt. 382\\nNew Janaeland, KS 18262-7067"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'ZMPuNqkSvk', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(13, 'Ms. Aniyah Ondricka', 'cleora31@example.com', '{"address": "6758 August Mountain Suite 165\\nColumbusfort, AZ 57668"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'hMOBSZx8kF', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(14, 'Angus Quigley', 'lewis.jakubowski@example.com', '{"address": "797 Gay Corner Apt. 457\\nHettieborough, HI 23104-8737"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'd0Wl1du0ZA', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(15, 'Treva Rolfson', 'mcclure.gladyce@example.net', '{"address": "873 Frami Locks\\nWest Kassandra, SC 26441-1030"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'yTt3oo1HLk', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(16, 'Johnpaul Pagac III', 'mackenzie.bogisich@example.net', '{"address": "2429 Abigail Row\\nWest Americoland, VT 68988"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', '6ig0DtmwFh', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(17, 'Prof. Dewitt Doyle Sr.', 'jones.celestino@example.org', '{"address": "923 Dibbert Stravenue\\nNorth Garett, SC 80200-3019"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'o1VoWeWS2y', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(18, 'Camryn Will', 'ypouros@example.com', '{"address": "8493 Dawson Groves Suite 532\\nPort Eloy, HI 73486-9868"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', '5qKqWMv8lZ', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(19, 'Ms. Letha Lakin', 'rogelio69@example.org', '{"address": "437 Olson Common Apt. 856\\nHanemouth, ME 74310-7194"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'UVLCTiR0x3', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(20, 'Irma Prohaska', 'maryam19@example.net', '{"address": "7495 Okuneva Via\\nPierreshire, PA 75950-0670"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'eWL0aX0G3o', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(21, 'Krista Schuppe MD', 'nshanahan@example.org', '{"address": "36016 Marks Court\\nNorth Saige, AL 61866"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'eTHws6MyEt', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(22, 'Lelah Prosacco', 'garfield46@example.org', '{"address": "786 Justus Street\\nSouth Reta, SD 54754-7378"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'NHUNwT5BiV', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(23, 'Alexandra Hahn', 'rframi@example.org', '{"address": "68891 Monahan Vista Suite 774\\nPort Kassandratown, CT 94676-8702"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'MDjtFC0Zyg', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(24, 'Kale Fritsch DDS', 'morton.pouros@example.org', '{"address": "73399 Avis Skyway\\nEast Isom, MN 19708-2982"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', '4F3a0pGY3M', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(25, 'Hunter Torphy', 'hackett.donnie@example.com', '{"address": "433 Torphy Lake Suite 552\\nNew Bretthaven, KY 28184"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'fCylSVFSXv', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(26, 'Paris Connelly', 'hammes.domenica@example.com', '{"address": "9925 Scarlett Trail\\nEast Luisa, WV 54979"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'N7dUHv9bij', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(27, 'Felicita Kutch', 'alverta55@example.net', '{"address": "668 Tromp Shoal\\nSouth Krystaltown, VT 50198"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'QuYZb8n5LL', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(28, 'Keshawn Hickle', 'abbott.cordia@example.org', '{"address": "49200 Rosalyn Hills\\nEast Lonie, DE 63941-2937"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', '0pi3PDuQKa', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(29, 'Margret Hessel', 'hdaniel@example.net', '{"address": "71123 Minerva Village\\nNew Lutherbury, SD 84934-0540"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'uvExqnqwj3', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(30, 'Cindy Koelpin', 'vritchie@example.com', '{"address": "42577 Treutel Valleys Apt. 580\\nKunzetown, WA 99641"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'XyKBbaeJr9', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
-	(31, 'Carole Pollich', 'lourdes.brakus@example.org', '{"address": "6936 Alessandra Via\\nLake Luluburgh, AK 96259"}', '2025-03-24 18:31:41', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'nOXiCsXP0M', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(32, 'Dr. Jessy Vandervort', 'rziemann@example.org', '{"address": "647 Senger Road Apt. 258\\nNorth Lera, PA 82130"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'QAfIw78Dkf', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(33, 'Susana Rolfson', 'lowe.lizzie@example.com', '{"address": "51832 Koelpin Squares Apt. 132\\nSouth Johnathanbury, AZ 95535-8597"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'LhSDXyYCGg', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(34, 'Isabell Weissnat', 'nquigley@example.com', '{"address": "360 Yasmine Lane Suite 492\\nLake Malikaside, ID 81568"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'mI5dGL0Ba9', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(35, 'Bartholome Murazik', 'glover.dallin@example.org', '{"address": "1317 Reilly Mill Apt. 459\\nHalvorsonfurt, AR 11055-1444"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'LX7xESOKKt', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(36, 'Mckenzie Conroy DDS', 'qdeckow@example.net', '{"address": "47635 Michale Light Suite 983\\nNew Ole, NY 72829"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'MdZ2wPgzjn', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(37, 'Dahlia Abbott', 'rreichel@example.com', '{"address": "92165 Jaylen Rest\\nWest Rutheborough, NH 36801"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'MZ4cZYn4qa', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(38, 'Miss Zola D\'Amore Jr.', 'logan.kilback@example.net', '{"address": "9033 Tressie Terrace\\nLake Federicofurt, NJ 48245-5109"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'h8rPEA068k', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(39, 'Stacy Rolfson', 'mcglynn.anna@example.org', '{"address": "2731 Idell Parkway Apt. 898\\nFarrellborough, VT 68881-4501"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'SFV3nv95Vh', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(40, 'Myra Borer', 'considine.elisa@example.net', '{"address": "91352 Hirthe Extension Suite 573\\nAbbieside, IN 63984"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'OQ0kehugKG', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(41, 'Evie Reichel', 'qlubowitz@example.com', '{"address": "638 Branson Track\\nSouth Tobybury, AZ 49851-4520"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'a01vEU2mMj', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(42, 'Mr. Torrey Kshlerin III', 'jovan37@example.org', '{"address": "813 Adams Summit Suite 488\\nBashirianside, WY 24035"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'n8fmQVxQka', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(43, 'Ms. Helene Collier PhD', 'joan70@example.com', '{"address": "690 Tromp Circles\\nEast Elizabeth, ID 57047-9676"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'AQLx0UGYp4', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(44, 'Mr. Demetrius Turcotte', 'bernier.emile@example.net', '{"address": "8849 Kiehn Creek\\nSchmelerport, CT 15607-2513"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'IKJqsaIxaA', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(45, 'Dr. Mabelle Bode', 'iwunsch@example.org', '{"address": "88131 Dagmar Pass Apt. 083\\nPort Courtney, KY 94227"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', '3eV1Rwmndw', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(46, 'Prof. Eleanora Spinka IV', 'senger.michaela@example.org', '{"address": "550 Hagenes Common Apt. 272\\nLuisview, KS 82291-1395"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'hHa7eMwRdq', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(47, 'Edmond Mante IV', 'soledad.glover@example.com', '{"address": "528 Keeling Crescent\\nWest Devonberg, NY 31810"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'IWHCkAzepX', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
-	(51, 'mohi', 'admin@1.com', '{"address": "asdasd"}', '2025-03-24 18:31:42', '$2y$12$nXnYgKYy23ObY1Sej3r49eWGwjEPXbA7WGlwqzyt.9yTnl2rWucvO', 'xr2SXodl7Nw3j87l356d9JPBI42vfd0PgFUiu3FtYSzWXDgBqi20dpr1ZcmF', '2025-03-24 18:31:42', '2025-06-07 14:00:43'),
-	(53, 'محسن علی محمدی', 'a@d.com', '[{"city": "تهران", "address": "خیابان آزادی، پلاک ۱۲۳", "province": "تهران"}, {"city": "اصفهان", "address": "خیابان چهارباغ پایین، کوچه بهار", "province": "اصفهان"}, {"city": "گرمی", "address": "کوچه گل سرخ", "province": "اردبیل"}]', NULL, '$2y$12$oZbI0PRYBdWcyMxa0W/0h.BgD20tqmQlUgsI3WLfrcwmzYNVp9ybu', 'Jwlx0j2E0CpgHbIVIDvLATUKU1ICYRgqlDQ52cBjwLepskkq9Csx6PDTw3So', '2025-05-25 15:04:04', '2025-06-09 12:54:33');
+-- Dumping data for table mohsencommerce.users: ~50 rows (approximately)
+INSERT INTO `users` (`id`, `name`, `role`, `email`, `phone`, `address`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+	(1, 'Miss Brianne Trantow', '', 'armstrong.lucy@example.net', NULL, '{"address": "352 Hintz Track\\nErnestofurt, NE 73404"}', '2025-03-14 14:57:50', '$2y$2y$12$sKrfCKY2ola05H25xCyeduqb1u2yhVrs027Z/sPQbY8ZZCBhWVLS6', 'dZ7gwitwGL', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
+	(2, 'Miss Kathleen Mante Sr.', '', 'walker.jerry@example.net', NULL, '{"address": "738 Breitenberg Vista\\nSchambergermouth, AL 75469-3886"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'IM2OlsrR2y', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
+	(3, 'Llewellyn Considine', '', 'ismael.dubuque@example.net', NULL, '{"address": "88115 Fletcher Spur Apt. 379\\nSouth Bettye, DC 64967-4648"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'evpnljhFmB', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
+	(4, 'Mr. Ike McDermott', '', 'dario.pacocha@example.net', NULL, '{"address": "701 Elenora Springs Suite 375\\nWest Corrine, LA 15863"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'ReteNvITM4', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
+	(5, 'Miss Laurine Parker MD', '', 'abdul.farrell@example.com', NULL, '{"address": "2125 Paige Pines\\nAlvaburgh, IL 20262-2807"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'YjwXJHi3gs', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
+	(6, 'Mose Jerde', '', 'omarquardt@example.net', NULL, '{"address": "151 Birdie Cape Suite 237\\nGonzalomouth, MO 11560"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'j150DDCS0r', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
+	(7, 'Jedediah Towne', '', 'ndaniel@example.org', NULL, '{"address": "44489 Janie Isle Apt. 245\\nEffertzside, DC 62821-1485"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'gEy9xCiKTd', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
+	(8, 'Virginia Kerluke', '', 'gleannon@example.org', NULL, '{"address": "776 O\'Hara Pine\\nChristatown, OK 14841-7662"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'us1PEcAZIh', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
+	(9, 'Cathryn Ward', '', 'zromaguera@example.com', NULL, '{"address": "78174 Wolf Brooks Apt. 564\\nCruzfurt, NY 70390"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'UUe5iqFyGY', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
+	(10, 'Valerie McCullough', '', 'deckow.garth@example.com', NULL, '{"address": "64567 Burley Tunnel Suite 511\\nLueilwitzland, KS 54232-9594"}', '2025-03-14 14:57:50', '$2y$12$bnSv4KFH4.9kxpsQX9l.5.Rsl/ylX0REpWYHFoeBrdD0q41Hotxhe', 'hcICAkWdxx', '2025-03-14 14:57:50', '2025-03-14 14:57:50'),
+	(11, 'Miss Mikayla Strosin', '', 'ysenger@example.net', NULL, '{"address": "1080 Mollie Center\\nPort Aliceland, KS 15823-0671"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'UyHl2tSzz6', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(12, 'Anibal Weber III', '', 'roberto49@example.org', NULL, '{"address": "7910 Paolo Lake Apt. 382\\nNew Janaeland, KS 18262-7067"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'ZMPuNqkSvk', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(13, 'Ms. Aniyah Ondricka', '', 'cleora31@example.com', NULL, '{"address": "6758 August Mountain Suite 165\\nColumbusfort, AZ 57668"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'hMOBSZx8kF', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(14, 'Angus Quigley', '', 'lewis.jakubowski@example.com', NULL, '{"address": "797 Gay Corner Apt. 457\\nHettieborough, HI 23104-8737"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'd0Wl1du0ZA', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(15, 'Treva Rolfson', '', 'mcclure.gladyce@example.net', NULL, '{"address": "873 Frami Locks\\nWest Kassandra, SC 26441-1030"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'yTt3oo1HLk', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(16, 'Johnpaul Pagac III', '', 'mackenzie.bogisich@example.net', NULL, '{"address": "2429 Abigail Row\\nWest Americoland, VT 68988"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', '6ig0DtmwFh', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(17, 'Prof. Dewitt Doyle Sr.', '', 'jones.celestino@example.org', NULL, '{"address": "923 Dibbert Stravenue\\nNorth Garett, SC 80200-3019"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'o1VoWeWS2y', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(18, 'Camryn Will', '', 'ypouros@example.com', NULL, '{"address": "8493 Dawson Groves Suite 532\\nPort Eloy, HI 73486-9868"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', '5qKqWMv8lZ', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(19, 'Ms. Letha Lakin', '', 'rogelio69@example.org', NULL, '{"address": "437 Olson Common Apt. 856\\nHanemouth, ME 74310-7194"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'UVLCTiR0x3', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(20, 'Irma Prohaska', '', 'maryam19@example.net', NULL, '{"address": "7495 Okuneva Via\\nPierreshire, PA 75950-0670"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'eWL0aX0G3o', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(21, 'Krista Schuppe MD', '', 'nshanahan@example.org', NULL, '{"address": "36016 Marks Court\\nNorth Saige, AL 61866"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'eTHws6MyEt', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(22, 'Lelah Prosacco', '', 'garfield46@example.org', NULL, '{"address": "786 Justus Street\\nSouth Reta, SD 54754-7378"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'NHUNwT5BiV', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(23, 'Alexandra Hahn', '', 'rframi@example.org', NULL, '{"address": "68891 Monahan Vista Suite 774\\nPort Kassandratown, CT 94676-8702"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'MDjtFC0Zyg', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(24, 'Kale Fritsch DDS', '', 'morton.pouros@example.org', NULL, '{"address": "73399 Avis Skyway\\nEast Isom, MN 19708-2982"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', '4F3a0pGY3M', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(25, 'Hunter Torphy', '', 'hackett.donnie@example.com', NULL, '{"address": "433 Torphy Lake Suite 552\\nNew Bretthaven, KY 28184"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'fCylSVFSXv', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(26, 'Paris Connelly', '', 'hammes.domenica@example.com', NULL, '{"address": "9925 Scarlett Trail\\nEast Luisa, WV 54979"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'N7dUHv9bij', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(27, 'Felicita Kutch', '', 'alverta55@example.net', NULL, '{"address": "668 Tromp Shoal\\nSouth Krystaltown, VT 50198"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'QuYZb8n5LL', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(28, 'Keshawn Hickle', '', 'abbott.cordia@example.org', NULL, '{"address": "49200 Rosalyn Hills\\nEast Lonie, DE 63941-2937"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', '0pi3PDuQKa', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(29, 'Margret Hessel', '', 'hdaniel@example.net', NULL, '{"address": "71123 Minerva Village\\nNew Lutherbury, SD 84934-0540"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'uvExqnqwj3', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(30, 'Cindy Koelpin', '', 'vritchie@example.com', NULL, '{"address": "42577 Treutel Valleys Apt. 580\\nKunzetown, WA 99641"}', '2025-03-24 18:31:21', '$2y$12$eMR13PGAiPeJrNkAaD.1WOV8zmWPt/Cri/39hygqAbynNBhM8XzeK', 'XyKBbaeJr9', '2025-03-24 18:31:21', '2025-03-24 18:31:21'),
+	(31, 'Carole Pollich', '', 'lourdes.brakus@example.org', NULL, '{"address": "6936 Alessandra Via\\nLake Luluburgh, AK 96259"}', '2025-03-24 18:31:41', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'nOXiCsXP0M', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(32, 'Dr. Jessy Vandervort', '', 'rziemann@example.org', NULL, '{"address": "647 Senger Road Apt. 258\\nNorth Lera, PA 82130"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'QAfIw78Dkf', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(33, 'Susana Rolfson', '', 'lowe.lizzie@example.com', NULL, '{"address": "51832 Koelpin Squares Apt. 132\\nSouth Johnathanbury, AZ 95535-8597"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'LhSDXyYCGg', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(34, 'Isabell Weissnat', '', 'nquigley@example.com', NULL, '{"address": "360 Yasmine Lane Suite 492\\nLake Malikaside, ID 81568"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'mI5dGL0Ba9', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(35, 'Bartholome Murazik', '', 'glover.dallin@example.org', NULL, '{"address": "1317 Reilly Mill Apt. 459\\nHalvorsonfurt, AR 11055-1444"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'LX7xESOKKt', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(36, 'Mckenzie Conroy DDS', '', 'qdeckow@example.net', NULL, '{"address": "47635 Michale Light Suite 983\\nNew Ole, NY 72829"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'MdZ2wPgzjn', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(37, 'Dahlia Abbott', '', 'rreichel@example.com', NULL, '{"address": "92165 Jaylen Rest\\nWest Rutheborough, NH 36801"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'MZ4cZYn4qa', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(38, 'Miss Zola D\'Amore Jr.', '', 'logan.kilback@example.net', NULL, '{"address": "9033 Tressie Terrace\\nLake Federicofurt, NJ 48245-5109"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'h8rPEA068k', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(39, 'Stacy Rolfson', '', 'mcglynn.anna@example.org', NULL, '{"address": "2731 Idell Parkway Apt. 898\\nFarrellborough, VT 68881-4501"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'SFV3nv95Vh', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(40, 'Myra Borer', '', 'considine.elisa@example.net', NULL, '{"address": "91352 Hirthe Extension Suite 573\\nAbbieside, IN 63984"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'OQ0kehugKG', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(41, 'Evie Reichel', '', 'qlubowitz@example.com', NULL, '{"address": "638 Branson Track\\nSouth Tobybury, AZ 49851-4520"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'a01vEU2mMj', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(42, 'Mr. Torrey Kshlerin III', '', 'jovan37@example.org', NULL, '{"address": "813 Adams Summit Suite 488\\nBashirianside, WY 24035"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'n8fmQVxQka', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(43, 'Ms. Helene Collier PhD', '', 'joan70@example.com', NULL, '{"address": "690 Tromp Circles\\nEast Elizabeth, ID 57047-9676"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'AQLx0UGYp4', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(44, 'Mr. Demetrius Turcotte', '', 'bernier.emile@example.net', NULL, '{"address": "8849 Kiehn Creek\\nSchmelerport, CT 15607-2513"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'IKJqsaIxaA', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(45, 'Dr. Mabelle Bode', '', 'iwunsch@example.org', NULL, '{"address": "88131 Dagmar Pass Apt. 083\\nPort Courtney, KY 94227"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', '3eV1Rwmndw', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(46, 'Prof. Eleanora Spinka IV', '', 'senger.michaela@example.org', NULL, '{"address": "550 Hagenes Common Apt. 272\\nLuisview, KS 82291-1395"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'hHa7eMwRdq', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(47, 'Edmond Mante IV', '', 'soledad.glover@example.com', NULL, '{"address": "528 Keeling Crescent\\nWest Devonberg, NY 31810"}', '2025-03-24 18:31:42', '$2y$12$7z.phSFEWFaP140zwHDPie.x1SCqtumhO6OcmZ919HtSPWGiP2aqi', 'IWHCkAzepX', '2025-03-24 18:31:42', '2025-03-24 18:31:42'),
+	(51, 'mohi', '', 'admin@1.com', NULL, '{"address": "asdasd"}', '2025-03-24 18:31:42', '$2y$12$nXnYgKYy23ObY1Sej3r49eWGwjEPXbA7WGlwqzyt.9yTnl2rWucvO', 'xr2SXodl7Nw3j87l356d9JPBI42vfd0PgFUiu3FtYSzWXDgBqi20dpr1ZcmF', '2025-03-24 18:31:42', '2025-06-07 14:00:43'),
+	(53, 'محسن علی محمدی', 'admin', 'a@d.com', NULL, '[{"city": "تهران", "address": "خیابان آزادی، پلاک ۱۲۳", "province": "تهران"}, {"city": "اصفهان", "address": "خیابان چهارباغ پایین، کوچه بهار", "province": "اصفهان"}, {"city": "گرمی", "address": "کوچه گل سرخ", "province": "اردبیل"}]', NULL, '$2y$12$oZbI0PRYBdWcyMxa0W/0h.BgD20tqmQlUgsI3WLfrcwmzYNVp9ybu', 'mSPKmvMyLvX9kQ9gWGnS8Nx0roxjpnGk4r04X7ltPJgwSIE4HfL3rcLq9jdY', '2025-05-25 15:04:04', '2025-06-09 12:54:33'),
+	(54, 'محسن علی محمدیgg', '', 'b@c.c', '09147524002', '[{"city": "اردبیل", "address": "شهرک دادگستری پردیسان 3\\r\\nقطعه آخر(136)همه طبقات", "province": "اردبیل"}, {"city": "dsf", "address": "sdf", "province": "sdf"}]', NULL, '$2y$12$6PchfQhbMMtzb99yaMZ3F.M3VI/4q7eSzJFI.GEbRvvaMBik3s23y', 'f5rwWHc7HBM7qhql8pb0FS6lV8sNLI2SE8u88SpOwpe8qJguzTgngamZROi9', '2025-07-05 14:56:56', '2025-07-09 09:55:17');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

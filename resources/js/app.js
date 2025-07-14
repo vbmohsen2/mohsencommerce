@@ -55,15 +55,15 @@ document.addEventListener("DOMContentLoaded", function () {
     new Swiper(".Itemcarousel", {
 
         slidesPerView: 3,
-        spaceBetween: 15,
+        spaceBetween: 8,
 
         pagination: {
             el: ".swiper-pagination",
             clickable: true},
         breakpoints: {
-            300:{slidesPerView: 3},
-            640: { slidesPerView: 3 },
-            768: { slidesPerView: 4 },
+            300:{slidesPerView: 2},
+            640: { slidesPerView: 2.5 },
+            768: { slidesPerView: 3 },
             1024: { slidesPerView: 4 }
         }
 
