@@ -30,7 +30,7 @@ Route::get('/user', function (Request $request) {
 // 🔐 Admin APIs (محافظت‌شده)
 // -------------------------------
 
-Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'isAdmin'])->group(function () {
 
     // 🔸 محصولات
     Route::get('/products', [admin::class, 'getProducts']);
