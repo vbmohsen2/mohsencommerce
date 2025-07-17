@@ -266,7 +266,7 @@
 
 
 <script setup>
-import {computed, onMounted, reactive, ref, watch} from 'vue'
+import {computed,  reactive, ref, watch} from 'vue'
 import CategorySelector from './CategoryFilterforaddporduct.vue'
 import axios from "axios";
 

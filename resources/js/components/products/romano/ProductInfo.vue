@@ -14,11 +14,11 @@
             </li>
         </ul>
 
-        <!-- خط جداکننده زیبا -->
+        <!-- خط جداکننده-->
         <div class="w-full border-t border-dashed border-gray-300 my-4"></div>
 
         <!-- انتخاب طرح -->
-        <div class="w-full py-2">
+        <div class="w-full py-2" id="codeMessage">
             <h3 class="text-gray-700 mb-2 text-sm font-semibold">انتخاب طرح:</h3>
             <div class="flex flex-wrap gap-2">
                 <button
@@ -38,7 +38,7 @@
             </div>
 
             <!-- نمایش طرح انتخاب‌شده -->
-            <div v-if="selectedCode" class="mt-3 text-green-600 text-sm font-medium">
+            <div v-if="selectedCode"  class="mt-3 text-green-600 text-sm font-medium">
                 طرح انتخاب‌شده: {{ selectedCode }}
             </div>
         </div>
@@ -116,7 +116,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 const props = defineProps({
     product: Object
 })
@@ -166,6 +167,12 @@ const discountPercent = computed(() =>
 // افزودن به سبد خرید
 const handleAddToCart = () => {
     if (!selectedCode.value) {
+        const el = document.getElementById('codeMessage')
+        const $toast = useToast();
+        let instance = $toast.info('طرح یا رنگ انتخاب نشده است ',{duration:3000,position:'top-right'});
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
         successMessage.value = 'لطفاً یک طرح انتخاب کنید.'
         return
     }

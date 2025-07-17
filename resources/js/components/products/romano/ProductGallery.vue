@@ -1,13 +1,7 @@
 <template>
     <div class="flex flex-col lg:flex-row w-full md:w-2/4  pb-6">
         <!-- آیکون‌ها -->
-        <div class="flex lg:flex-col align-top text-2xl lg:w-1/12">
-            <ul class="float-left">
-                <li class="inline-block"><i class="fa-regular fa-heart text-gray-500"></i></li>
-                <li class="inline-block"><i class="fa fa-link text-gray-500"></i></li>
-                <li class="inline-block"><i class="fa fa-code-compare text-gray-500"></i></li>
-            </ul>
-        </div>
+       <like-share-compare :product="product"></like-share-compare>
 
         <!-- تصاویر -->
         <div class="flex flex-col w-full justify-center">
@@ -18,9 +12,9 @@
                     loading="lazy"
                     alt="'Main Image ' + product.name"
                     decoding="async"
-                    width="400"
-                    height="400"
-                    class="w-full transition-transform duration-300 ease-in-out object-scale-down rounded-2xl"
+                    width="350"
+                    height="350"
+                    class="w-full  transition-transform duration-300 ease-in-out object-scale-down rounded-2xl"
                     ref="mainImageEl"
                 />
             </div>
@@ -87,11 +81,50 @@
                         <div class="swiper-slide">
                             <img :src="getImageUrl(images.main)" class="w-full max-h-96 object-contain" />
                         </div>
-                        <div class="swiper-slide" v-for="(img, i) in images.gallery" :key="'mobile-' + i">
+                        <div
+                            class="swiper-slide"
+                            v-for="(img, i) in images.gallery"
+                            :key="'mobile-' + i"
+                        >
                             <img :src="getGalleryUrl(img)" class="w-full max-h-96 object-contain" />
                         </div>
                     </div>
+                    <!-- دایره پیشرفت روی تصویر، پایین وسط -->
+                    <div
+                        class="absolute bottom-2 left-25 transform z-10 -translate-x-1/2"
+                        style="pointer-events: none;"
+                    >
+                        <svg
+                            class="w-6 h-6"
+                        viewBox="0 0 36 36"
+                        >
+                        <path
+                            class="text-gray-300"
+                            stroke-width="3"
+                            stroke="currentColor"
+                            fill="none"
+                            d="M18 2.0845
+           a 15.9155 15.9155 0 0 1 0 31.831
+           a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <path
+                            id="progress-circle"
+                            class="text-blue-500 transition-all duration-100 ease-linear"
+                            stroke-width="3"
+                            stroke-linecap="round"
+                            stroke="currentColor"
+                            fill="none"
+                            stroke-dasharray="100"
+                            stroke-dashoffset="100"
+                            d="M18 2.0845
+           a 15.9155 15.9155 0 0 1 0 31.831
+           a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        </svg>
+                    </div>
+
                     <div class="swiper-pagination"></div>
+
                 </div>
             </div>
         </div>
@@ -102,6 +135,10 @@
 import { ref, computed, onMounted } from 'vue'
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.css'
+import axios from "axios";
+import LikeShareCompare from "@/components/products/romano/like-share-compare.vue";
+
+
 
 // props
 const props = defineProps({
@@ -174,4 +211,6 @@ onMounted(() => {
         },
     })
 })
+
+
 </script>

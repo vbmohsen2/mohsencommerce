@@ -1,6 +1,5 @@
-<div class="w-1/3 md:w-1/4 rounded-md  mt-1   px-2">
-
-    <a href="" class="w-full h-full ">
-        <img loading="lazy" src="images/banner/banner.png"  class="w-full rounded-md" alt="">
+<div class="w-1/2 lg:w-1/2 h-1/2 p-2  mt-2 md:mt-0">
+    <a href="#" class="block w-full h-full rounded-md overflow-hidden">
+        <img loading="lazy" src="/images/banner/banner.png" class="w-full h-full object-fill rounded-md" alt="">
     </a>
 </div>

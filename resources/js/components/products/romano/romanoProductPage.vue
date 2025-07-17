@@ -1,6 +1,6 @@
 <template>
-    <div class="text-sm text-gray-500 mt-4 flex flex-wrap gap-1 p-8 rtl:flex-row-reverse">
-        <span>فروشگاه اینترنتی</span>
+    <div class="text-sm text-gray-500  flex flex-wrap gap-1 pb-3  rtl:flex-row-reverse">
+        <a href="/">فروشگاه اینترنتی</a>
         <template v-for="cat in breadcrumb" :key="cat.id">
             <span>/</span>
             <a :href="`/category/${cat.slug}`" class="hover:text-green-600 transition">

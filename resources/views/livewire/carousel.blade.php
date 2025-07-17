@@ -1,40 +1,24 @@
-<div class="relative h-full overflow-hidden w-full rounded-xl">
-    <!-- Carousel Container -->
-    <div id="carousel" class="flex transition-transform duration-500 ease-in-out">
+<div class="relative w-full lg:w-1/2 sm:h-60 md:h-full  overflow-hidden rounded-xl">
+    <div id="carousel" class="flex transition-transform duration-500 ease-in-out h-full">
         @foreach ($images as $index => $image)
-            <div class="slide w-full flex-shrink-0 flex items-center justify-center">
+            <div class="slide w-full flex-shrink-0 flex items-center justify-center h-full">
                 <a href="#">
                     <img src="{{ asset($image) }}"
                          loading="lazy"
-                         class="w-full h-[16vh] object-cover object-center sm:h-full sm:max-h-screen"
+                         class="w-full h-full object-fill object-center"
                          alt="Slide {{ $index }}">
                 </a>
             </div>
         @endforeach
     </div>
 
-    <!-- Left Arrow -->
-{{--    <button id="prev" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full shadow-lg">--}}
-{{--        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">--}}
-{{--            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>--}}
-{{--        </svg>--}}
-{{--    </button>--}}
-
-{{--    <!-- Right Arrow -->--}}
-{{--    <button id="next" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full shadow-lg">--}}
-{{--        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">--}}
-{{--            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>--}}
-{{--        </svg>--}}
-{{--    </button>--}}
-
-    <!-- Indicators (Optional) -->
+    {{-- Indicators --}}
     <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
         @foreach ($images as $index => $image)
             <button class="dot w-3 h-2 px-3 mx-2 bg-gray-400 rounded-full cursor-pointer transition-all"
                     onclick="moveToSlide({{ $index }})"></button>
         @endforeach
     </div>
-
 </div>
 
 <!-- JavaScript for Auto-Slide Reset -->

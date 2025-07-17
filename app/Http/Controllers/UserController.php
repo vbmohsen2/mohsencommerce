@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Products;
+use App\Models\ProductsLikes;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -190,5 +192,50 @@ class UserController extends Controller
         return response()->json([
             'order' => $order,
         ]);
+    }
+
+    public function getLikeStatus($id){
+        $user = Auth::user();
+        $product =Products::where('id', $id)->firstorfail();
+        $like=ProductsLikes::where('products_id',$product->id)->where('users_id',$user->id)->first();
+            return response()->json($like);
+
+    }
+
+    public function addlike(Request $request)
+    {
+        if (!Auth::check()) {
+            return response()->json(['login_required' => true], 401);
+        }
+        $user = Auth::user();
+
+        // اعتبارسنجی ورودی‌ها
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'like' => 'required|boolean',
+        ]);
+
+        $productId = $validated['product_id'];
+        $likeValue = $validated['like'];
+
+        // پیدا کردن یا ساختن ردیف لایک
+        $like = ProductsLikes::firstOrNew([
+            'products_id' => $productId,
+            'users_id' => $user->id,
+        ]);
+
+        if ($likeValue === 1) {
+            $like->like=1;
+            $like->save(); // لایک ثبت شود
+        } else {
+            $like->delete(); // لایک حذف شود
+        }
+
+        return response()->json(['like' => $likeValue]);
+
+
+
+
+
     }
 }

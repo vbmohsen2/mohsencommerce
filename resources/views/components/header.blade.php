@@ -2,8 +2,10 @@
     <div class="flex flex-col">
         <div class="flex justify-between flex-wrap  items-center  ">
             {{--        logo--}}
-            <div class="flex-grow-1  sm:order-1 order-2 w-20 md:justify-self-center">
+            <div  class="flex-grow-1  sm:order-1 order-2 w-20 md:justify-self-center">
+                <a href="/">
                 <img src="{{asset('images/romanologo.jpg')}}" alt="romano logo " class="h-16">
+                </a>
             </div>
 
             {{--search--}}
@@ -222,7 +224,7 @@
                     if (modal) {
                         setTimeout(() => {
                             closeModal()
-                            // window.location.href = "/";
+                            location.reload();
                         }, 2000);
                     } else {
                         setTimeout(() => {

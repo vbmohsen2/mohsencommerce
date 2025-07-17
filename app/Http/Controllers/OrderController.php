@@ -172,4 +172,5 @@ class OrderController extends Controller
         $ordercount=Order::where($user)->count();
         return response()->json(['ordercount' => $ordercount]);
     }
+
 }

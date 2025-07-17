@@ -8,12 +8,15 @@
         @endforeach
 
     </div>
-    <div class="swiper-pagination"></div>
+    <div class="swiper-pagination "></div>
 </div>
 <style>
     .swiper-slide {
         height: auto !important;
         display: flex;
+    }
+    .swiper-pagination{
+
     }
 </style>
 <script>

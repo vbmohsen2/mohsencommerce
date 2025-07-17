@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\admin;
 use App\Http\Controllers\admin\attributes;
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\blogAdmin;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
@@ -56,7 +57,7 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(f
     })->where('any', '.*');
 
     // ابزارها
-    
+
 });
 
 
@@ -201,13 +202,20 @@ Route::middleware(['auth', 'isAdmin'])->prefix('api')->group(function () {
 
 // Route::get('/api/products', [ProductController::class, 'index']);
 // Route::get('/api/products/{id}', [ProductController::class, 'show']);
-// Route::get('/api/categories/{category:slug}/products', [ProductController::class, 'index2']);
+ Route::get('/api/categories/{category:slug}/products', [ProductController::class, 'index2']);
 Route::get('/api/categories/{category:slug}/filters', [CategoryController::class, 'filters']);
 Route::get('/api/categories/breadcrumb/{id}', [admin::class, 'breadcrumb']);
+
+Route::post('/api/changelike',[UserController::class, 'addlike']);
+Route::get('/api/getlikestatus/{id}', [UserController::class, 'getLikeStatus']);
+
+
 // دریافت اطلاعات کاربر لاگین‌شده (اگر کاربر معمولی هست)
 Route::get('/api/user', function (Request $request) {
     return $request->user();
 })->middleware('auth');
+
+
 //api
 //Route::view('dashboard', 'dashboard')
 //    ->middleware(['auth', 'verified'])

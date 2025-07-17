@@ -9,8 +9,10 @@
     @vite('resources/js/app.js')
 
         <title>@yield('title', 'صفحه اصلی')</title>
-         <meta name="description" content=@yield('description','بهترین فروشگاه برای خرید انواع لپ‌تاپ، گوشی موبایل، تجهیزات کامپیوتری و لوازم جانبی با قیمت مناسب. تحویل سریع در سراسر کشور.')>
+    <meta name="description" content="@yield('description','فروشگاه شال و روسری و کیف رومانو')">
 
+
+    @yield('ogdescription')
 
 
 </head>
