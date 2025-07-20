@@ -37,28 +37,28 @@
     </div>
 </template>
 
-<script setup>
-import { computed } from 'vue'
+    <script setup>
+    import { computed } from 'vue'
 
-const props = defineProps({
-    product: Object,
-})
+    const props = defineProps({
+        product: Object,
+    })
 
-const mainImage = computed(() => {
-    try {
-        const images = JSON.parse(props.product.images || '{}')
-        return images.main || ''
-    } catch {
-        return ''
+    const mainImage = computed(() => {
+        try {
+            const images = JSON.parse(props.product.images || '{}')
+            return images.main || ''
+        } catch {
+            return ''
+        }
+    })
+
+    const discountPercent = computed(() => {
+        const { price, discount_price } = props.product
+        return Math.round(((price - discount_price) / price) * 100)
+    })
+
+    function numberFormat(num) {
+        return new Intl.NumberFormat('fa-IR').format(num)
     }
-})
-
-const discountPercent = computed(() => {
-    const { price, discount_price } = props.product
-    return Math.round(((price - discount_price) / price) * 100)
-})
-
-function numberFormat(num) {
-    return new Intl.NumberFormat('fa-IR').format(num)
-}
-</script>
+    </script>

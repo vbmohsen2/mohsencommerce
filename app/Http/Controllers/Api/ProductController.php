@@ -72,11 +72,40 @@ class ProductController extends Controller
 
     public function related(Products $product)
     {
+        $limit = 10;
+
+        // 1. بر اساس دسته‌بندی مشابه
         $related = Products::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->latest()
-            ->take(10)
+            ->take($limit)
             ->get();
+
+        $count = $related->count();
+
+        if ($count < $limit) {
+            // 2. اگر کم بود، محصولات از همان برند هم بیار
+            $more = Products::where('brand', $product->brand)
+                ->where('id', '!=', $product->id)
+                ->whereNotIn('id', $related->pluck('id'))
+                ->latest()
+                ->take($limit - $count)
+                ->get();
+
+            $related = $related->merge($more);
+            $count = $related->count();
+        }
+
+        if ($count < $limit) {
+            // 3. اگر باز هم کم بود، محصولات تصادفی پر کن
+            $random = Products::where('id', '!=', $product->id)
+                ->whereNotIn('id', $related->pluck('id'))
+                ->inRandomOrder()
+                ->take($limit - $count)
+                ->get();
+
+            $related = $related->merge($random);
+        }
 
         return response()->json($related);
     }

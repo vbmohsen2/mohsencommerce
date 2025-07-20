@@ -14,7 +14,7 @@
                     decoding="async"
                     width="350"
                     height="350"
-                    class="w-full  transition-transform duration-300 ease-in-out object-scale-down rounded-2xl"
+                    class="w-full   transition-transform duration-300 ease-in-out object-scale-down rounded-2xl"
                     ref="mainImageEl"
                 />
             </div>
@@ -27,7 +27,7 @@
                 >
                     <img
                         :src="getImageUrl(images.main)"
-                        class="w-full md:h-20 lg:h-20"
+                        class="w-full md:h-20 lg:h-20 "
                         :alt="'Thumbnail ' + images.main"
                     />
                 </div>

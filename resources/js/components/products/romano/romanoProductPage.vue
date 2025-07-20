@@ -1,5 +1,5 @@
 <template>
-    <div class="text-sm text-gray-500  flex flex-wrap gap-1 pb-3  rtl:flex-row-reverse">
+    <div class="text-sm text-gray-500  flex flex-wrap gap-1 pb-3  rtl:flex-row-reverse  ">
         <a href="/">فروشگاه اینترنتی</a>
         <template v-for="cat in breadcrumb" :key="cat.id">
             <span>/</span>
