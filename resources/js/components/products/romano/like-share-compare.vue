@@ -14,6 +14,7 @@ const likeFetch=async (product) => {
     if (product) {
         try {
             const response = await axios.get(`/api/getlikestatus/${product.id}`)
+            console.log(response)
            like.value=response.data.like
         } catch (error) {
             console.error('خطا در like', error)
@@ -35,8 +36,9 @@ const togglelike=async (product) => {
         // آپدیت وضعیت like در محصول
        like.value = res.data.like;
     } catch (error) {
+        console.log(error)
         if (error.response.status === 401) {
-            // کاربر لاگین نیست، مودال لاگین رو نشون بده
+
             if (typeof openLoginModal === 'function') {
                 openLoginModal();
             } else {

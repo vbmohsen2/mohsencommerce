@@ -78,6 +78,38 @@
                                 </div>
                             </div>
 
+<!--                            بخش عکس-->
+                            <div class="flex items-center gap-2 mt-2 sm:mt-0">
+                                <div v-if="node.image">
+                                    <img
+                                        :src="`/storage/categoryimages/${node.image}`"
+                                        alt="عکس دسته"
+                                        class="w-12 h-12 object-cover rounded-md cursor-pointer hover:opacity-75"
+                                        @click="triggerImageUpload(node)"
+                                    />
+                                </div>
+                                <div v-else>
+                                    <button
+                                        @click="triggerImageUpload(node)"
+                                        class="text-sm text-blue-600 underline hover:text-blue-800"
+                                    >
+                                        📷 افزودن عکس
+                                    </button>
+                                </div>
+                                <input
+                                    ref="fileInput"
+                                    type="file"
+                                    accept="image/*"
+                                    class="hidden"
+                                    @change="uploadImage(node, $event)"
+                                />
+                            </div>
+
+
+
+
+
+
                             <div class="flex gap-2 mt-2 sm:mt-0">
                                 <button
                                     @click="addChild(node, stat)"
@@ -310,6 +342,7 @@ export default {
                     }
                 }
             });
+            console.log(node)
         },
         async editslug(node) {
             this.openModal({

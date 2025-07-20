@@ -29,15 +29,17 @@
                     <a :href="`https://wa.me/?text=${url}`" target="_blank" title="واتساپ" class="text-green-500 hover:text-green-600">
                         <i class="fab fa-whatsapp"></i>
                     </a>
-                    <a :href="`sms:?body=${url}`" title="پیامک" class="text-gray-700 hover:text-gray-800">
-                        <i class="fa fa-sms"></i>
-                    </a>
+
                     <a :href="`https://www.instagram.com/?url=${url}`" target="_blank" title="اینستاگرام" class="text-pink-500 hover:text-pink-600">
                         <i class="fab fa-instagram"></i>
+                    </a>
+                    <a :href="`sms:?body=${url}`" title="پیامک" class="text-gray-700 hover:text-gray-800">
+                        <i class="fa fa-sms"></i>
                     </a>
                     <button @click="copyToClipboard" title="کپی لینک" class="text-gray-500 hover:text-blue-600">
                         <i class="fas fa-clipboard"></i>
                     </button>
+
                 </div>
             </div>
         </transition>

@@ -75,7 +75,16 @@ class admin extends Controller
 
         $query = Products::query();
 
-        // فیلتر دسته‌بندی‌ها
+        // اضافه کردن تعداد فروش‌های تکمیل‌شده
+        $query->withCount([
+            'orderItems as completed_sales_count' => function ($q) {
+                $q->whereHas('order', function ($q2) {
+                    $q2->where('status', 'تحویل داده شده');
+                });
+            }
+        ]);
+
+        // فیلتر بر اساس دسته‌بندی
         if (!empty($categoryIds)) {
             $query->whereHas('category', function ($q) use ($categoryIds) {
                 $q->whereIn('categories.id', $categoryIds);
@@ -87,14 +96,18 @@ class admin extends Controller
             $query->where('name', 'like', '%' . $searchTerm . '%');
         }
 
-        // گرفتن محصولات با استفاده از paginate
+        // گرفتن محصولات با paginate
         $products = $query->paginate($perPage);
 
-        // اضافه کردن مسیر تصویر به محصولات
+        // پردازش تصویر و افزودن تعداد فروش به هر محصول
         $products->getCollection()->transform(function ($product) {
-
             $images = json_decode($product->images, true);
-            $product->image = isset($images['thumb']) ? asset('../images/products/thumb/' . $images['thumb']) : 'https://via.placeholder.com/300x200?text=No+Image';
+            $product->image = isset($images['thumb'])
+                ? asset('../images/products/thumb/' . $images['thumb'])
+                : 'https://via.placeholder.com/300x200?text=No+Image';
+
+            // اضافه کردن تعداد فروش تکمیل‌شده
+            $product->total_sold = $product->completed_sales_count;
 
             return $product;
         });

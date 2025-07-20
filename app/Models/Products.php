@@ -19,6 +19,10 @@ class Products extends Model
     {
         return $this->belongsToMany(Order::class, 'order_items')->withPivot(['quantity', 'price', 'total_price', 'discount']);
     }
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'product_id');
+    }
 
     protected $casts = [
         'attributes' => 'array',

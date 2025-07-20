@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Products;
-use App\Models\ProductsLikes;
+use App\Models\Productslikes;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -196,8 +196,9 @@ class UserController extends Controller
 
     public function getLikeStatus($id){
         $user = Auth::user();
+
         $product =Products::where('id', $id)->firstorfail();
-        $like=ProductsLikes::where('products_id',$product->id)->where('users_id',$user->id)->first();
+        $like=Productslikes::where('products_id',$product->id)->where('users_id',$user->id)->first();
             return response()->json($like);
 
     }
@@ -219,7 +220,7 @@ class UserController extends Controller
         $likeValue = $validated['like'];
 
         // پیدا کردن یا ساختن ردیف لایک
-        $like = ProductsLikes::firstOrNew([
+        $like = Productslikes::firstOrNew([
             'products_id' => $productId,
             'users_id' => $user->id,
         ]);

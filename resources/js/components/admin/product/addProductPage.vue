@@ -115,7 +115,7 @@
                         />
                     </div>
                 </div>
-                {{ prodcutdesription }}
+
                 <div class="border p-2">
                     <p>sku: <input v-model="productsku" class=" border px-2 py-1 rounded" type="text"></p>
                 </div>

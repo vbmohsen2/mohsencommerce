@@ -71,9 +71,14 @@
                                         <p class="text-sm text-gray-600 mb-2">
                                             {{ Number(product.price).toLocaleString('en-US') }} تومان
                                         </p>
-
                                         <p class="text-sm text-gray-600">
                                             شماره محصول: {{ product.id }}
+                                        </p>
+                                        <p class="text-sm text-gray-600">
+                                             بازدید: {{ product.views_count }}
+                                        </p>
+                                        <p class="text-sm text-gray-600">
+                                            فروش موفق: {{ product.total_sold }}
                                         </p>
                                     </div>
                                 </a>
