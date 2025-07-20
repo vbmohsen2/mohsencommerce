@@ -70,5 +70,17 @@ class ProductController extends Controller
         return response()->json($products);
     }
 
+    public function related(Products $product)
+    {
+        $related = Products::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return response()->json($related);
+    }
+
+
 
 }

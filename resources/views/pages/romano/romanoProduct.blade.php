@@ -30,5 +30,7 @@
 
        <romano-product-page :product='@json($product)'>
        </romano-product-page>
+
+
     </div>
 @endsection

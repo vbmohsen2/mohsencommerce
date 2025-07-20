@@ -16,11 +16,15 @@
 
     </div>
     <div class="pt-2 pb-4 w-full" v-html="product.description"></div>
+
+    <same-product :product="product"/>
+
 </template>
 <script setup>
 import {onMounted, ref} from "vue";
 import ProductGallery from "@/components/products/romano/ProductGallery.vue";
 import ProductInfo from "@/components/products/romano/ProductInfo.vue";
+import SameProduct from "@/components/products/romano/sameProduct.vue";
 
 const breadcrumb = ref([])
 const { product } = defineProps({

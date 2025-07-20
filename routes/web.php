@@ -210,6 +210,9 @@ Route::post('/api/changelike',[UserController::class, 'addlike']);
 Route::get('/api/getlikestatus/{id}', [UserController::class, 'getLikeStatus']);
 
 
+Route::get('/api/products/{product}/related', [ProductController::class, 'related']);
+
+
 // دریافت اطلاعات کاربر لاگین‌شده (اگر کاربر معمولی هست)
 Route::get('/api/user', function (Request $request) {
     return $request->user();
