@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    <div  class="container px-6 sm:px-0  mx-auto mt-4">
+    <div  class="container max-w-screen-lg px-6 sm:px-0  mx-auto mt-4">
         <div class="flex flex-col md:flex-row w-full md:h-72">
 
         @livewire('carousel')

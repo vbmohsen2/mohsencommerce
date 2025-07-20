@@ -106,7 +106,20 @@ class ProductController extends Controller
 
             $related = $related->merge($random);
         }
+        if ($count < $limit) {
+            $priceRange = 0.2; // مثلا 20 درصد بالا و پایین
+            $min = $product->price * (1 - $priceRange);
+            $max = $product->price * (1 + $priceRange);
 
+            $similarPrice = Products::whereBetween('price', [$min, $max])
+                ->where('id', '!=', $product->id)
+                ->whereNotIn('id', $related->pluck('id'))
+                ->latest()
+                ->take($limit - $count)
+                ->get();
+
+            $related = $related->merge($similarPrice);
+        }
         return response()->json($related);
     }
 
