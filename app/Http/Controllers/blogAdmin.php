@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\PostCategory;
 use App\Models\PostMedias;
 use App\Models\Posts;
+use App\Models\PostTags;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -35,6 +37,11 @@ class blogAdmin extends Controller
             ->paginate(10);
 
         return response()->json($posts);
+    }
+    public function tags()
+    {
+        $tags = PostTags::all();
+        return response()->json($tags);
     }
     public function getallpostswithoutpaginate()
     {
@@ -172,7 +179,19 @@ class blogAdmin extends Controller
 
         $post = Posts::where('slug', $slug)->firstOrFail();
 
-        return response()->json($post);
+//        $tags = PostTags::all();
+        $selectedTags = $post->postTags()->pluck('id');
+
+
+        return response()->json([
+            'id' => $post->id,
+            'title' => $post->title,
+            'slug' => $post->slug,
+            'content' => $post->content,
+            'post_category_id' => $post->post_category_id,
+            'is_published' => $post->is_published,
+            'selected_tags' => $selectedTags,
+        ]);
 
     }
 
@@ -182,34 +201,6 @@ class blogAdmin extends Controller
         try {
             $uploadedMain = null;
             $uploadedThumb = null;
-//            $uploadedGallery = [];
-
-            // بررسی تکراری بودن slug
-//            if (!Posts::where('id', $request->id)->exists()) {
-//                return response()->json([
-//                    'field' => 'slug',
-//                    'message' => 'id tekrari'
-//                ], 421);
-//            }
-
-            // بررسی تکراری بودن sku
-
-
-
-
-//
-
-//
-//            if ($request->hasFile('gallery')) {
-//                foreach ($request->file('gallery') as $file) {
-//                    $galleryFilename = $request->slug . '-' . uniqid() . '.' . $file->extension();
-//                    $file->storeAs('images/products/gallery', $galleryFilename, 'public');
-//                    $uploadedGallery[] = $galleryFilename;
-//                }
-//            }
-//            log::info($request->all());
-            // ذخیره در دیتابیس
-
 
 
             $post=Posts::where('id',$request->input('id'))->first();
@@ -217,6 +208,7 @@ class blogAdmin extends Controller
             if(!$post){
                 $post = new Posts();
             }
+
             if($request->ispublished){
                 $post->is_published = 1;
             }
@@ -225,13 +217,29 @@ class blogAdmin extends Controller
             }
 
             $post->title = $request->title;
+
+
+            $existingSlug = Posts::where('slug', $request->slug)
+                ->where('id', '!=', $request->input('id')) // یعنی اسلاگی که برای پست فعلی نیست
+                ->exists();
+
+            if ($existingSlug) {
+                return response()->json([
+                    'message' => 'این اسلاگ قبلا استفاده شده است',
+                    'status' => 421
+                ],200);
+            }
+
+
             $post->slug = $request->slug;
             $post->content = $request->contentt ;
             $post->user_id='7';
             $post->post_category_id = $request->categoryid;
+            $post->save();
             $image=new PostMedias();
-            if ($request->hasFile('mainimage')) {
 
+            if ($request->hasFile('mainimage')) {
+//                Log::info("mainimage");
                 // حذف همه عکس‌های بنر قبلی این پست
                 PostMedias::where('post_id', $post->id)
                     ->where('type', 'banner')
@@ -245,11 +253,11 @@ class blogAdmin extends Controller
                 $mainFilename = 'main_' . $request->slug  . '.' . $request->file('mainimage')->extension();
                 $request->file('mainimage')->storeAs('images/blog/' . $post->slug . "/", $mainFilename, 'public');
                 $image->file_path = $mainFilename;
-
+                $image->post_id = $post->id;
                 $uploadedMain=$mainFilename;
                 $image->save();
             }
-
+            Log::info($request);
             if ($request->hasFile('thumbimage')) {
 
                 // حذف همه عکس‌های تامبنیل قبلی این پست
@@ -267,19 +275,26 @@ class blogAdmin extends Controller
                 $thumbImage->file_path = $thumbFilename;
                 $uploadedThumb=$thumbFilename;
                 $thumbImage->save();
+//                Log::info($thumbImage);
             }
-//            $product->attributes = json_decode($request->input('attributes', []),true);
-//            $product->images = json_encode([
-//                'main' => $uploadedMain,
-//                'thumb' => $uploadedThumb,
-//                'gallery' => $uploadedGallery
-//            ]);
 
 
 
 
 
-            $post->save();
+
+
+
+            $tagIds = [];
+
+            if ($request->has('tags')) {
+                foreach ($request->tags as $tagName) {
+                    $tag = PostTags::firstOrCreate(['name' => trim($tagName)]);
+                    $tagIds[] = $tag->id;
+                }
+
+                $post->postTags()->sync($tagIds); // بروزرسانی رابطه‌ها
+            }
 
             DB::commit();
 
@@ -302,7 +317,47 @@ class blogAdmin extends Controller
         }
 
     }
+    public function deletepost($id)
+    {
+        $post = Posts::find($id);
 
+        if (!$post) {
+            return response()->json(['message' => 'پست پیدا نشد'], 404);
+        }
+
+        try {
+            // اگر عکس یا فایل خاصی هم داره اینجا حذف کن
+            // Storage::delete($post->image);
+
+            $post->delete();
+            $postmedias=PostMedias::where('post_id', $post->id)->get();
+            foreach ($postmedias as $postmedia) {
+                // مسیر فعلی در دیسک public (بدون public_path)
+                $currentPath = 'images/blog/' . $post->slug . '/' . $postmedia->file_path;
+
+                // مسیر جدید (بایگانی در deleted)
+                $newPath = 'images/blog/deleted/' . $post->slug . '/' . $postmedia->file_path;
+
+                // اگر فایل وجود دارد، انتقال بده
+                if (Storage::disk('public')->exists($currentPath)) {
+                    // اگر پوشه مقصد وجود ندارد، بساز
+                    $deletedFolder = 'images/blog/deleted/' . $post->slug;
+                    if (!Storage::disk('public')->exists($deletedFolder)) {
+                        Storage::disk('public')->makeDirectory($deletedFolder);
+                    }
+                    Log::info( Storage::disk('public')->move($currentPath, $newPath));
+                    // انتقال فایل
+//                    Storage::disk('public')->move($currentPath, $newPath);
+                }
+
+                // حذف رکورد از دیتابیس
+                $postmedia->delete();
+            }
+            return response()->json(['message' => 'پست با موفقیت حذف شد'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'خطا در حذف پست'], 500);
+        }
+    }
 
     public function postImages(Request $request){
         $postId = $request->input('postid');

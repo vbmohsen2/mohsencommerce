@@ -17,12 +17,12 @@
 
         <div class="lg:flex flex-col hidden w-3/12 lg:sticky top-20 h-fit">
             {{--        تبلیغ--}}
-            <div class="rounded-md py-2">
-                <img src="images\blog\adv\1.gif" alt="">
-            </div>
-            <div class="rounded-md py-2">
-                <img src="images\blog\adv\1.gif" alt="">
-            </div>
+{{--            <div class="rounded-md py-2">--}}
+{{--                <img src="images\blog\adv\1.gif" alt="">--}}
+{{--            </div>--}}
+{{--            <div class="rounded-md py-2">--}}
+{{--                <img src="images\blog\adv\1.gif" alt="">--}}
+{{--            </div>--}}
 {{--            پایان تبلیغ--}}
 <x-postthumb_mosts :posts="$posts" :type="'comments'"/>
 

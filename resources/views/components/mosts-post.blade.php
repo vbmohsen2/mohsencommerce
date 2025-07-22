@@ -6,14 +6,15 @@
     @foreach($posts as $post)
     <br>
         @php
-        $file = $post->postmedia->first();
-        $PostFile = $file ? $file->file_path . $file->extension : null;
+            $file = $post->postmedia->where('type','banner')->first();
+            $PostFile = $file ? $file->file_path  : null;
 
         @endphp
 
         <div class="flex flex-col group w-1/2 md:w-1/4 rounded-md hover:shadow-lg max-h- overflow-hidden p-2 transition-all duration-500">
             <div class="h-4/6 w-full group-hover:h-2/6 transition-all duration-500 overflow-hidden rounded-t-md">
-                <a href="./blog/{{$post->slug}}"> <img src="{{ asset('images/blog/posts/'.$PostFile) }}"
+
+                <a href="./blog/{{$post->slug}}"> <img src="{{asset("/storage/images/blog/".$post->slug."/".$PostFile)}}"
                 class="object-cover w-full h-full transition-all duration-500"
                      alt="">
                 </a>

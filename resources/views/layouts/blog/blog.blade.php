@@ -14,11 +14,11 @@
 
 </head>
 <body style="direction: rtl">
-<div>
+
     @include('layouts.blog.header')
     @yield('content')
     @include('layouts.blog.BlogFooter')
     @include('layouts.blog.StickyToolbox')
-</div>
+
 </body>
 </html>

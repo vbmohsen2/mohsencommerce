@@ -37,7 +37,7 @@ class ProductsController extends Controller
         $products = Products::where('name', 'like', "%$query%")
             ->orWhere('description', 'like', "%$query%")
             ->take(10)
-            ->get(['id', 'name','slug', 'images', 'price']);
+            ->get(['id', 'name','slug', 'images', 'price','discount_price']);
 
         return response()->json($products);
     }

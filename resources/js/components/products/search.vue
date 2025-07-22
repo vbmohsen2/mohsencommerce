@@ -24,7 +24,13 @@
                     <img :src="`/storage/images/products/thumb/${getThumb(item.images)}`" alt="" class="w-10 h-10 object-cover rounded-md" />
                     <div class="flex-1">
                         <p class="font-semibold text-sm">{{ item.name }}</p>
-                        <p class="text-xs text-gray-500">{{ item.price }} تومان</p>
+
+                        <p v-if="Number(item.discount_price) === 0" class="text-xs text-gray-500">
+                            {{ formatPrice(item.price) }}
+                        </p>
+                        <p v-else class="text-xs text-gray-500">
+                            {{ formatPrice(item.discount_price) }}
+                        </p>
                     </div>
                     </a>
                 </li>
@@ -72,5 +78,12 @@ const getThumb = (images) => {
 }
 const onInput = () => {
     fetchResults()
+}
+
+const formatPrice = (price) => {
+    // const tomanPrice = price / 10; // چون قیمت‌ها به ریاله
+    return new Intl.NumberFormat('fa-IR', {
+        maximumFractionDigits: 0,
+    }).format(price) + ' تومان';
 }
 </script>

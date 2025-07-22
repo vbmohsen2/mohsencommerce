@@ -27,23 +27,29 @@
 
 
         <div class="relative text-lg" id="menu-wrapper">
-            <button class="max-sm:hidden mx-2  hover:text-green-600 py-2" id="menu-button">
-                <i class="fa fa-bars pl-2 "></i><span class="px-2 font-thin"> دسته بندی </span>
-            </button>
-            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" >
-                <span class="px-2 font-thin"> شال</span>
-            </button>
-            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" >
-                <span class="px-2 font-thin"> روسری</span>
-            </button>
-            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600">
-               <span class="px-2 font-thin"> اسکارف</span>
-            </button>
-            <button class="max-sm:hidden  mx-2 py-2 hover:text-green-600" >
-                <span class="px-2 font-thin">کیف</span>
-            </button>
+{{--            <button class="max-sm:hidden mx-2  hover:text-green-600 py-2" id="menu-button">--}}
+{{--                <i class="fa fa-bars pl-2 "></i><span class="px-2 font-thin"> دسته بندی </span>--}}
+{{--            </button>--}}
 
-            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" id="menu-button">
+            @foreach($parents as $parent)
+                <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" >
+                    <a href="/category/{{$parent->slug}}" class="px-2 font-thin">{{$parent->name}}</a>
+                </button>
+            @endforeach
+{{--            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" >--}}
+{{--                <a href="/category/" class="px-2 font-thin"> شال</a>--}}
+{{--            </button>--}}
+{{--            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" >--}}
+{{--                <span class="px-2 font-thin"> روسری</span>--}}
+{{--            </button>--}}
+{{--            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600">--}}
+{{--               <span class="px-2 font-thin"> اسکارف</span>--}}
+{{--            </button>--}}
+{{--            <button class="max-sm:hidden  mx-2 py-2 hover:text-green-600" >--}}
+{{--                <span class="px-2 font-thin">کیف</span>--}}
+{{--            </button>--}}
+
+            <button class="max-sm:hidden mx-2 py-2 hover:text-green-600" >
                 <i class="fa-solid  fa-file-lines pl-4"><span class="px-2 font-thin"><a href="/blog">بلاگ</a></span></i>
             </button>
             <button class="sm:hidden" id="openmobilemenu"><i class="fa fa-bars pl-2 "></i></button>
@@ -139,22 +145,22 @@
                         $children = $categories->where('parent_id', $parent->id);
                     @endphp
 
-                    @if ($children->isNotEmpty())
-                        <!-- دسته‌بندی با زیرمجموعه -->
-                        <li class="group">
-                            <button class="w-full text-right p-2 bg-gray-100">
-                                {{ $parent->name }}
-                            </button>
-                            <ul class="max-h-0 overflow-hidden transition-all duration-500 group-hover:max-h-[200px] pr-4">
-                                @foreach ($children as $child)
-                                    <li><a href="#" class="block p-2 hover:bg-gray-200">{{ $child->name }}</a></li>
-                                @endforeach
-                            </ul>
-                        </li>
-                    @else
+{{--                    @if ($children->isNotEmpty())--}}
+{{--                        <!-- دسته‌بندی با زیرمجموعه -->--}}
+{{--                        <li class="group">--}}
+{{--                            <button class="w-full text-right p-2 bg-gray-100">--}}
+{{--                                {{ $parent->name }}--}}
+{{--                            </button>--}}
+{{--                            <ul class="max-h-0 overflow-hidden transition-all duration-500 group-hover:max-h-[200px] pr-4">--}}
+{{--                                @foreach ($children as $child)--}}
+{{--                                    <li><a href="#" class="block p-2 hover:bg-gray-200">{{ $child->name }}</a></li>--}}
+{{--                                @endforeach--}}
+{{--                            </ul>--}}
+{{--                        </li>--}}
+{{--                    @else--}}
                         <!-- دسته‌بندی بدون زیرمجموعه -->
                         <li><a href="#" class="block p-2 hover:bg-gray-200">{{ $parent->name }}</a></li>
-                    @endif
+{{--                    @endif--}}
                 @endforeach
 
                 <li><a href="#" class="block p-2 hover:bg-gray-200">درباره ما</a></li>

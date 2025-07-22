@@ -1,4 +1,4 @@
-<footer  class="pb-6">
+<footer  class="pb-2">
     <div class="container mt-5 mx-auto">
         <div class="flex flex-col">
             <div class="w-full mb-4">
@@ -13,8 +13,22 @@
                         <i class="fa fa-phone text-green-500  ml-3 mt-1"></i>
                         <div class="flex flex-col  text-xl">
                             <small>تماس با پشتیبانی</small>
-                            <small class="my-1 leading-5">0914-752-4002</small>
-                            <small class="leading-5  "> 0914-752-4002</small>
+                            <a href="tel:04533275523" class="block sm:hidden my-1 leading-5  ">
+                                045-33275523
+                            </a>
+
+                            <!-- فقط برای دسکتاپ (sm و بالاتر) -->
+                            <small class="hidden sm:block my-1 leading-5">
+                                045-33275523
+                            </small>
+                            <a href="tel:09144737632" class="block sm:hidden my-1 leading-5  ">
+                                09144737632
+                            </a>
+
+                            <!-- فقط برای دسکتاپ (sm و بالاتر) -->
+                            <small class="hidden sm:block my-1 leading-5">
+                               09144737632
+                            </small>
 
                         </div>
                     </div>
@@ -24,8 +38,8 @@
                         <i class="fa fa-map-marker-alt text-green-500  ml-3 mt-1"></i>
                         <div class="flex flex-col  text-xl">
                             <small>نشانی</small>
-                            <small class="my-1 leading-5">تهران، تقاطع خیابان ولیعصر و طالقانی، مجتمع تجاری نور،</small>
-                            <small class="leading-5">طبقه همکف سوم تجاری، واحد ۸۰۲۸</small>
+                            <small class="my-1 leading-5">اردبیل،مجتمع تجاری اطلس مال</small>
+                            <small class="leading-5">همکلف ساحلی پلاک A32</small>
                         </div>
                     </div>
 
@@ -116,16 +130,18 @@
 
 
                     <!-- شبکه‌های اجتماعی -->
-                <div class=" flex  flex-wrap mx-auto max-md:w-full mt-10 text-wrap  text-lg  lg:mt-0">
+                <div class=" flex  flex-wrap mx-auto  max-md:w-full mt-10 text-wrap  text-lg  lg:mt-0">
                     <p class="md:hidden w-full px-4">با ما در ارتباط باشید</p>
                     <div class=" flex items-center md:w-full text-center justify-between max-md:mx-auto   flex-wrap  text-wrap  text-lg  mt-4 md:mt-0">
-                    <a href="" title="یوتیوب"><i class="fab fa-youtube text-3xl text-blue-400"></i></a>
-                    <a href="" title="یوتیوب"><i class="fab fa-youtube text-3xl text-red-400"></i></a>
-                    <a href="" title="یوتیوب"><i class="fab fa-youtube text-3xl text-green-600"></i></a>
+                    <a href="https://www.instagram.com/romanoscarf.ard/" title="instagram"><i class="fab fa-instagram text-3xl px-2 text-red-400"></i></a>
+                    <a href="https://t.me/romanoscarfard?fbclid=PAZXh0bgNhZW0CMTEAAadPqQ3UKwnnuq-HQdyYc_irEYGBuzN5vTzP7XakBfW-r7foYeIAvNTr4SBwYA_aem_G3M9xHnAXQuSCnK2afAcSw"
+                       title="تلگرام"><i class="fab fa-telegram text-3xl px-2 text-blue-400"></i></a>
+{{--                    <a href="" title="یوتیوب"><i class="fab fa-youtube text-3xl text-green-600"></i></a>--}}
                     </div>
                 </div>
                 </div>
-                <div class="mx-auto text-center text-2xl mt-8 text-gray-500">تمامی حقوق این سایت متعلق به محسن علی محمدی میباشد </div>
+                <div class="mx-auto text-center text-sm mt-8 text-gray-500">تمامی حقوق این سایت متعلق به رومانو اردبیل میباشد </div>
+                <div class="mx-auto text-center text-xs  text-gray-500">طراحی و توسعه :محسن علی محمدی </div>
             </div>
             <script>
                 function toggleAccordion(button) {

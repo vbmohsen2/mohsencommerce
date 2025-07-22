@@ -174,6 +174,8 @@ Route::middleware(['auth', 'isAdmin'])->prefix('api')->group(function () {
     Route::post('/blogcategories/delete', [blogAdmin::class, 'deleteBlogCategory']);
     Route::post('/blogcategories/save', [blogAdmin::class, 'categoryBlogSave']);
     Route::get('/blog/postsvue', [blogAdmin::class, 'vueposts'])->name('admin.blog.postsvue');
+    Route::get('/blog/tags', [blogAdmin::class, 'tags'])->name('admin.blog.tags');
+    Route::delete('/blog/deletepost/{id}', [blogAdmin::class, 'deletepost'])->name('admin.blog.deletepost');
     Route::post('/blog/postsvue/edit', [blogAdmin::class, 'getPost'])->name('admin.blog.editpost');
     Route::post('/blog/savepost', [blogAdmin::class, 'savePost'])->name('admin.blog.savePost');
     Route::post('/blog/postimages', [blogAdmin::class, 'postImages'])->name('admin.blog.postimages');

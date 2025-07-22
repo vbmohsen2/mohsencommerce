@@ -10,7 +10,7 @@
                 @php
                     $bannerWidth = ($index == 0) ? 2  : 1;
                 @endphp
-
+                a
                 <x-blogpostbanner :bannerPostId="$p" :bannerwitdth="$bannerWidth"/>
             @endforeach
         </section>
@@ -58,9 +58,15 @@
                             $bannerimage = optional($mainpost->postmedia->where('type', 'banner')->first());
                             $imagePath = $bannerimage->file_path ? $bannerimage->file_path . $bannerimage->extension : 'default.jpg';
                         @endphp
+{{--                        @dd($imagePath)--}}
 
-                        <img src="/images/blog/posts/{{$imagePath}}" alt="">
-                    </div>
+                        <div class="w-full h-[25vh] sm:h-[40vh] md:h-[45vh] overflow-hidden rounded-xl shadow mb-6">
+                            <img
+                                src="/storage/images/blog/{{ $mainpost->slug }}/{{ $imagePath }}"
+                                alt="{{ $mainpost->title }}"
+                                class="w-full h-full object-cover"
+                            >
+                        </div>                    </div>
 
                     {{--                    share post--}}
 

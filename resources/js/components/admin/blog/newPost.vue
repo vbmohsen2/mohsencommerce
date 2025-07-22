@@ -6,10 +6,12 @@ import { QuillEditor} from "@vueup/vue-quill";
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import {useToast} from "vue-toast-notification";
 import router from "@/router.js";
+import Multiselect from 'vue-multiselect'
+import 'vue-multiselect/dist/vue-multiselect.min.css'
 
 
 const route = useRoute()
-let slug = route.params.slug
+const slug=ref()
 const post=ref({})
 const categories=ref([])
 const selectedCategory=ref('')
@@ -21,7 +23,8 @@ const mainImage = ref(null)
 const mainImagePreview = ref(null)
 const thumbnail = ref(null)
 const isImage=ref()
-
+const tags = ref([])
+const selectedTags = ref([])
 
 
 const quillModules = {
@@ -34,102 +37,163 @@ const quillModules = {
         ['clean']
     ]
 };
-const fetchPost = async () => {
-    const res = await axios.post('/api/blog/postsvue/edit', {
-            slug
-    })
-    post.value = res.data
-    content.value=post.value.content
-
-    postId.value=post.value.id
-
-
-    selectedCategory.value=post.value.post_category_id
-    isPublished.value = !!post.value.is_published
-    console.log(isPublished)
-    title.value=post.value.title
-    console.log("selected category",selectedCategory.value)
-    // console.log(res.data)
-}
+// const fetchPost = async () => {
+//     const res = await axios.post('/api/blog/postsvue/edit', {
+//             slug
+//     })
+//     post.value = res.data
+//     content.value=post.value.content
+//
+//     postId.value=post.value.id
+//
+//
+//     selectedCategory.value=post.value.post_category_id
+//     isPublished.value = !!post.value.is_published
+//     console.log(isPublished)
+//     title.value=post.value.title
+//     console.log("selected category",selectedCategory.value)
+//     // console.log(res.data)
+// }
 const fetchCategories = async () => {
     const res = await axios.get('/api/blog/categories')
     categories.value = res.data
 
 }
-    const fetchImages=async ()=>{
-
-        const res = await axios.post('/api/blog/postimages', {
-            'postid':postId.value
-        })
-        let bannerObj = res.data.find(item => item.type === 'banner');
-        if (bannerObj) {
-            const path = `/storage/images/blog/${slug}/${bannerObj.file_path}`;
-            mainImagePreview.value = path;
-            isImage.value=true
-        }
-
-
-    }
+    // const fetchImages=async ()=>{
+    //
+    //     const res = await axios.post('/api/blog/postimages', {
+    //         'postid':postId.value
+    //     })
+    //     let bannerObj = res.data.find(item => item.type === 'banner');
+    //     if (bannerObj) {
+    //         const path = `/storage/images/blog/${slug}/${bannerObj.file_path}`;
+    //         mainImagePreview.value = path;
+    //         isImage.value=true
+    //     }
+    //
+    //
+    // }
 const handleCategory=(id)=>{
     selectedCategory.value=id
 }
 
+const loadTags=async () => {
+    const res = await axios.get('/api/blog/tags')
+    tags.value=res.data
+    // console.log(tags.value)
+}
 
-
+const addTag = (tagName) => {
+    const newTag = { id: null, name: tagName }
+    tags.value.push(newTag)
+    selectedTags.value.push(newTag)
+}
 
 onMounted(async () => {
         await fetchCategories()
-    console.log(isPublished)
+    await loadTags()
+
 })
 const handleMainImageUpload = async (e) => {
 
 
-    const file = e.target.files[0]
+    const file = e.target.files[0];
+    if (!file) return;
 
-    const compressedFile = await compressImage(file, "main");
-    mainImage.value = compressedFile
-    mainImagePreview.value = URL.createObjectURL(compressedFile)
+    // فشرده‌سازی تصویر اصلی
+    const { jpeg, webp } = await compressImage(file, "main");
+    mainImage.value = webp;
+    mainImagePreview.value = URL.createObjectURL(webp);
 
-    const thumbFile = e.target.files[0]
-    thumbnail.value = await compressImage(thumbFile, "thumb");
+    // فشرده‌سازی تصویر بندانگشتی (thumbnail)
+    const thumbCompressed = await compressImage(file, "thumb");
+    thumbnail.value = thumbCompressed.webp; // یا thumbCompressed.jpeg بسته به نیاز شما
 }
-const compressImage = (file, type) => {
-    let MAX_WIDTH = 800;
-    if (type === "thumb") {
-        MAX_WIDTH = 200
-    }
-    if (type === "gallery") {
-        MAX_WIDTH = 800
-    }
-    if (type === "main") {
-        MAX_WIDTH = 1600
-    }
-    return new Promise((resolve) => {
-        const img = new Image()
-        const reader = new FileReader()
+const compressImage = (file, type = 'main') => {
+    const MAX_WIDTHS = {
+        thumb: 200,
+        gallery: 800,
+        main: 1200,
+    };
+
+    const quality = {
+        jpeg: 0.7,
+        webp: 0.8,
+    };
+
+    const MAX_WIDTH = MAX_WIDTHS[type] || 800;
+
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        const reader = new FileReader();
 
         reader.onload = (e) => {
-            img.src = e.target.result
-        }
+            img.src = e.target.result;
+        };
+
+        reader.onerror = () => reject("خطا در خواندن فایل");
 
         img.onload = () => {
-            const canvas = document.createElement('canvas')
-            const ctx = canvas.getContext('2d')
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            const scale = Math.min(1, MAX_WIDTH / img.width);
+            const newWidth = img.width * scale;
+            const newHeight = img.height * scale;
+
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+            const originalName = file.name.replace(/\.\w+$/, '');
+
+            // خروجی JPEG
+            const jpegBlobPromise = new Promise((res) => {
+                canvas.toBlob((blob) => {
+                    res(new File([blob], `${originalName}.jpg`, { type: 'image/jpeg' }));
+                }, 'image/jpeg', quality.jpeg);
+            });
+
+            // خروجی WebP
+            const webpBlobPromise = new Promise((res) => {
+                canvas.toBlob((blob) => {
+                    res(new File([blob], `${originalName}.webp`, { type: 'image/webp' }));
+                }, 'image/webp', quality.webp);
+            });
+
+            Promise.all([jpegBlobPromise, webpBlobPromise])
+                .then(([jpegFile, webpFile]) => {
+                    resolve({
+                        jpeg: jpegFile,
+                        webp: webpFile,
+                    });
+                })
+                .catch(() => reject("خطا در فشرده‌سازی تصویر"));
+        };
+
+        img.onerror = () => reject("خطا در بارگذاری تصویر");
+
+        reader.readAsDataURL(file);
+    });
+};
 
 
-            const scaleSize = MAX_WIDTH / img.width
-            canvas.width = MAX_WIDTH
-            canvas.height = img.height * scaleSize
+watch(title,(newVal,oldVal)=>{
+    handleSlug(newVal)
+})
 
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+const handleSlug=async (newVal) => {
 
-            canvas.toBlob((blob) => {
-                resolve(new File([blob], file.name, {type: file.type}))
-            }, file.type, 0.7)
-        }
+    let slugres
+    try {
+        slugres= await axios.post("/slugify", {data:newVal});
+        slugres = slugres.data.slug;
+    } catch (err) {
+        alert(err);
+        console.error(err);
+    }
+    slug.value=slugres
 
-        reader.readAsDataURL(file)
-    })
 }
 
 function goToPost (slug) {
@@ -140,26 +204,23 @@ function goToPost (slug) {
 const submitForm = async () => {
 
     const formData = new FormData()
-    const attributes = []
 
 
-
-
-
-
-    formData.append('id', post.value.id)
+    // formData.append('id', post.value.id)
     formData.append('title', title.value)
-    formData.append('slug',slug)
+    formData.append('slug',slug.value)
     formData.append('contentt', content.value)
     formData.append('categoryid', selectedCategory.value)
     formData.append('ispublished', isPublished.value ? 1 : 0)
-    console.log(mainImage.value)
+    // console.log(mainImage.value)
     if(mainImage.value!=null){
     formData.append('mainimage', mainImage.value)
     formData.append('thumbimage', thumbnail.value)
     }
 
-
+    selectedTags.value.forEach(tag => {
+        formData.append('tags[]', tag.name) // فقط name‌ها رو ارسال کن
+    })
     //
     try {
         const response = await axios.post('/api/blog/savepost', formData, {
@@ -168,13 +229,13 @@ const submitForm = async () => {
             },
 
         })
-        console.log(response.status)
-        console.log(response.data)
+        // console.log(response.status)
+        // console.log(response.data)
         if (response.data.status === 312) {
 
             const $toast = useToast();
             let instance = $toast.success('محصول ثبت شد');
-            goToPost(slug)
+            goToPost(slug.value)
             // یا هر کار دیگه‌ای مثل نمایش toast موفقیت
         }
         else{
@@ -260,7 +321,20 @@ const submitForm = async () => {
                 />
 
             </div>
-
+            <div class="my-4">
+                <label class="block mb-2 font-semibold text-gray-700">تگ‌ها</label>
+                <Multiselect
+                    v-model="selectedTags"
+                    :options="tags"
+                    :multiple="true"
+                    :taggable="true"
+                    tag-placeholder="افزودن تگ جدید"
+                    placeholder="تگ‌ها را انتخاب یا بنویسید"
+                    label="name"
+                    track-by="id"
+                    @tag="addTag"
+                />
+            </div>
         </div>
         <button @click="submitForm">ذخیره</button>
     </div>

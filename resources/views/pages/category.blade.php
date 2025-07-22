@@ -3,7 +3,7 @@
 @section('description',$category->description)
 @section('content')
 
-    <div id="app" class="w-full container mx-auto my-16 ">
+    <div id="app" class="w-full container mx-auto my-16  ">
 
 {{--        for future should send category object into the component--}}
         <category-products

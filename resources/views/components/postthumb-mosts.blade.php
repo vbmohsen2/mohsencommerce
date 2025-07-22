@@ -9,12 +9,12 @@
                 @php
 
                 $file = $post->postmedia->where('type','thumb')->first();
-                $PostFile = $file ? $file->file_path . $file->extension : null;
+                $PostFile = $file ? $file->file_path  : null;
 
                 @endphp
             <li >
                 <a href="./blog/{{$post->slug}}" class="flex">
-                    <img src="{{asset("images/blog/posts/".$PostFile)}}" class="w-14 rounded-md" alt="">
+                    <img src="{{asset("/storage/images/blog/".$post->slug."/".$PostFile)}}" class="w-14 rounded-md" alt="">
                     <span class="pr-2 text-wrap">{{  strip_tags( Str::limit($post->title, 50 )) }}
 
                     </span>

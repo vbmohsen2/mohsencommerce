@@ -28,11 +28,14 @@
                 </select>
             </div>
 
-            <div class=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class=" grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
                 <ProductCard v-for="product in products" :key="product.id" :product="product" />
             </div>
 
-            <div v-if="loading" class="text-center mt-4">در حال بارگذاری...</div>
+            <div v-if="loading" class="flex flex-col items-center justify-center py-6">
+                <div class="loader mb-3"></div>
+                <p class="text-gray-600 text-sm">در حال بارگذاری، لطفاً صبور باشید...</p>
+            </div>
         </div>
     </div>
 </template>
@@ -107,3 +110,19 @@ window.addEventListener('scroll', () => {
     }
 })
 </script>
+<style scoped>
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #e0e0e0;
+    border-top-color: #6366f1; /* رنگ بنفش مدرن */
+    border-radius: 50%;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+</style>

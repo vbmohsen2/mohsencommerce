@@ -18,13 +18,13 @@ class PostsController extends Controller
         ->orderby('created_at','desc')->paginate(15);
 
 
-        return view('layouts.blog.blogMain',compact('Posts','PostsInBanners'));
+        return view('layouts.blog.BlogMain',compact('Posts','PostsInBanners'));
     }
     public function show(Request $request,$slug){
-        $Posts=Posts::where('is_published',true)->with(['postmedia' => function ($query) {
-            $query->where('type', 'banner');
-        }],
-        )->orderby('created_at','desc')->paginate(15);
+//        $Posts=Posts::where('is_published',true)->with(['postmedia' => function ($query) {
+//            $query->where('type', 'banner');
+//        }],
+//        )->orderby('created_at','desc')->paginate(15);
         $mainpost = Posts::where('slug', $slug)->first();
 
         $relatedposts = Posts::whereHas('postTags', function ($query) use ($mainpost) {
@@ -47,6 +47,6 @@ class PostsController extends Controller
             // تنظیم کوکی برای جلوگیری از ثبت دوباره بازدید توسط همین کاربر
             Cookie::queue($cookieName, true, 60 );
         }
-        return view('layouts.blog.showpost',['mainpost'=>$mainpost,'Posts'=>$Posts,'relatedposts'=>$relatedposts]);
+        return view('layouts.blog.ShowPost',['mainpost'=>$mainpost,'relatedposts'=>$relatedposts]);
     }
 }

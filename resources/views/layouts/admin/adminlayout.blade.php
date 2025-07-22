@@ -18,13 +18,13 @@
 
 
     {{--    header--}}
-    <div class="flex-col fixed top-0 w-full  bg-white justify-between items-center shadow-md h-20 ">
+    <div class="flex-col fixed top-0 w-full   bg-white justify-between items-center shadow-md h-20 ">
        <div class="w-full flex justify-between items-center mx-auto py-2 px-4">
            @auth()
                <p>{{auth()->user()->name}}</p>
            @endauth
-           <div>
-               <img src="{{asset('images/logo.svg')}}" alt="">
+           <div class="h-fit">
+               <img src="{{asset('images/romanologo.jpg')}}" width="50" height="50" alt="">
            </div>
            <div>
                {{ \Carbon\Carbon::now()->format('Y-m-d H:i') }}
