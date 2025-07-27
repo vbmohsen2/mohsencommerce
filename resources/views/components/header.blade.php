@@ -123,7 +123,7 @@
 
         <!-- Modal Box -->
         <div class="bg-white w-full max-w-md mx-4 p-6 rounded-2xl shadow-xl border border-gray-200 animate-fadeIn">
-            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">ورود به حساب کاربری</h2>
+            <span class="text-2xl font-bold text-center text-gray-800 mb-6">ورود به حساب کاربری</span>
 
             <!-- پیام -->
             <div id="loginMessage" class="hidden text-center p-3 mb-4 rounded font-medium"></div>

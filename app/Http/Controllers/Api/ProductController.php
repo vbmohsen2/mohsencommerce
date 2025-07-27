@@ -66,8 +66,11 @@ class ProductController extends Controller
         // -------------------------------
         // صفحه‌بندی
         $products = $query->paginate(10);
-        Log::info(['sql' => $query->toSql(), 'bindings' => $query->getBindings()]);
-        return response()->json($products);
+//        Log::info(['sql' => $query->toSql(), 'bindings' => $query->getBindings()]);
+        return response()->json([
+            'products' => $products,
+            'category_id' => $category->id,
+        ]);
     }
 
     public function related(Products $product)

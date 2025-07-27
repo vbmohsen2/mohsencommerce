@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
+
 
 
 
@@ -114,7 +117,7 @@ Route::middleware('auth')->group(function () {
 //blog
 route::get('/blog', PostsController::class . '@index');
 Route::get('/blog/{post}', PostsController::class . '@show');
-
+Route::get('/blog/category/{category}', PostsController::class . '@categoryshow');
 
 Route::middleware('auth')->group(function () {
     Route::get('/api/user', function() {
@@ -179,7 +182,7 @@ Route::middleware(['auth', 'isAdmin'])->prefix('api')->group(function () {
     Route::post('/blog/postsvue/edit', [blogAdmin::class, 'getPost'])->name('admin.blog.editpost');
     Route::post('/blog/savepost', [blogAdmin::class, 'savePost'])->name('admin.blog.savePost');
     Route::post('/blog/postimages', [blogAdmin::class, 'postImages'])->name('admin.blog.postimages');
-
+    Route::get('/blog/search/', [PostsController::class, 'search']);
     // 🔸 کاربران
     Route::prefix('users')->controller(UserController::class)->group(function () {
         Route::get('/', 'index');
@@ -207,7 +210,6 @@ Route::middleware(['auth', 'isAdmin'])->prefix('api')->group(function () {
  Route::get('/api/categories/{category:slug}/products', [ProductController::class, 'index2']);
 Route::get('/api/categories/{category:slug}/filters', [CategoryController::class, 'filters']);
 Route::get('/api/categories/breadcrumb/{id}', [admin::class, 'breadcrumb']);
-
 Route::post('/api/changelike',[UserController::class, 'addlike']);
 Route::get('/api/getlikestatus/{id}', [UserController::class, 'getLikeStatus']);
 
@@ -220,6 +222,44 @@ Route::get('/api/user', function (Request $request) {
     return $request->user();
 })->middleware('auth');
 
+
+
+//sitemap
+
+Route::get('/sitemap.xml', function () {
+    $sitemap = Sitemap::create(config('app.url'));
+
+    // محصولات
+    \App\Models\Products::all()->each(function ($product) use ($sitemap) {
+        $sitemap->add(
+            Url::create("/product/{$product->slug}")
+                ->setLastModificationDate($product->updated_at)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
+                ->setPriority(0.9)
+        );
+    });
+
+    // پست‌های وبلاگ
+    \App\Models\Posts::all()->each(function ($post) use ($sitemap) {
+        $sitemap->add(
+            Url::create("/blog/{$post->slug}")
+                ->setLastModificationDate($post->updated_at)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
+                ->setPriority(0.8)
+        );
+    });
+
+    \App\Models\Category::all()->each(function ($category) use ($sitemap) {
+        $sitemap->add(
+            Url::create("/category/{$category->slug}")
+                ->setLastModificationDate($category->updated_at)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
+                ->setPriority(0.8)
+        );
+    });
+
+    return $sitemap->toResponse(request());
+});
 
 //api
 //Route::view('dashboard', 'dashboard')

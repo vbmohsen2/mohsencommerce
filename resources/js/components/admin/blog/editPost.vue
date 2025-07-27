@@ -24,7 +24,7 @@ const thumbnail = ref(null)
 const isImage=ref()
 const tags = ref([])
 const selectedTags = ref([])
-
+const seoDescription=ref()
 
 const quillModules = {
     toolbar: [
@@ -51,7 +51,7 @@ const fetchPost = async () => {
 
     title.value=post.value.title
 
-
+    seoDescription.value=post.value.seo_description
     // console.log(res.data.selected_tags)
 
 
@@ -305,9 +305,10 @@ const submitForm = async () => {
                   <h2>ویرایش پست</h2>
 
               </div>
-        <div class="w-full py-4 inline-flex flex-wrap lg:flex-nowrap space-y-2 justify-between space-x-8 ">
-            <input type="text" placeholder="عنوان" class="w-full  mx-2   border rounded-md focus:outline-none focus:ring focus:border-blue-300" v-model="title" >
-            <input type="text" placeholder="اسلاگ" class="w-full  mx-2   border rounded-md focus:outline-none focus:ring focus:border-blue-300" v-model="slug">
+        <div class="w-full py-4 inline-flex flex-wrap lg:flex-nowrap   justify-between  ">
+            <input type="text" placeholder="عنوان" class="w-full  mx-2 my-2  border rounded-md focus:outline-none focus:ring focus:border-blue-300" v-model="title" >
+            <input type="text" placeholder="اسلاگ" class="w-full  mx-2  my-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" v-model="slug">
+            <input type="text" placeholder="توضیحات سئو" class="w-full my-2 mx-2   border rounded-md focus:outline-none focus:ring focus:border-blue-300" v-model="seoDescription">
             <span class="text-nowrap">
             منتشر شده:
             <input type="checkbox" v-model="isPublished">

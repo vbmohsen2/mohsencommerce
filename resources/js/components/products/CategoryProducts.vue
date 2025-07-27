@@ -1,5 +1,16 @@
 <template>
+    <div class="text-sm text-gray-500  flex flex-wrap gap-1 pb-3  rtl:flex-row-reverse  ">
+        <a href="/">فروشگاه اینترنتی</a>
+        <template v-for="cat in breadcrumb" :key="cat.id">
+            <span>/</span>
+            <a :href="`/category/${cat.slug}`" class="hover:text-green-600 transition">
+                {{ cat.name }}
+            </a>
+        </template>
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-4 relative">
+
+
         <!-- Filters -->
         <aside class="hidden md:block sticky top-4 h-fit">
             <FilterSidebar :filters="filters" :brands="brands" v-model="selectedFilters" :disabled="loading" />
@@ -32,16 +43,51 @@
                 <ProductCard v-for="product in products" :key="product.id" :product="product" />
             </div>
 
+            <!-- Pagination -->
+<!--            <nav v-if="totalPages > 1" class="flex justify-center items-center gap-1 mt-6 w-full">-->
+<!--                <button-->
+<!--                    @click="changePage(currentPage - 1)"-->
+<!--                    :disabled="currentPage === 1"-->
+<!--                    class="px-3 py-1 rounded border"-->
+<!--                    :class="{ 'opacity-50': currentPage === 1 }"-->
+<!--                >-->
+<!--                    قبلی-->
+<!--                </button>-->
+
+<!--                <button-->
+<!--                    v-for="pageNum in visiblePages"-->
+<!--                    :key="pageNum"-->
+<!--                    @click="changePage(pageNum)"-->
+<!--                    class="px-3 py-1 rounded border"-->
+<!--                    :class="{ 'bg-gray-800 text-white': currentPage === pageNum }"-->
+<!--                >-->
+<!--                    {{ pageNum }}-->
+<!--                </button>-->
+
+<!--                <button-->
+<!--                    @click="changePage(currentPage + 1)"-->
+<!--                    :disabled="currentPage === totalPages"-->
+<!--                    class="px-3 py-1 rounded border"-->
+<!--                    :class="{ 'opacity-50': currentPage === totalPages }"-->
+<!--                >-->
+<!--                    بعدی-->
+<!--                </button>-->
+<!--            </nav>-->
+
+
+
             <div v-if="loading" class="flex flex-col items-center justify-center py-6">
+
                 <div class="loader mb-3"></div>
                 <p class="text-gray-600 text-sm">در حال بارگذاری، لطفاً صبور باشید...</p>
             </div>
         </div>
+
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { computed,onMounted, ref, watch} from 'vue'
 import axios from 'axios'
 import ProductCard from './ProductCard.vue'
 import FilterSidebar from './FilterSidebar.vue'
@@ -60,7 +106,10 @@ const page = ref(1)
 const loading = ref(false)
 const hasMore = ref(true)
 const showMobileFilters = ref(false)
-
+const currentPage = ref(1)
+const totalPages = ref(1)
+const categoryId=ref()
+const breadcrumb=ref()
 const fetchFilters = async () => {
     const { data } = await axios.get(`/api/categories/${props.categorySlug}/filters`)
     filters.value = data.attributes
@@ -70,9 +119,11 @@ const fetchFilters = async () => {
 
 const fetchProducts = async (reset = false) => {
     if (loading.value || (!hasMore.value && !reset)) return
+
     loading.value = true
     if (reset) {
         page.value = 1
+        currentPage.value = 1
         products.value = []
         hasMore.value = true
     }
@@ -82,26 +133,70 @@ const fetchProducts = async (reset = false) => {
 
     const { data } = await axios.get(`/api/categories/${props.categorySlug}/products`, {
         params: {
-            brand: selectedFilters.value.brand,       // به طور جدا
-            filters: filtersWithoutBrand,             // فقط attributes
+            brand: selectedFilters.value.brand,
+            filters: filtersWithoutBrand,
             sort_by: sortBy.value,
             page: page.value,
         },
     })
 
-    products.value.push(...data.data)
-    hasMore.value = !!data.next_page_url
+    if (reset) {
+        products.value = data.products.data
+    } else {
+        products.value.push(...data.products.data)
+    }
+
+    categoryId.value=data.category_id
+    // console.log('categoryid',categoryId.value)
+    totalPages.value = data.products.last_page || 1 // فرض می‌کنیم API شما اینو می‌ده
+    currentPage.value = page.value
+    hasMore.value = !!data.products.next_page_url
     page.value++
     loading.value = false
-}
 
-onMounted(() => {
-    fetchFilters()
-    fetchProducts()
+    // تغییر URL
+    const newUrl = `?page=${currentPage.value}`
+    window.history.pushState({}, '', newUrl)
+    // console.log('data',data )
+}
+const categoryView=async () => {
+    // console.log('categoryView',categoryId.value)
+        try {
+            const response = await axios.get(`/api/categories/breadcrumb/${categoryId.value}`)
+            breadcrumb.value = response.data
+            // console.log('breadcrumb', response.data)
+        } catch (error) {
+            console.error('خطا در دریافت breadcrumb:', error)
+        }
+
+}
+onMounted(async () => {
+    await fetchFilters()
+    await fetchProducts()
+    console.log(products.value[0].category_id)
+    categoryView()
 })
 
 watch([selectedFilters, sortBy], () => {
     fetchProducts(true)
+})
+const changePage = (pageNum) => {
+    if (pageNum < 1 || pageNum > totalPages.value) return
+
+    page.value = pageNum
+    currentPage.value = pageNum
+    products.value = []
+    fetchProducts(true)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+const visiblePages = computed(() => {
+    const range = []
+    const start = Math.max(1, currentPage.value - 2)
+    const end = Math.min(totalPages.value, currentPage.value + 2)
+    for (let i = start; i <= end; i++) {
+        range.push(i)
+    }
+    return range
 })
 
 window.addEventListener('scroll', () => {
@@ -109,6 +204,7 @@ window.addEventListener('scroll', () => {
         fetchProducts()
     }
 })
+
 </script>
 <style scoped>
 .loader {

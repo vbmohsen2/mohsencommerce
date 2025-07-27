@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PostBigbanner;
+use App\Models\PostCategory;
 use App\Models\Posts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -48,5 +49,29 @@ class PostsController extends Controller
             Cookie::queue($cookieName, true, 60 );
         }
         return view('layouts.blog.ShowPost',['mainpost'=>$mainpost,'relatedposts'=>$relatedposts]);
+    }
+public function categoryshow($slug){
+        $category=PostCategory::where('slug', $slug)->firstorfail();
+        $posts = $category->posts()->latest()->paginate(15);
+
+        return view('pages.postcategory',['Posts'=>$posts,'category'=>$category]);
+}
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+
+        $posts = Posts::select('id', 'title', 'slug') // فقط ستون‌های لازم از posts
+        ->where(function ($q2) use ($query) {
+            $q2->where('title', 'like', "%{$query}%")
+                ->orWhere('content', 'like', "%{$query}%");
+        })
+            ->with(['postmedia' => function ($q) {
+                $q->select('id', 'post_id', 'file_path') // فقط ستون‌های لازم
+                ->where('type', 'thumb')
+                    ->limit(1);
+            }])
+            ->get();
+        return response()->json($posts);
     }
 }

@@ -188,6 +188,7 @@ class blogAdmin extends Controller
             'title' => $post->title,
             'slug' => $post->slug,
             'content' => $post->content,
+            'seo_description' => $post->seo_description,
             'post_category_id' => $post->post_category_id,
             'is_published' => $post->is_published,
             'selected_tags' => $selectedTags,
@@ -217,7 +218,7 @@ class blogAdmin extends Controller
             }
 
             $post->title = $request->title;
-
+            $post->seo_description=$request->seodescription;
 
             $existingSlug = Posts::where('slug', $request->slug)
                 ->where('id', '!=', $request->input('id')) // یعنی اسلاگی که برای پست فعلی نیست

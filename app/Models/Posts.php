@@ -22,6 +22,7 @@ class Posts extends Model
     {
         return $this->hasMany(PostMedias::class, 'post_id');
     }
+
     public function PostComments()
     {
         return $this->hasMany(PostComments::class, 'post_id');

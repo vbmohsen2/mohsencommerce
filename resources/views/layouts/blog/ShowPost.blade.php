@@ -1,5 +1,22 @@
 @section('title',$mainpost->title)
-@section('description',$mainpost->description)
+@section('description',$mainpost->seo_description)
+@section('ogdescription')
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="{{ url()->current() }}" />
+    <meta property="og:title" content='{{ config("app.name") }}' />
+    <meta property="og:description" content= "{{$mainpost->seo_description}}" />
+    @php
+        $bannerimage = optional($mainpost->postmedia->where('type', 'banner')->first());
+        $imagePath = $bannerimage->file_path ? $bannerimage->file_path . $bannerimage->extension : 'default.jpg';
+    @endphp
+    <meta property="og:image" content={{asset('/storage/images/blog/'.'/'. $mainpost->slug .'/'. $imagePath )}} />
+
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="{{ config('app.name')}}" />
+    <meta property="twitter:description" content="{{$mainpost->seo_description}}" />
+    <meta property="twitter:image" content={{asset('/storage/images/blog/'.'/'. $mainpost->slug .'/'. $imagePath )}}  />
+@endsection
 @extends( 'layouts.blog.blog')
 @section('content')
     <main class="container mx-auto mt-36 w-full my-10 ">
@@ -10,7 +27,7 @@
                 @php
                     $bannerWidth = ($index == 0) ? 2  : 1;
                 @endphp
-                a
+
                 <x-blogpostbanner :bannerPostId="$p" :bannerwitdth="$bannerWidth"/>
             @endforeach
         </section>
@@ -23,7 +40,7 @@
 
                     <ul class=" inline-flex">
                         <li class="px-2">
-                            <a class="border-gray-400 border rounded-md px-2 py-1" href="./">
+                            <a class="border-gray-400 border rounded-md px-2 py-1" href="/blog">
                                 <i class="fa fa-home text-gray-600" aria-hidden="true"></i>
                             </a>
                         </li>
@@ -31,7 +48,7 @@
                             <i class="fa fa-angle-left" aria-hidden="true"></i>
                         </li>
                         <li class="px-2">
-                            <a class="border-gray-400 border rounded-md px-2 py-1" href="./">
+                            <a class="border-gray-400 border rounded-md px-2 py-1" href="/blog/{{$mainpost->category->slug}}">
                                 {{$mainpost->category->name}}
                             </a>
                         </li>
