@@ -15,6 +15,32 @@
     <meta property="twitter:description" content={{$category->description}} />
     <meta property="twitter:image" content="{{ asset('images/romanologo.jpg') }}" />
 @endsection
+@section('structured_data')
+    <script type="application/ld+json">
+        {!! json_encode([
+            "@context" => "https://schema.org",
+            "@type" => "CollectionPage",
+            "name" => $category->name,
+            "description" => $category->description ?? "مطالب مرتبط با {$category->name}",
+            "mainEntity" => [
+                "@type" => "Blog",
+                "name" => $category->name,
+                "url" => url()->current(),
+                "publisher" => [
+                    "@type" => "Organization",
+                    "name" => "Romano",
+                    "logo" => [
+                        "@type" => "ImageObject",
+                        "url" => asset('logo.png')
+                    ]
+                ]
+            ]
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
+@endsection
+
+
+
 @section('content')
     <main class=" container  mt-36  my-10  mx-auto max-w-screen-xl ">
         <h1>{{$category->name}}</h1>

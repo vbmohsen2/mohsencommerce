@@ -116,7 +116,7 @@ Route::middleware('auth')->group(function () {
 
 //blog
 route::get('/blog', PostsController::class . '@index');
-Route::get('/blog/{post}', PostsController::class . '@show');
+Route::get('/blog/{post}', PostsController::class . '@show')->name('blog.show');
 Route::get('/blog/category/{category}', PostsController::class . '@categoryshow');
 
 Route::middleware('auth')->group(function () {
@@ -255,6 +255,14 @@ Route::get('/sitemap.xml', function () {
                 ->setLastModificationDate($category->updated_at)
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
                 ->setPriority(0.8)
+        );
+    });
+    \App\Models\PostCategory::all()->each(function ($category) use ($sitemap) {
+        $sitemap->add(
+            Url::create("blog/category/{$category->slug}")
+                ->setLastModificationDate($category->updated_at)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
+                ->setPriority(0.5)
         );
     });
 

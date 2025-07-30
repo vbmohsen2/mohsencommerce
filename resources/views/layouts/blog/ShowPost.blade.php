@@ -17,6 +17,35 @@
     <meta property="twitter:description" content="{{$mainpost->seo_description}}" />
     <meta property="twitter:image" content={{asset('/storage/images/blog/'.'/'. $mainpost->slug .'/'. $imagePath )}}  />
 @endsection
+
+@section('structured_data')
+    <script type="application/ld+json">
+        {!! json_encode([
+            "@context" => "https://schema.org",
+            "@type" => "BlogPosting",
+            "mainEntityOfPage" => [
+                "@type" => "WebPage",
+                "@id" => url()->current()
+            ],
+            "headline" => $mainpost->title,
+            "image" => asset('/storage/images/blog/'.'/'. $mainpost->slug .'/'. $imagePath ),
+            "author" => [
+                "@type" => "Person",
+                "name" => $mainpost->user->name ?? 'Romano'
+            ],
+            "publisher" => [
+                "@type" => "Organization",
+                "name" => "Romano",
+                "logo" => [
+                    "@type" => "ImageObject",
+                    "url" => asset('logo.png')
+                ]
+            ],
+            "datePublished" => $mainpost->created_at->toW3cString(),
+            "dateModified" => $mainpost->updated_at->toW3cString()
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
+@endsection
 @extends( 'layouts.blog.blog')
 @section('content')
     <main class="container mx-auto mt-36 w-full my-10 ">
@@ -89,17 +118,32 @@
 
                     <div class="py-4 mx-4 ">
                         <ul class="text-white inline-flex font-light text-center text-xs ">
-                            <li class="bg-black mx-1 p-1 ">
-                                <a href="">
-                                    <i class="fa fa-x "> ایکس </i>
+{{--                            <li class="bg-black mx-1 p-1">--}}
+{{--                                <a href="/blog/{{$mainpost->slug}}" class="text-white flex items-center gap-1">--}}
+{{--                                    <i class="fa fa-instagram"></i> اینستاگرام--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+                            @php
+                                $postUrl = urlencode(route('blog.show', $mainpost->slug));
+                                $postTitle = urlencode($mainpost->title);
+                            @endphp
+
+                            <li class="bg-green-600 mx-1 p-1 rounded">
+                                <a href="https://wa.me/?text={{ $postTitle }}%0A{{ $postUrl }}"
+                                   target="_blank"
+                                   class="text-white flex items-center gap-1">
+                                    <i class="fab fa-whatsapp"></i> واتساپ
                                 </a>
                             </li>
-                            <li class="bg-blue-800 mx-1 p-1">
-                                <i class="fab fa-facebook"> فیس بوک </i>
+
+                            <li class="bg-blue-500 mx-1 p-1 rounded">
+                                <a href="https://t.me/share/url?url={{ $postUrl }}&text={{ $postTitle }}"
+                                   target="_blank"
+                                   class="text-white flex items-center gap-1">
+                                    <i class="fab fa-telegram"></i>     تلگرام
+                                </a>
                             </li>
-                            <li class="bg-blue-500 mx-1 p-1">
-                                <i class="fab fa-telegram"> تلگرام </i>
-                            </li>
+
 
                             <li onclick="copyLink(this)"
                                 class="text-gray-600 border border-gray-300 px-2 mx-2 cursor-pointer">

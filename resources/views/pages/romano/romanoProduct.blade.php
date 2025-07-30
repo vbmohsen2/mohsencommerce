@@ -22,6 +22,27 @@
     <meta property="twitter:image" content="{{ asset('storage/images/products/' . $productmainImage) }}" />
 @endsection
 
+
+@section('structured_data')
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": "{{ $product->name }}",
+  "image": ["{{ asset('storage/images/products/' . $productmainImage) }}"],
+  "description": {!! json_encode(strip_tags($product->seo_description)) !!},
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ $product->discount_price > 0 ? $product->discount_price * 10 : $product->price * 10 }}",
+    "priceCurrency": "IRR",
+    "availability": "https://schema.org/{{ $product->stock > 0 ? 'InStock' : 'OutOfStock' }}"
+  }
+}
+    </script>
+@endsection
+
+
+
 {{--بعدا حل شود--}}
 @section('content')
 

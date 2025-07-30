@@ -20,6 +20,12 @@
 
     @yield('ogdescription')
 
+
+    @if (!View::hasSection('structured_data'))
+        {!! View::make('components.schema.blog')->render() !!}
+    @else
+        @yield('structured_data')
+    @endif
 </head>
 <body style="direction: rtl">
 

@@ -19,6 +19,12 @@
         <link rel="canonical" href="{{ url()->current() }}">
     @endif
 
+
+    @if (!View::hasSection('structured_data'))
+        {!! View::make('components.schema.default')->render() !!}
+    @else
+        @yield('structured_data')
+    @endif
 </head>
 <body style="direction: rtl;font-weight: 300">
 
