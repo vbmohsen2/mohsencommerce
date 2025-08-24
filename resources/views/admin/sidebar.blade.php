@@ -1,4 +1,4 @@
-<!-- resources/views/layouts/admin-sidebar.blade.php -->
+<!-- resources/views/Layouts/admin-sidebar.blade.php -->
 <style>
     .mega-menu {
         display: none;

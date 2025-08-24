@@ -14,7 +14,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        return view('pages.shipping');
+        return view('Pages.shipping');
     }
     public function indexordersforvue(Request $request){
         $perPage = $request->input('per_page', 10);

@@ -31,7 +31,7 @@
                     "name" => "Romano",
                     "logo" => [
                         "@type" => "ImageObject",
-                        "url" => asset('logo.png')
+                        "url" => asset('faveicon.png')
                     ]
                 ]
             ]

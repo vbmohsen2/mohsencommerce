@@ -54,7 +54,7 @@ public function categoryshow($slug){
         $category=PostCategory::where('slug', $slug)->firstorfail();
         $posts = $category->posts()->latest()->paginate(15);
 
-        return view('pages.postcategory',['Posts'=>$posts,'category'=>$category]);
+        return view('Pages.postcategory',['Posts'=>$posts,'category'=>$category]);
 }
 
     public function search(Request $request)

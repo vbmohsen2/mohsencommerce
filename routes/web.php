@@ -24,6 +24,9 @@ use Spatie\Sitemap\Tags\Url;
 
 
 
+Auth::routes(['verify' => true]);
+
+
  Route::middleware(['auth', 'isAdmin'])->get('/api/products', [admin::class, 'getProducts']);
 // گروه مسیرهای ادمین با middleware
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
@@ -80,7 +83,7 @@ Route::get('/admin/users', function () {
 //commerce
 Route::get('/', [Mainpage::class, 'index'])->name('home');
 //route::get('/product/{slug}', ProductsController::class . '@show');
-route::get('/product/{slug}', ProductsController::class . '@romanoShow');
+route::get('/product/{slug}', ProductsController::class . '@productshow');
 
 
 route::get('/category/{slug}', CategoryController::class . '@show');
@@ -140,7 +143,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::view('/user/{any?}', 'pages.user')->where('any', '.*');
+Route::view('/user/{any?}', 'Pages.user')->where('any', '.*');
 
 
 
@@ -209,6 +212,7 @@ Route::middleware(['auth', 'isAdmin'])->prefix('api')->group(function () {
 // Route::get('/api/products/{id}', [ProductController::class, 'show']);
  Route::get('/api/categories/{category:slug}/products', [ProductController::class, 'index2']);
 Route::get('/api/categories/{category:slug}/filters', [CategoryController::class, 'filters']);
+
 Route::get('/api/categories/breadcrumb/{id}', [admin::class, 'breadcrumb']);
 Route::post('/api/changelike',[UserController::class, 'addlike']);
 Route::get('/api/getlikestatus/{id}', [UserController::class, 'getLikeStatus']);

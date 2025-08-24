@@ -34,6 +34,7 @@ class CartController extends Controller
             } else {
                Carts::create([
                     'user_id'    => $user->id,
+                    'images'    => $images,
                     'product_id' => $productId,
                     'quantity'   => 1,
                     'code'       => $code,
@@ -53,9 +54,9 @@ class CartController extends Controller
                 }
                 $cart[$cartKey] = [
                     'name'     => $product->name,
+                    'images'    => $images,
                     'price'    => $price,
                     'quantity' => 1,
-                    'image'    => $images->thumb,
                     'code'     => $code,
                 ];
             }
@@ -101,7 +102,7 @@ class CartController extends Controller
             }
         }
 
-        return view('pages.cart',compact('cartItems'));
+        return view('Pages.cart',compact('cartItems'));
     }
     public function increase($id)
     {

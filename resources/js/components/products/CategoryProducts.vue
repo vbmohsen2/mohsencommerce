@@ -90,7 +90,7 @@
 import { computed,onMounted, ref, watch} from 'vue'
 import axios from 'axios'
 import ProductCard from './ProductCard.vue'
-import FilterSidebar from './FilterSidebar.vue'
+import FilterSidebar from './filterSidebar.vue'
 import MobileFilterDrawer from './MobileFilterDrawer.vue'
 
 const props = defineProps({

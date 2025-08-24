@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use App\Models\Carts;
 use App\Models\Products;
+use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
 use Livewire\Component;
 
 class Mainpage extends Component
@@ -22,7 +24,15 @@ class Mainpage extends Component
             ->take(10)
             ->get();
         $topseller=Products::orderby('views_count','DESC')->take(10)->get();
-        return view('livewire.mainpage', compact('topDiscountedProducts','topseller'));
+
+
+//        return view('livewire.mainpage', compact('topDiscountedProducts','topseller'));
+        return Inertia::render('home', [
+            "topseller"=>$topseller,
+            "topDiscountedProducts"=>$topDiscountedProducts,
+            'currentUrl' => URL::current(),
+            'siteUrl' => config('app.url')
+        ]);
     }
 
     public function render()

@@ -10,11 +10,11 @@
                 <img
                     :src="mainImageUrl"
                     loading="lazy"
-                    alt="'Main Image ' + product.name"
+                    :alt="product.name"
                     decoding="async"
                     width="350"
                     height="350"
-                    class="w-full   transition-transform duration-300 ease-in-out object-scale-down rounded-2xl"
+                    class="w-full  h-[60vh] transition-transform duration-300 ease-in-out object-scale-down rounded-2xl"
                     ref="mainImageEl"
                 />
             </div>
@@ -133,7 +133,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import Swiper from 'swiper'
+import Swiper from 'swiper/bundle'
 import 'swiper/swiper-bundle.css'
 import axios from "axios";
 import LikeShareCompare from "@/components/products/romano/like-share-compare.vue";
@@ -204,13 +204,41 @@ onMounted(() => {
         })
     }
 
-    // Swiper init
-    new Swiper('.swiper', {
+    const swiper = new Swiper(".mobilepimage", {
+        slidesPerView: 1,
+        spaceBetween: 15,
         pagination: {
-            el: '.swiper-pagination',
+            el: ".swiper-pagination",
+            clickable: true,
+            dynamicBullets: true,
         },
-    })
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        on: {
+            autoplayTimeLeft(swiper, time, progress) {
+                const circle = document.getElementById('progress-circle');
+                if (circle) {
+                    const circumference = 100;
+                    const offset = circumference * (1 - progress);
+                    circle.style.strokeDashoffset = offset;
+                }
+            },
+            slideChange() {
+                const circle = document.getElementById('progress-circle');
+                if (circle) {
+                    circle.style.transition = 'none';
+                    circle.style.strokeDashoffset = 100;
+                    setTimeout(() => {
+                        circle.style.transition = 'stroke-dashoffset 0.1s linear';
+                    }, 50);
+                }
+            }
+        }
+    });
 })
+
 
 
 </script>

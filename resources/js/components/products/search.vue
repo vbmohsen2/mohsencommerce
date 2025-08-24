@@ -6,8 +6,9 @@
             @input="onInput"
             type="text"
             placeholder="جستجوی محصول..."
-            class="w-full rounded-md bg-transparent focus:outline-none py-2 px-1"
-        />
+            class="border border-gray-300 rounded-lg p-2 w-full
+         focus:border-gray-100 focus:ring-1 focus:ring-gray-200 focus:outline-none
+         transition duration-200"        />
 
         <div
             v-if="results.length && showDropdown"

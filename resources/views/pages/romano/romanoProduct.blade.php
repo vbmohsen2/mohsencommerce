@@ -47,11 +47,7 @@
 @section('content')
 
     <div id="app" class=" container max-w-screen-lg mx-auto mt-2 px-4 ">
-
-
        <romano-product-page :product='@json($product)'>
        </romano-product-page>
-
-
     </div>
 @endsection

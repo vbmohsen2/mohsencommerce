@@ -10,7 +10,7 @@
             "name" => "Romano",
             "logo" => [
                 "@type" => "ImageObject",
-                "url" => asset('logo.png')
+                "url" => asset('faveicon.png')
             ]
         ]
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}

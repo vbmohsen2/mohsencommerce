@@ -118,9 +118,20 @@
 import { ref, computed } from 'vue'
 import {useToast} from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import { router } from '@inertiajs/vue3'
 const props = defineProps({
     product: Object
 })
+import { usePage } from '@inertiajs/vue3'
+import axios from 'axios' // فقط اگر لازم شد فچ بک‌آپ گرفته شود
+
+const page = usePage()
+import { useCartStore } from '../../store/cart.js'
+import {route} from "ziggy-js";
+
+const cartStore = useCartStore()
+
+
 
 // خصوصیات
 const attributes = computed(() => {
@@ -165,26 +176,64 @@ const discountPercent = computed(() =>
 )
 
 // افزودن به سبد خرید
+
+
 const handleAddToCart = () => {
     if (!selectedCode.value) {
         const el = document.getElementById('codeMessage')
         const $toast = useToast();
-        let instance = $toast.info('طرح یا رنگ انتخاب نشده است ',{duration:3000,position:'top-right'});
+        $toast.info('طرح یا رنگ انتخاب نشده است', { duration: 3000, position: 'top-right' });
         if (el) {
             el.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
         successMessage.value = 'لطفاً یک طرح انتخاب کنید.'
         return
     }
-
-    // شبیه‌سازی افزودن به سبد خرید
+    // پیام موفقیت محلی
     successMessage.value = `محصول با طرح "${selectedCode.value}" به سبد خرید اضافه شد ✅`
-    const url = `/addtocart/${props.product.id}?code=${encodeURIComponent(selectedCode.value)}`;
-    window.location.href = url;
-    setTimeout(() => {
-        successMessage.value = ''
-    }, 4000)
+
+    // 1) آپدیت محلی فوری (optimistic)
+    cartStore.addLocal({
+        id: props.product.id,
+        code: selectedCode.value,
+        name: props.product.name,
+        price: props.product.price,
+        images: props.product.images ?? {},
+        quantity: 1
+    })
+
+    // درخواست به سرور
+    const url = `/addtocart/${props.product.id}?code=${encodeURIComponent(selectedCode.value)}`
+    router.visit(url, {
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: () => {
+            // 2) وقتی پاسخ اینرشیا رسید، داده‌های سرور را روی store مرج کن
+            const serverCartItems = page.props.cart?.items
+
+            if (Array.isArray(serverCartItems)) {
+
+                cartStore.setItems(serverCartItems)
+            } else {
+                // fallback: اگر سرور پروپ cart نفرستاد، با یک API صریح بگیری
+                axios.get(route('cart.current')).then(res => {
+
+                    cartStore.setItems(res.data.items || [])
+                }).catch(() => {
+                    // اگر fail شد، فعلاً به همان optimistic تکیه کن
+                })
+            }
+        },
+        onError: () => {
+            // خطا — پیام موفقیت را بردار و در صورت نیاز rollback محلی
+            successMessage.value = ''
+            // (اختیاری) می‌توانی یک rollback هم انجام دهی — یا از سرور re-sync بگیر
+        }
+    })
+
+    setTimeout(() => { successMessage.value = '' }, 4000)
 }
+
 
 // فرمت عدد
 const formatNumber = (number) =>

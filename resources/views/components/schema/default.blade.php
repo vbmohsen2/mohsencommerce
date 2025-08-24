@@ -4,7 +4,7 @@
       "@type": "Organization",
       "name": "{{config('app.name')}}",
       "url": "{{ config('app.url') }}",
-  "logo": "{{ asset('logo.png') }}",
+  "logo": "{{ asset('favicon.png') }}",
   "sameAs": [
     "https://t.me/romanoscarfard",
     "https://www.instagram.com/romanoscarf.ard/"

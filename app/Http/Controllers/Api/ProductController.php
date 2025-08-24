@@ -28,7 +28,7 @@ class ProductController extends Controller
             $brands = (array) $request->input('brand');
             $query->whereIn('brand', $brands);
         }
-        Log::info($request->input('brand'));
+
         // -------------------------------
         // فیلتر بر اساس ویژگی‌ها (attributes)
         if ($request->has('filters')) {
@@ -123,7 +123,8 @@ class ProductController extends Controller
 
             $related = $related->merge($similarPrice);
         }
-        return response()->json($related);
+//        return response()->json($related);
+        return $related;
     }
 
 

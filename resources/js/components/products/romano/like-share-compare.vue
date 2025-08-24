@@ -1,30 +1,33 @@
 <script setup>
 import axios from "axios";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {data} from "autoprefixer";
 import ShareMenu from "@/components/products/romano/ShareMenu.vue";
+import {usePage} from "@inertiajs/vue3";
 
 const props = defineProps({
     product: Object
 })
-
+const isLoggedIn = usePage().props.auth.user
+// console.log(isLoggedIn)
 const like= ref(true)
 
 const likeFetch=async (product) => {
-    if (product) {
+    if ( isLoggedIn!=null) {
         try {
             const response = await axios.get(`/api/getlikestatus/${product.id}`)
-            console.log(response)
+            // console.log(response)
            like.value=response.data.like
         } catch (error) {
-            console.error('خطا در like', error)
+            // console.error('خطا در like', error)
         }
     }
 }
 onMounted(() => {
    likeFetch(props.product)
 })
-const url=window.location.href
+const page = usePage()
+const currentUrl = page.url
 const togglelike=async (product) => {
     try {
         const res = await axios.post("/api/changelike", {
@@ -42,7 +45,7 @@ const togglelike=async (product) => {
             if (typeof openLoginModal === 'function') {
                 openLoginModal();
             } else {
-                window.openLoginModal?.();
+                // window.openLoginModal?.();
             }
 
         }

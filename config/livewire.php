@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'layout' => 'components.layouts.app',
+    'layout' => 'components.Layouts.app',
 
     /*
     |---------------------------------------------------------------------------
@@ -109,7 +109,7 @@ return [
     |---------------------------------------------------------------------------
     |
     | By default, Livewire automatically injects its JavaScript and CSS into the
-    | <head> and <body> of pages containing Livewire components. By disabling
+    | <head> and <body> of Pages containing Livewire components. By disabling
     | this behavior, you need to use @livewireStyles and @livewireScripts.
     |
     */
@@ -122,7 +122,7 @@ return [
     |---------------------------------------------------------------------------
     |
     | By adding `wire:navigate` to links in your Livewire application, Livewire
-    | will prevent the default link handling and instead request those pages
+    | will prevent the default link handling and instead request those Pages
     | via AJAX, creating an SPA-like effect. Configure this behavior here.
     |
     */

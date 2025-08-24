@@ -38,7 +38,7 @@
                 "name" => "Romano",
                 "logo" => [
                     "@type" => "ImageObject",
-                    "url" => asset('logo.png')
+                    "url" => asset('faveicon.png')
                 ]
             ],
             "datePublished" => $mainpost->created_at->toW3cString(),
